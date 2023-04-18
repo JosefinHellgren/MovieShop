@@ -6,6 +6,9 @@ import './App.css'
 //Hej hopp/Cilia
 
 function App() {
+
+  const apiKey = "305f99214975faee28a0f129881c6ec9";
+
   const [count, setCount] = useState(0)
 
   return (
