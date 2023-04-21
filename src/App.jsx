@@ -5,6 +5,7 @@ import './App.css'
 import MainPage from './compontents/MainPage';
 import MovieInfo from './compontents/MovieInfo';
 import { Route, Routes } from 'react-router-dom';
+import Payment from './compontents/Payment';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage setMovie={setMovie}/>}/>
         <Route path="/movieinfo" element={<MovieInfo movie={movie}/>}/>
+        <Route path="/payment" element={<Payment movie={movie}/>}/>
       </Routes>
     </div>
   )

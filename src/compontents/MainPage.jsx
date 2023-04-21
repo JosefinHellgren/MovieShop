@@ -37,15 +37,21 @@ const MainPage = (props) =>{
         navigate("/movieinfo/")
     }
 
+    const handleButtonClick = (movie) =>{
+        props.setMovie(movie);
+        navigate("/payment/")
+    }
+
 
 
     return(
         <div className="main_container">
            <h1>Popular Movies:</h1>
            {data && data.map((movie, index) => (
-            <div className="popular_movies_container" onClick={() => handleMovieClick(movie)}>
+            <div className="popular_movies_container" >
             <p>{movie.title}</p>
-            <img src={imgUrlStart+movie.poster_path}/>
+            <img onClick={() => handleMovieClick(movie)} src={imgUrlStart+movie.poster_path}/>
+            <button className="payment_button" onClick={()=> handleButtonClick(movie)}>199:- Buy </button>
             </div>
             
            ))}
