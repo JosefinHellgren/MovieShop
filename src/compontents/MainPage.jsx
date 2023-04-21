@@ -30,6 +30,12 @@ const MainPage = (props) => {
         props.setMovie(movie);
         navigate("/movieinfo/")
     }
+    
+    const handleButtonClick = (movie) =>{
+        props.setMovie(movie);
+        navigate("/payment/")
+    }
+
 
     return (
         <div className="main_container">
@@ -37,15 +43,15 @@ const MainPage = (props) => {
                 <h4>Popular Movies</h4>
                 <Slider className="slick-slider" slidesToShow={12}>
                     {popularMovies && popularMovies.map((movie, index) => (
-                        <div key={index} className="popular_movies_container" onClick={() => handleMovieClick(movie)}>
-                            <img className="movie_poster" src={imgUrlStart + movie.poster_path} />
+                        <div key={index} className="popular_movies_container" >
+                            <img className="movie_poster" src={imgUrlStart + movie.poster_path} onClick={() => handleMovieClick(movie)} />
+                            <button className="payment_button" onClick={()=> handleButtonClick(movie)}>199:- Buy </button>
                             <h6>{movie.title}</h6>
                         </div>
                     ))}
                 </Slider>
             </section>
             <section className="toprated_movies_section"></section>
-
         </div>
     )
 }
