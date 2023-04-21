@@ -3,16 +3,21 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import MainPage from './compontents/MainPage';
+import MovieInfo from './compontents/MovieInfo';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
 
   const apiKey = "305f99214975faee28a0f129881c6ec9";
 
-  const [count, setCount] = useState(0)
+  const [movie, setMovie] = useState(null);
 
   return (
     <div className="App">
-      <MainPage/>
+      <Routes>
+        <Route path="/" element={<MainPage setMovie={setMovie}/>}/>
+        <Route path="/movieinfo" element={<MovieInfo movie={movie}/>}/>
+      </Routes>
     </div>
   )
 }
