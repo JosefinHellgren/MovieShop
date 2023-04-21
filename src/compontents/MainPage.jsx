@@ -5,9 +5,14 @@
 //Visa upp filmerna
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
-const MainPage = () =>{
+const MainPage = (props) =>{
+
+    let navigate = useNavigate();
+
+
     const [data,setData]= useState([]);
     const apiKey = "305f99214975faee28a0f129881c6ec9";
     const imgUrlStart = "https://image.tmdb.org/t/p/w185";
@@ -27,21 +32,23 @@ const MainPage = () =>{
 
     },[])
 
+    const handleMovieClick = (movie) => {
+        props.setMovie(movie);
+        navigate("/movieinfo/")
+    }
+
 
 
     return(
         <div className="main_container">
            <h1>Popular Movies:</h1>
-           {data && data.map((data, index) => (
-            <div className="popular_movies_container">
-            <p>{data.title}</p>
-            <img src={imgUrlStart+data.poster_path}/>
+           {data && data.map((movie, index) => (
+            <div className="popular_movies_container" onClick={() => handleMovieClick(movie)}>
+            <p>{movie.title}</p>
+            <img src={imgUrlStart+movie.poster_path}/>
             </div>
             
            ))}
-            
-
-
         </div>
     )
 }
