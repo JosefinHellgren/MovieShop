@@ -1,0 +1,27 @@
+
+@import url('../../node_modules/slick-carousel/slick/slick.css');
+@import url('../../node_modules/slick-carousel/slick/slick-theme.css');
+
+.slick-slider {
+    width: 0 auto;
+    height: 300px;
+
+  }
+
+h4 {
+    color: lightgray;
+    width: fit-content;
+}
+
+h6 {
+    font-size: 10px;
+    width: 76px;
+    color: lightgrey;
+}
+
+.movie_poster {
+    width: 70px;
+    height: 110px;
+}
+
+
