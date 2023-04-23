@@ -24,6 +24,8 @@ const MovieSlider = ({ query, setMovie, handleButtonClick }) => {
     navigate("/movieinfo/");
   };
 
+  
+
   return (
     <Slider className="slick-slider" slidesToShow={12}>
       {movies &&
