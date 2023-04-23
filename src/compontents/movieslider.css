@@ -1,0 +1,37 @@
+@import url('../../node_modules/slick-carousel/slick/slick.css');
+@import url('../../node_modules/slick-carousel/slick/slick-theme.css');
+
+.slick-slider {
+    width: 0 auto;
+    height: 220px;
+  }
+
+  .slick-slider .slider_container{
+    position: relative;
+  }
+
+.slick-slider .movie-title {
+    font-size: 10px;
+    width: 80px;
+    color: lightgrey;
+    margin-top: 5px;
+    margin-bottom: 30px;
+    
+}
+
+.slick-slider .movie_poster {
+    width: 80px;
+    height: 120px;
+}
+
+.slick-slider .payment_button {
+    width: 60px;
+    height: fit-content;
+    font-size: 10px;
+    background-color: lightgray; 
+    bottom: 0; 
+    position: absolute;
+    right: 40%;
+   
+ 
+}
