@@ -2,6 +2,7 @@
 .mainpage_container h4 {
     color: lightgray;
     width: fit-content;
+    font-size: 20px;
 }
 
 .mainpage_container .popular_movies_section {

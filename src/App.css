@@ -23,11 +23,11 @@ body{
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-.payment_button{
+/* .payment_button{
   position: absolute;
   right: 40%;
   bottom: 10%;
-}
+} */
 
 .slider_container{
   position: relative;

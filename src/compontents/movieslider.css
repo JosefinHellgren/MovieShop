@@ -4,11 +4,12 @@
 .slick-slider {
     height: 220px;
     width: 86vw;
+    position: relative;
 }
 
 .slick-slider .slider_container {
     position: relative;
-
+    height: 194px;
 }
 
 /* .slick-prev,
@@ -17,11 +18,16 @@
 } */
 
 .slick-slider .movie-title {
-    font-size: 10px;
-    width: 80px;
+    font-size: 11px;
+    width: 88px;
     color: lightgrey;
     margin-top: 5px;
     margin-bottom: 30px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
 }
 
@@ -30,12 +36,12 @@
     height: 130px;
 }
 
-/* .slick-slider .payment_button {
-    width: 60px;
-    height: fit-content;
+.slick-slider .payment_button {
+    width: 70px;
+    height: 24px;
     font-size: 10px;
-    background-color: lightgray; 
-    bottom: 0; 
+    background-color: lightgray;
+    bottom: 0;
     position: absolute;
-    right: 40%;
-} */
+    right: 32%;
+}
