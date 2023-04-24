@@ -4,9 +4,12 @@
     width: fit-content;
 }
 
-
-.mainpage_container{
-  
+.mainpage_container .popular_movies_section {
+    margin-top: 80px;
 }
+
+
+
+
 
 

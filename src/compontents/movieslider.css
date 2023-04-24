@@ -2,13 +2,19 @@
 @import url('../../node_modules/slick-carousel/slick/slick-theme.css');
 
 .slick-slider {
-    width: 0 auto;
     height: 220px;
-  }
+    width: 86vw;
+}
 
-  .slick-slider .slider_container{
+.slick-slider .slider_container {
     position: relative;
-  }
+
+}
+
+/* .slick-prev,
+.slick-next {
+    display: none !important;
+} */
 
 .slick-slider .movie-title {
     font-size: 10px;
@@ -16,15 +22,15 @@
     color: lightgrey;
     margin-top: 5px;
     margin-bottom: 30px;
-    
+
 }
 
 .slick-slider .movie_poster {
-    width: 80px;
-    height: 120px;
+    width: 90px;
+    height: 130px;
 }
 
-.slick-slider .payment_button {
+/* .slick-slider .payment_button {
     width: 60px;
     height: fit-content;
     font-size: 10px;
@@ -32,6 +38,4 @@
     bottom: 0; 
     position: absolute;
     right: 40%;
-   
- 
-}
+} */

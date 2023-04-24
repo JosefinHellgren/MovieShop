@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import MovieSlider from "./MovieSlider";
 import "./mainpage.css";
+import Navbar from "./NavBar"
 
 const MainPage = (props) => {
   let navigate = useNavigate();
@@ -17,6 +18,9 @@ const MainPage = (props) => {
 
   return (
     <div className="mainpage_container">
+        <section>
+            <Navbar/>
+        </section>
       <section className="popular_movies_section">
         <h4>Popular Movies</h4>
         <MovieSlider query="popular" setMovie={handleMovieClick} handleButtonClick={handleButtonClick} />
