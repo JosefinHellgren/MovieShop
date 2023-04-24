@@ -5,6 +5,8 @@ import './App.css'
 import MainPage from './compontents/MainPage';
 import MovieInfo from './compontents/MovieInfo';
 import { Route, Routes } from 'react-router-dom';
+import SignUpPage from './compontents/SignUpPage';
+import LoginPage from './compontents/LoginPage';
 
 function App() {
 
@@ -17,6 +19,8 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage setMovie={setMovie}/>}/>
         <Route path="/movieinfo" element={<MovieInfo movie={movie}/>}/>
+        <Route path='/login' element={<LoginPage/>} />
+        <Route path= "/signup" element={<SignUpPage/>}/>
       </Routes>
     </div>
   )
