@@ -9,6 +9,7 @@ import 'firebase/compat/firestore';
 
 import { HashRouter as Router } from 'react-router-dom';
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyDEfI0TLpFbsldRzHb72ZhZsXVKjiuRn1o",
   authDomain: "movieshop-e53aa.firebaseapp.com",
