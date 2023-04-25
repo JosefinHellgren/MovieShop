@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import MovieSlider from "./MovieSlider";
 import "./mainpage.css";
@@ -40,3 +41,5 @@ const MainPage = (props) => {
 };
 
 export default MainPage;
+
+export const imgUrlStart = "https://image.tmdb.org/t/p/w185";

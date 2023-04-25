@@ -1,0 +1,64 @@
+
+.movieinfo {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  .poster-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .poster-container img {
+    margin-right: 20px;
+  }
+  
+  .movie-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  
+  .overview {
+    margin-top: 20px;
+  }
+
+  .movieinfobuybtns{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 20px;
+
+  }
+
+  .movieinfobtn{
+    background-color: rgb(100, 247, 59);
+    margin-top: 15px;
+  }
+
+  .details-nav {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  
+  .details-btn {
+    background-color: black;
+    color: white;
+    margin-top: 20px;
+    margin-right: 10px;
+
+  }
+
+  .ratebtn{
+    margin: 10px;
+    background-color: grey;
+  }
+
+ 
