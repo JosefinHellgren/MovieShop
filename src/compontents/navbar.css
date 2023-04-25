@@ -19,6 +19,11 @@
     height: 50px;
   }
 
+  .navbar .user_icon {
+    font-size: 35px;
+    color: white;
+  }
+
   .navbar .search_icon {
     width: 16px;
     height: 16px;

@@ -1,21 +1,21 @@
-.sign-up-page {
+.login-page {
     display: flex;
     flex-direction: column;
 }
 
-.sign-up-page .signup-title {
+.login-page .signup-title {
     display: flex;
     justify-content: space-around;
 }
 
-.sign-up-page .fa-icon-container {
+.login-page .fa-icon-container {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
     margin-right: 10px;
 }
 
-.sign-up-page .fa-icon {
+.login-page .fa-icon {
     background-color: black;
     color: white;
     border-radius: 50%;
@@ -23,31 +23,34 @@
     outline-color: black;
 }
 
-.sign-up-page .signup-title {
+.login-page .signup-title {
     margin-bottom: 30px;
 }
 
-.sign-up-page .signup-title > h1 {
+.login-page .signup-title > h1 {
     font-size: 25px;
     color: white;
     font-family: 'Courier New', Courier, monospace;
 }
 
-.sign-up-page .sign-up-container > input {
+.login-page .sign-up-container > input, .login-page .password-input {
     border-radius: 10px;
     height: 5vh;
     width: 80vw;
-    text-align: center;
     margin-bottom: 15px;
 }
 
 
-.sign-up-page .signup-button-container > button {
+.login-page .signup-button-container > button {
     margin-top: 50px;
     background-color: red;
 }
 
-.sign-up-page .fa-times-icon {
+.login-page .register-member {
+    color: white;
+}
+
+.login-page .fa-times-icon {
     font-size: 35px;
     color: white;
 }
