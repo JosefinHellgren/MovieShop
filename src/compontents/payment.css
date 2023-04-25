@@ -2,10 +2,11 @@
 
 
 
-.payment-container img{
+.poster{
 width: 70%;
 height: 70%;
 top: 10%;
+border: 3px solid white;
 }
 
 
@@ -24,18 +25,17 @@ top: 10%;
 .exit-button{
     position: absolute;
     border-radius: 50%;
-    top: 7%;
+    top: 1%;
     right: 0;
     margin: 5px;
     background-color: black;
     color: white;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: bold;
 }
 
 .small-info{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+   
     width: 100%;
     height: 70%;
 }
@@ -43,12 +43,49 @@ top: 10%;
 .paymentform{
     display: grid;
     grid-template-columns: 2fr 2fr;
+}
+
+.paymentform input{
+    border-radius: 10px;
+    padding: 10px;
+    width: 80%;
 
 }
 
+.paymentform button  {
+    margin-top: 20px;
+ }
+
 #playButton{
     position: absolute;
-    bottom: 25%;
+    bottom: 15%;
     right:35%;
     background-color: greenyellow;
+}
+
+.credticard{
+width: 50px;
+height: 30px;
+border: 3px solid white;
+
+}
+
+.payment-form-wrapper{
+    margin: 10px;
+}
+.payment-form-wrapper img{
+    width: 60px;
+height: 40px;
+
+
+}
+
+.submitButton{
+    margin-top: 30px;
+}
+
+.selected{
+    border: 4px solid greenyellow;
+   
+
 }
