@@ -1,6 +1,4 @@
 
-
-
 //Set up api fetch för filmer
 //Visa upp filmerna
 
@@ -54,3 +52,6 @@ const MainPage = (props) =>{
 }
 
 export default MainPage
+
+export const imgUrlStart = "https://image.tmdb.org/t/p/w185";
+
