@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "./movieslider.css";
 import { useMediaQuery } from 'react-responsive';
 
-const MovieSlider = ({ query, setMovie, handleButtonClick }) => {
+const MovieSlider = ({ query, setMovie, handleButtonClick, handleMovieClick }) => {
     const [movies, setMovies] = useState([]);
     const apiKey = "305f99214975faee28a0f129881c6ec9";
     const imgUrlStart = "https://image.tmdb.org/t/p/w185";
@@ -19,11 +19,6 @@ const MovieSlider = ({ query, setMovie, handleButtonClick }) => {
                 console.log(error);
             });
     }, [query]);
-
-    const handleMovieClick = (movie) => {
-        setMovie(movie);
-        navigate("/movieinfo/");
-    };
 
     return (
         <Slider className="slick-slider" slidesToShow={3} slidesToScroll={1} >
