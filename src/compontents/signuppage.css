@@ -1,0 +1,49 @@
+.sign-up-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.sign-up-page .signup-title {
+    display: flex;
+    justify-content: space-around;
+}
+
+.sign-up-page .fa-icon-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.sign-up-page .fa-icon {
+    background-color: black;
+    color: white;
+    border-radius: 50%;
+    outline: none;
+    outline-color: black;
+}
+
+.sign-up-page .signup-title {
+    margin-bottom: 30px;
+}
+
+.sign-up-page .signup-title > h1 {
+    font-size: 25px;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.sign-up-page .sign-up-container > input {
+    border-radius: 10px;
+    height: 5vh;
+    width: 80vw;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+
+.sign-up-page .signup-button-container > button {
+    margin-top: 50px;
+    background-color: red;
+    
+}
