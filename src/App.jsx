@@ -7,6 +7,7 @@ import MovieInfo from './compontents/MovieInfo';
 import { Route, Routes } from 'react-router-dom';
 import Payment from './compontents/Payment';
 
+
 function App() {
 
   const apiKey = "305f99214975faee28a0f129881c6ec9";
