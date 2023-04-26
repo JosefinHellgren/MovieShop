@@ -40,6 +40,11 @@
     margin-bottom: 15px;
 }
 
+.login-page .error-message {
+    color: red;
+    font-weight: bolder;
+}
+
 
 .login-page .signup-button-container > button {
     margin-top: 50px;
