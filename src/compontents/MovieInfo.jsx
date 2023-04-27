@@ -5,10 +5,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp , faCartPlus , faThumbsDown } from '@fortawesome/free-solid-svg-icons'
 
 
+
 function MovieInfo(props) {
   const [genres, setGenres] = useState([]);
   const { movie } = props;
   const rating = movie.vote_average;
+
+
+
+
+
 
   useEffect(() => {
     // fetch movie genres from API
@@ -25,6 +31,9 @@ function MovieInfo(props) {
     const genre = genres.find(g => g.id === id);
     return genre ? genre.name : "";
   });
+
+
+  
 
   return (
     <div className="movieinfo">
