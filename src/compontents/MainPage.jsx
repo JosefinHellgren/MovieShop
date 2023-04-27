@@ -24,18 +24,16 @@ const MainPage = (props) => {
         </section>
       <section className="popular_movies_section">
         <h4>Popular Movies</h4>
-        <MovieSlider query="popular" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} />
+        <MovieSlider category="popular" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} />
       </section>
       <section className="toprated_movies_section">
         <h4>Top Rated Movies On IMDb</h4>
-        <MovieSlider query="top_rated" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} />
+        <MovieSlider category="top_rated" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} />
       </section>
       <section className="now_playing_section">
         <h4>In Theaters Now</h4>
-        <MovieSlider query="now_playing" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} />
+        <MovieSlider category="now_playing" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} />
       </section>
-      
-      
     </div>
   );
 };

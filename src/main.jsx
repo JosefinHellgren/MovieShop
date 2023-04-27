@@ -4,10 +4,10 @@ import App from './App'
 import './index.css'
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
-
-
-
 import { HashRouter as Router } from 'react-router-dom';
+import { configureStore } from '@reduxjs/toolkit'
+import { rootReducer } from './features/rootreducer.js';
+import { Provider } from 'react-redux';
 
 
 const firebaseConfig = {
@@ -21,13 +21,17 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-
+const store = configureStore({
+  reducer: rootReducer
+});
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
   </React.StrictMode>,
 )
 
