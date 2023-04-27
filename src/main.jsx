@@ -8,6 +8,7 @@ import 'firebase/compat/firestore';
 
 
 import { HashRouter as Router } from 'react-router-dom';
+import Comments from './compontents/Comments';
 
 
 const firebaseConfig = {

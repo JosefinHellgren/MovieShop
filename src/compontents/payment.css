@@ -89,3 +89,88 @@ height: 40px;
    
 
 }
+
+
+.overlay{
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+.modalContainer{
+    max-width: 400px;
+    width: 100%;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: flex;
+    background-color: white;
+    box-shadow: 0px 0px 18px 0px, rgba(0, 0, 0, 0.75);
+
+}
+
+.modalContainer img{
+    width: 30%;
+    object-fit: fill;
+    height: 30%;
+}
+
+.modalRight{
+    width: 100%;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-top: 3rem;
+    padding: 1rem 2rem;
+    color: black;
+}
+
+.buttonContainer{
+    display: flex;
+    padding: 1rem 1rem;
+
+}
+
+.buttonContainer .button{
+    width: 100%;
+    margin:  .5rem;
+    padding: 16px;
+    border: none;
+    color: black;
+    background-color: blue;
+
+}
+@media (min-width: 768px) {
+
+
+
+    .div-for-web{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+   
+    .payment-form-wrapper{
+        margin-top: 40%;
+        
+    }
+
+    .paymentform{
+        font-size: large;
+        margin: 27px;
+    }
+
+    .payment-form-wrapper img{
+        width: 90px;
+        height: 60px;
+    }
+.purchased{
+
+}
+}
