@@ -8,6 +8,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit'
 import { rootReducer } from './features/rootreducer.js';
 import { Provider } from 'react-redux';
+import Comments from './compontents/Comments';
 
 
 const firebaseConfig = {
