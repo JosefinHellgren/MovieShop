@@ -4,11 +4,15 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { IconContext } from 'react-icons';
 import { FaTimes } from 'react-icons/fa';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpPage = () => {
     
 
     const auth = getAuth();
+    const navigate = useNavigate();
 
     const validateEmail = (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -85,22 +89,16 @@ const SignUpPage = () => {
         });
     }
 
-    const FaTimesIcon = () => {
-        return (
-          <IconContext.Provider
-            value={{ color: 'white', size: '35px' }}
-          >
-            <div className='fa-icon-container'>
-              <FaTimes />
-            </div>
-          </IconContext.Provider>
-        );
-      }
+    const handleIconClick = () => {
+        navigate(-1);
+    }
 
 
     return (
         <div className="sign-up-page">
-            <FaTimesIcon />  
+            <div className='fa-icon-container' onClick={handleIconClick}>
+                <FontAwesomeIcon className='fa-times-icon' icon={faTimes}/>
+            </div> 
             <section className='signup-title'>
                 <h1>Create an account</h1>
             </section>

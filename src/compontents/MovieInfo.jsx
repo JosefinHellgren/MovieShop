@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import "./movieInfo.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,7 +10,28 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 
+import { imgUrlStart } from "./MainPage";
+
+
+
+import { useSelector } from 'react-redux';
+
+
+
+
+
 function MovieInfo(props) {
+
+  //CILIA REDUX SELECTEDMOVIE
+ //how to get the selectedmovie from redux, must also import useSelector from react-redux
+ const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
+ // use the selectedMovie like this
+ console.log("movieinfo: " + selectedMovie.title);
+
+
+
+
+ 
   const [genres, setGenres] = useState([]);
   const [trailerKey, setTrailerKey] = useState(null);
   const [showOverview, setShowOverview] = useState(true);
@@ -18,6 +40,7 @@ function MovieInfo(props) {
   const { movie } = props;
   const rating = movie.vote_average;
   const imgUrlStart = "https://image.tmdb.org/t/p/w185";
+
 
   useEffect(() => {
     // fetch movie genres from API
@@ -52,6 +75,7 @@ function MovieInfo(props) {
     return genre ? genre.name : "";
   });
 
+
   const handleShowOverview = () => {
     setShowOverview(true);
     setShowTrailer(false);
@@ -69,6 +93,7 @@ function MovieInfo(props) {
     setShowTrailer(false);
     setShowComments(true);
   };
+
 
   return (
     <div className="movieinfo">
@@ -105,6 +130,7 @@ function MovieInfo(props) {
         </div>
       </div>
 
+
       <div className="movieinfobuybtns">
         <button className="movieinfobtn" onClick={() => handleBuy(movie)}>
           <FontAwesomeIcon icon={faCartPlus} />
@@ -114,6 +140,7 @@ function MovieInfo(props) {
           + Add to watch list
         </button>
       </div>
+
 
       <div className="details-nav">
         <button className="details-btn" onClick={handleShowOverview}>
