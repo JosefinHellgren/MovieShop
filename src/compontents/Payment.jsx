@@ -173,7 +173,7 @@ const Payment = (props) => {
 
     const auth = getAuth();
 
-    const auth = getAuth();
+ 
 
     const movie = props.movie;
     let navigate = useNavigate();
@@ -370,19 +370,16 @@ const Payment = (props) => {
     }
     return (
 
-
         <div  className="payment-container">
 
            
-
             <button onClick={handleExitButtonClick} className='exit-button'>x</button>
             <div className='div-for-web'>
                 <div className='small-info'>
 
 
-
-                    {isPaymentSuccessful ? (<div>
-
+                    {isPaymentSuccessful ? ( <div>
+                        
                         <h2>Purchased:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <button id='playButton'>Play movie</button> </div>) : (<div> <h2>Checkout:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <h2>{movie.title}</h2> </div>)}
 
 
@@ -398,12 +395,15 @@ const Payment = (props) => {
                     <img className={`creditcard ${cardType === "Visa" ? "selected" : ""}`} src={visa} alt="" />
 
 
-
                     <input type="checkbox" value={"Mastercard"} name="cardType" checked={cardType === "Mastercard"} onChange={handleCheckboxChange} ></input>
                     <img className={`creditcard ${cardType === "Mastercard" ? "selected" : ""}`} src={mastercard} alt="" />
                     <input type="checkbox" value={"American Express"} name="cardType" checked={cardType === "American Express"} onChange={handleCheckboxChange}></input>
                     <img className={`creditcard ${cardType === "American Express" ? "selected" : ""}`} src={americanexpress} alt="" />
                     <div>
+                    
+                    
+
+
 
 
                     </div>
@@ -430,39 +430,6 @@ const Payment = (props) => {
 
                         </form>)}
                        
-                </div>
-                )}
-
-
-
-
-            </div>
-
-
-                    </div>
-
-                    {cardType === "American Express" ? (<AmexForm setIsPaymentSuccessful={setIsPaymentSuccessful} setCardName={setCardName} setCVV={setCVV} setCardNumber={setCardNumber} setExpDate={setExpDate} cardName={cardName} cardNumber={cardNumber} cvv={cvv} expDate={expDate} />) : (
-
-                        <form onSubmit={handleSubmit}>
-                            <div className='paymentform'>
-
-                                Card Number:
-
-                                <input type="text" onChange={handleCardNumberChange} value={cardNumber} placeholder='Valid Card Number'></input>
-                                Exp. Date:
-                                <input type="text" onChange={handleExpDateChange} value={expDate} placeholder='MM/YY'></input>
-                                cvv/CVC:
-                                <input type="text" onChange={handleCVVChange} value={cvv} placeholder='123'></input>
-                                Name on Card:
-                                <input type="text" onChange={handleNameChange} value={cardName} placeholder='Jamile Jonson'></input>
-                            </div>
-
-
-                            <button type='submit' className='submitButton'> Buy 199kr</button>
-
-
-                        </form>)}
-
                 </div>
                 )}
 
