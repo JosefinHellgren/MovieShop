@@ -64,4 +64,4 @@ const MainPage = (props) => {
 
 export default MainPage;
 
-
+export const imgUrlStart = "https://image.tmdb.org/t/p/w185";
