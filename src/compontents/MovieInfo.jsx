@@ -3,7 +3,9 @@ import { imgUrlStart } from "./MainPage";
 import './movieInfo.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp , faCartPlus , faThumbsDown } from '@fortawesome/free-solid-svg-icons'
+
 import { useSelector } from 'react-redux';
+
 
 
 
@@ -74,6 +76,7 @@ function MovieInfo(props) {
           <button className="details-btn">Trailer</button>
           <button className="details-btn">Comments</button>
           </div>
+         
           <p className="overview">Overview: {props.movie.overview}</p>
 
 

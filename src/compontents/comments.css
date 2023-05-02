@@ -1,0 +1,30 @@
+.comments-wrapper{
+    color: white;
+    display: grid;
+   grid-template-columns: 1fr;
+   margin: 10px;
+   gap: 10px;
+   text-align: start;
+}
+
+.comments-wrapper span{
+    font-weight: bold;
+}
+
+
+.comments-list{
+    height: 100px;
+     width: 300px;
+      overflow: auto;
+}
+
+
+.comment-input{
+    height: 50px;
+    width: 100%;
+}
+
+.comments-wrapper button{
+    border-radius: 50px;
+    width: 100%;
+}
