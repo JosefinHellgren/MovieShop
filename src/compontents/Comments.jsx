@@ -1,33 +1,123 @@
 import { useState } from "react";
+import { getAuth,onAuthStateChanged} from 'firebase/auth';
+import { useEffect } from "react";
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import '../compontents/comments.css'
 
-const Comments = () => {
-    //const userName?
-    //const time and date.
-
-
+const Comments = (props) => {
+    const [commentText, setCommentText] = useState('');
+    const [userName,setUserName] = useState('');
     const timeStamp = new Date();
+    const movie = props.movie;
+    const auth = getAuth();
+    const db = firebase.firestore();
+    const [comments,setComments] = useState([]);
+    const [user, setUser] = useState('');
+
+   
+
+useEffect(() => {
+  const commentsRef = db.collection("comments");
+  const filteredCommentsRef = commentsRef.where("movieid", "==", movie.id.toString());
+  filteredCommentsRef.onSnapshot((querySnapshot) => {
+    if (!querySnapshot.empty) {
+      const commentsData = querySnapshot.docs.map((doc) => doc.data());
+      console.log("Comments for movie", movie.id, ":", commentsData);
+      setComments(commentsData);
+    } else {
+      console.log("No comments found for movie", movie.id);
+    }
+  }, (error) => {
+    console.log("Error getting comments:", error);
+  });
+}, []);
 
 
-    const [comment, setComment] = useState({
-        name: "",
-        time: "",
-        text: "",
+    const saveToFirebase = () =>{
+        const timeStampText = timeStamp.toString();
+        const formattedDate = new Intl.DateTimeFormat('en-US').format(timeStamp).toString();
+        
+        console.log("formatDate"+ formattedDate)
+const movieId = movie.id.toString()
+
+        db.collection("comments").doc(timeStampText).set({
+         text: commentText,
+         name : userName,
+         time : formattedDate,
+         movieid: movieId,
+         timeStamp:timeStampText
+        })
+        .then(() => {
+            console.log("saved.");
+         
+        })
+        .catch((error) => {
+            console.error("error saving: ", error);
+        });
+setCommentText('')
+    }
+   
+    useEffect(() => {
+        const unsubscribe =
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const uid = user.uid;
+          console.log(uid)
+          setUser(user);
+         
+          
+            const userRef = db.collection("users").doc(uid);
+    
+            userRef.get().then((doc) => {
+            if (doc.exists) {
+            const userData = doc.data();
+            const username = userData.username;
+            console.log("Username:", username);
+            setUserName(username)
+            } else {
+            console.log("cant fint username");
+        }
+                }).catch((error) => {
+            console.log("Error getting document:", error);
+            });
+    } else {
+          console.log('user is signed out')
+        }
       });
+      return () => {
+        unsubscribe();
+    };
+}, []);
+
+      const handleTextAreaChange = (event) =>{
+        const {value} = event.target;
+        setCommentText(value)
+      }
+
+    
 
 
 
 
+//if your nog logged in you cant see the input field.
     return(
-        <div>
-            <div>
-                <form>
-            <textarea name="text" type="text" placeholder="your comment..."></textarea>
-            <button>publish</button>
-            </form>
-            </div>
-
-
-            and here you can read comments.
+        <div className="comments-wrapper">
+            
+           {user && <div>
+            <textarea className="comment-input"value={commentText} onChange={handleTextAreaChange} name="text" type="text" placeholder="your comment..."></textarea>
+            <button onClick={saveToFirebase}>comment</button></div> }
+            
+            
+<div className="comments-list">
+            {comments && comments.slice()
+          .reverse()
+          .map((comment) =>  (
+  <div key={comment.timeStamp}>
+<span>{comment.name}</span> {comment.time}: <br/> {comment.text} 
+  </div>
+))}
+        </div>
         </div>
     )
 }
