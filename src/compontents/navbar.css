@@ -7,6 +7,7 @@
     left: 0;
     right: 0;
     padding: 6px;
+    background-color: black;
   }
   
   .navbar .movie_wheel {
@@ -15,13 +16,15 @@
   }
   
   .navbar .play_folder {
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
+    padding: 1.5rem;
   }
 
   .navbar .user_icon {
     font-size: 35px;
     color: white;
+    padding: 1.5rem;
   }
 
   .navbar .search_icon {
