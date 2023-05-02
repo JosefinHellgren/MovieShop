@@ -13,10 +13,10 @@ const MovieSlider = ({ category, handleButtonClick, handleMovieClick }) => {
 
     useEffect(() => {
         fetchMovies(category, dispatch)
-    }, [category]);
+    }, []);
 
     let content = null;
-
+    
     switch (moviesObject.status) {
         case STATUS.NORMAL:
             content = null;
@@ -26,8 +26,6 @@ const MovieSlider = ({ category, handleButtonClick, handleMovieClick }) => {
             break;
         case STATUS.SUCCESS:
             content = moviesObject.movies[category];
-            console.log({content});
-            console.log(category);
             break;
         default:
             content = null

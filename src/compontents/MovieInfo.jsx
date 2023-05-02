@@ -3,17 +3,25 @@ import { imgUrlStart } from "./MainPage";
 import './movieInfo.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp , faCartPlus , faThumbsDown } from '@fortawesome/free-solid-svg-icons'
+import { useSelector } from 'react-redux';
 
 
 
 function MovieInfo(props) {
+
+  //CILIA REDUX SELECTEDMOVIE
+ //how to get the selectedmovie from redux, must also import useSelector from react-redux
+ const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
+ // use the selectedMovie like this
+ console.log("movieinfo: " + selectedMovie.title);
+
+
+
+
+ 
   const [genres, setGenres] = useState([]);
   const { movie } = props;
   const rating = movie.vote_average;
-
-
-
-
 
 
   useEffect(() => {
