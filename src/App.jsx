@@ -9,6 +9,7 @@ import { Route, Routes } from 'react-router-dom';
 import SignUpPage from './compontents/SignUpPage';
 import LoginPage from './compontents/LoginPage';
 import Payment from './compontents/Payment';
+import UserPage from './compontents/UserPage';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<MainPage setMovie={setMovie}/>}/>
         <Route path="/movieinfo" element={<MovieInfo movie={movie}/>}/>
         <Route path='/login' element={<LoginPage/>} />
+        <Route path='/userpage'element= {<UserPage/>} />
         <Route path= "/signup" element={<SignUpPage/>}/>
         <Route path="/payment" element={<Payment movie={movie}/>}/>
       </Routes>

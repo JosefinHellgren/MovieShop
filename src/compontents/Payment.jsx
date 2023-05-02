@@ -7,6 +7,7 @@ import americanexpress from '../assets/AmericanExpress.png'
 import mastercard from '../assets/Mastercard.png'
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+
 import { getAuth } from "firebase/auth"
 import { useSelector } from 'react-redux';
 
@@ -15,8 +16,10 @@ import { useSelector } from 'react-redux';
 
 
 
-const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, setCVV, setCardNumber, setCardName, setExpDate }) => {
 
+const AmexForm = ({setIsPaymentSuccessful,cardName,cardNumber,expDate,cvv,setCVV,setCardNumber,setCardName,setExpDate}) => {
+
+ 
 
 
 
@@ -81,9 +84,11 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
 
     const handleNameChange = (event) => {
         const { value } = event.target;
+
         ([A - Z] | Å | Ä | Ö)([a - z] | å | ä | ö)
 
         const isValid = /^[a-zA-Z\u00C0-\u00ff]+\s?[a-zA-Z\u00C0-\u00ff]+$/.test(value)
+
         setCardName(value);
 
         if (isValid) {
@@ -164,7 +169,9 @@ const Payment = (props) => {
     const [cvvNumberValid, setCVVNumberValid] = useState(false);
     const [dateExpValid, setDateExpValid] = useState(false);
     const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
+  
 
+    const auth = getAuth();
 
     const auth = getAuth();
 
@@ -182,9 +189,6 @@ const Payment = (props) => {
         console.log(value)
 
     }
-
-
-
 
     const handleCardNumberChange = (event) => {
         const { value } = event.target;
@@ -250,6 +254,7 @@ const Payment = (props) => {
 
     const handleNameChange = (event) => {
         const { value } = event.target;
+
         const isValid = /^[a-zA-Z\u00C0-\u00ff]+\s?[a-zA-Z\u00C0-\u00ff]+$/.test(value)
 
 
@@ -264,8 +269,6 @@ const Payment = (props) => {
             console.log("please use only letters")
         }
     }
-
-
 
 
 
@@ -318,34 +321,32 @@ const Payment = (props) => {
         const db = firebase.firestore();
         const user = auth.currentUser;
 
-        if (user != null) {
+       
+        if(user != null){
             const userUID = auth.currentUser.uid;
-
-            db.collection("users").doc(userUID).collection("purchased").doc(movie.title).set({
-                title: movie.title,
-                img: imgUrlStart + movie.poster_path,
-                overview: movie.overview
+ 
+            db.collection("users").doc(userUID).collection("purchased").doc().set(movie)
+            .then(() => {
+                console.log("saved.");
             })
-                .then(() => {
-                    console.log("saved.");
-                })
-                .catch((error) => {
-                    console.error("error saving: ", error);
-                });
+            .catch((error) => {
+                console.error("error saving: ", error);
+            });
 
         } else {
+             
+        db.collection("users").doc("demo-user").collection("purchased").doc(movie.title).set({
+            title: movie.title,
+            img: imgUrlStart + movie.poster_path,
+            overview: movie.overview
+        })
+        .then(() => {
+            console.log("saved.");
+        })
+        .catch((error) => {
+            console.error("error saving: ", error);
+        });
 
-            db.collection("users").doc("demo-user").collection("purchased").doc(movie.title).set({
-                title: movie.title,
-                img: imgUrlStart + movie.poster_path,
-                overview: movie.overview
-            })
-                .then(() => {
-                    console.log("saved.");
-                })
-                .catch((error) => {
-                    console.error("error saving: ", error);
-                });
         }
     }
 
@@ -356,23 +357,28 @@ const Payment = (props) => {
             console.log("all fields area valid")
             setIsPaymentSuccessful(true);
             console.log(cardNumberValid, nameOnCardValid, cvvNumberValid, dateExpValid)
-            saveMovieToFirebase()
+
+             saveMovieToFirebase()
+
 
         } else {
             console.log("fields are not valid")
             console.log(cardNumber, cardName, cvv, expDate)
         }
 
-
+    
     }
     return (
 
-        <div className="payment-container">
 
+        <div  className="payment-container">
+
+           
 
             <button onClick={handleExitButtonClick} className='exit-button'>x</button>
             <div className='div-for-web'>
                 <div className='small-info'>
+
 
 
                     {isPaymentSuccessful ? (<div>
@@ -392,6 +398,7 @@ const Payment = (props) => {
                     <img className={`creditcard ${cardType === "Visa" ? "selected" : ""}`} src={visa} alt="" />
 
 
+
                     <input type="checkbox" value={"Mastercard"} name="cardType" checked={cardType === "Mastercard"} onChange={handleCheckboxChange} ></input>
                     <img className={`creditcard ${cardType === "Mastercard" ? "selected" : ""}`} src={mastercard} alt="" />
                     <input type="checkbox" value={"American Express"} name="cardType" checked={cardType === "American Express"} onChange={handleCheckboxChange}></input>
@@ -399,8 +406,37 @@ const Payment = (props) => {
                     <div>
 
 
+                    </div>
+                    
+                    {cardType === "American Express" ? (<AmexForm setIsPaymentSuccessful={setIsPaymentSuccessful} setCardName={setCardName} setCVV={setCVV} setCardNumber={setCardNumber} setExpDate={setExpDate} cardName={cardName} cardNumber={cardNumber } cvv={cvv} expDate={expDate}/>) : (
+
+                        <form onSubmit={handleSubmit}>
+                            <div className='paymentform'>
+
+                                Card Number:
+
+                                <input type="text" onChange={handleCardNumberChange} value={cardNumber} placeholder='Valid Card Number'></input>
+                                Exp. Date:
+                                <input type="text" onChange={handleExpDateChange} value={expDate} placeholder='MM/YY'></input>
+                                cvv/CVC:
+                                <input type="text" onChange={handleCVVChange} value={cvv} placeholder='123'></input>
+                                Name on Card:
+                                <input type="text" onChange={handleNameChange} value={cardName} placeholder='Jamile Jonson'></input>
+                            </div>
+                            
+                            
+                            <button type='submit' className='submitButton'> Buy 199kr</button>
+                        
+
+                        </form>)}
+                       
+                </div>
+                )}
 
 
+
+
+            </div>
 
 
                     </div>

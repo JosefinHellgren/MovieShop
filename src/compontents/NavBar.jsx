@@ -19,8 +19,11 @@ const Navbar = () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       setSignedIn(true);
+      console.log('setSginedIn körs - to true')
+     // auth.signOut();
     } else {
       setSignedIn(false);
+      console.log('setSginedIn körs - to false')
     }
   });
 
@@ -28,8 +31,12 @@ const Navbar = () => {
     navigate('/login');
   }
 
+  const handlePlayButtonPressed = () => {
+    navigate('/userpage')
+  }
+
   const renderButton = () => {
-    return signedIn ? <img src={PlayButton} alt="Play Button" className="play_folder" /> :  <HiOutlineUserCircle className="user_icon" onClick={handleUserCircleClick} />
+    return signedIn ? <img src={PlayButton} onClick = {handlePlayButtonPressed} alt="Play Button" className="play_folder" /> :  <HiOutlineUserCircle className="user_icon" onClick={handleUserCircleClick} />
   };
 
 
