@@ -2,16 +2,23 @@
 @import url('../../node_modules/slick-carousel/slick/slick-theme.css');
 
 .slick-slider {
-    height: 220px;
+    height: 0 auto;
     width: 86vw;
+    min-width: 200px;
     position: relative;
 }
 
 .slick-slider .slider_container {
     position: relative;
-    height: 194px;
+    width: 24vw;
+    height: 240px;
+    max-width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+/*Om man inte vill ha pilar i karusellerna
 /* .slick-prev,
 .slick-next {
     display: none !important;
@@ -19,29 +26,30 @@
 
 .slick-slider .movie-title {
     font-size: 11px;
-    width: 88px;
+    width: 24vw;
+    max-width: 120px;
     color: lightgrey;
     margin-top: 5px;
-    margin-bottom: 30px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
-
 }
 
 .slick-slider .movie_poster {
-    width: 90px;
-    height: 130px;
+    width: 24vw;
+    max-width: 120px;
+    height: 0 auto;
 }
 
 .slick-slider .payment_button {
-    width: 70px;
-    height: 24px;
+    width: 18vw;
+    min-width: 20px;
+    max-width: 100px;
+    height: fit-content;
     font-size: 10px;
-    background-color: lightgray;
-    bottom: 0;
-    position: absolute;
-    right: 32%;
+    background-color: lightgray; 
+    position: relative;
+    bottom: 10px;
 }
