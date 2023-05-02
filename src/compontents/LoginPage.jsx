@@ -10,6 +10,8 @@ const LoginPage = () => {
     const auth = getAuth();
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState('');
+    const [errorEmail, setErrorEmail] = useState(false);
+    const [errorPassword, setErrorPassword] = useState(false);
 
     const ERROR  = {
       EMAILMISSING : 'Please enter your email',
@@ -19,36 +21,31 @@ const LoginPage = () => {
       USERNOTFOUND : 'User not found'
     }
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-          const uid = user.uid;
-          console.log(uid)
-          navigate(-1);
-        } else {
-          console.log('user is signed out')
-        }
-      });
-
     const login = async () => {
         const email = document.getElementById('userEmail-input').value;
         const password = document.getElementById('userPassword-input').value;
 
         if (email === '') {
           setErrorMessage(ERROR.EMAILMISSING);
+          setErrorEmail(true);
         } else if (password === '') {
           setErrorMessage(ERROR.PASSWORDMISSING);
+          setErrorPassword(true);
         } else {
         const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password )
         .then((userCredential) => { 
             const user = userCredential.user;
             console.log(user.uid);
+            navigate(-1)
           })
           .catch((error) => {
             if(error.code === 'auth/wrong-password') {
               setErrorMessage(ERROR.WRONGPASSWORD);
+              setErrorPassword(true);
             } else if (error.code === 'auth/invalid-email') {
               setErrorMessage(ERROR.INVALIDEMAIL);
+              setErrorEmail(true);
             } else if (error.code === 'auth/user-not-found') {
               setErrorMessage(ERROR.USERNOTFOUND);
             }
@@ -70,19 +67,18 @@ const LoginPage = () => {
                 <FontAwesomeIcon className='fa-times-icon' icon={faTimes}/>
             </div>
             <section className='signup-title'>
-                <h1>Welcome back!</h1>
+                <h1>Sign in</h1>
             </section>
             <section className="sign-up-container">
 
               <p className='error-message'>{errorMessage}</p>
-                <input type="text" id='userEmail-input' placeholder="Enter you email" />
+                <input type="text" className={errorEmail ? "email-input red-border" : "email-input"} id='userEmail-input' placeholder="Enter you email" />
                 <PasswordInput
                 id="userPassword-input"
-                className = "password-input"
+                className = { errorPassword ? "password-input red-border" : "password-input" }
                 name="password"
                 placeholder="Enter your password"
-      />
-                
+              /> 
             </section>
       
             
