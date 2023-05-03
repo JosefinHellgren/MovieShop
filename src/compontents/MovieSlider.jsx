@@ -4,10 +4,11 @@ import "./movieslider.css";
 import { useMediacategory } from 'react-responsive';
 import { useDispatch, useSelector } from "react-redux";
 import { STATUS, actions } from "../features/movies";
+import MovieGridItem from "./MovieGridItem";
 
 const MovieSlider = ({ category, handleButtonClick, handleMovieClick }) => {
    
-    const imgUrlStart = "https://image.tmdb.org/t/p/w185";
+    
     const moviesObject = useSelector(state => state.movies);
     const dispatch = useDispatch();
 
@@ -36,15 +37,7 @@ const MovieSlider = ({ category, handleButtonClick, handleMovieClick }) => {
             {content &&
                 content.map((movie, index) => (
                     <div key={index} className="slider_container">
-                        <img
-                            className="movie_poster"
-                            src={imgUrlStart + movie.poster_path}
-                            onClick={() => handleMovieClick(movie)}
-                        />
-                        <h6 className="movie-title">{movie.title}</h6>
-                        <button className="payment_button" onClick={() => handleButtonClick(movie)}>
-                            59kr
-                        </button>
+                        <MovieGridItem movie={movie} handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} />
                     </div>
                 ))}
         </Slider>
