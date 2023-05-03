@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { imgUrlStart } from "./MainPage";
 import './movieInfo.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp , faCartPlus , faThumbsDown } from '@fortawesome/free-solid-svg-icons'
@@ -10,6 +9,7 @@ import { useSelector } from 'react-redux';
 
 
 function MovieInfo(props) {
+  const imgUrlStart = "https://image.tmdb.org/t/p/w185"
 
   //CILIA REDUX SELECTEDMOVIE
  //how to get the selectedmovie from redux, must also import useSelector from react-redux
@@ -23,7 +23,7 @@ function MovieInfo(props) {
  
   const [genres, setGenres] = useState([]);
   const { movie } = props;
-  const rating = movie.vote_average;
+  const rating = selectedMovie.vote_average; // ändring här!
 
 
   useEffect(() => {
@@ -37,7 +37,7 @@ function MovieInfo(props) {
   }, []);
 
   // find genre names for each genre ID in the movie's genre_ids array
-  const genreNames = props.movie.genre_ids.map(id => {
+  const genreNames = selectedMovie.genre_ids.map(id => {
     const genre = genres.find(g => g.id === id);
     return genre ? genre.name : "";
   });
@@ -47,13 +47,13 @@ function MovieInfo(props) {
 
   return (
     <div className="movieinfo">
-    <h1>{props.movie.title}</h1>
+    <h1>{selectedMovie.title}</h1>
     <div className="poster-container">
-      <img src={imgUrlStart + props.movie.poster_path} alt={props.movie.title} />
+      <img src={imgUrlStart + selectedMovie.poster_path} alt={selectedMovie.title} />
       <div className="movie-details">
         <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
-        <p className="movie-detail"><strong>Language: </strong>{props.movie.original_language}</p>
-        <p className="movie-detail"><strong>Release: </strong>{props.movie.release_date}</p>  
+        <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
+        <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>  
         <p><strong>Rating:</strong> {rating}</p>
         <div className="details-nav">
         <button className="ratebtn"><FontAwesomeIcon icon={faThumbsUp} /></button>
@@ -77,7 +77,7 @@ function MovieInfo(props) {
           <button className="details-btn">Comments</button>
           </div>
          
-          <p className="overview">Overview: {props.movie.overview}</p>
+          <p className="overview">Overview: {selectedMovie.overview}</p>
 
 
   </div>

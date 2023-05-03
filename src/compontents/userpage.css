@@ -1,11 +1,41 @@
 .user-page {
-    height: 100vh;
+    min-height: 80vh;
     position: relative;
     top: 0;
     right: 0;
     left: 0;
     align-items: center;
     text-align: center;
+}
+
+.user-page .navbar-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 6px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%);
+    z-index: 1;
+    height: 60px;
+    background-color: azure;
+  }
+
+.user-page .navbar-section .mov-wheel {
+    width: 100px;
+    height: 100px;
+
+    -webkit-clip-path: circle(35px at center);
+    clip-path: circle(35px at center);
+}
+
+.user-page .settings_icon {
+    color: white;
+    font-size: 35px;
+    padding: 1rem;
+    
 }
 
 .user-page > h3 {
@@ -53,7 +83,8 @@
 
 @media only screen and (min-width: 768px) { 
     .user-page {
-        width: 100vw;
+        width: 80vw;
+        background-color: aqua;
         text-align: start;
     }
 
