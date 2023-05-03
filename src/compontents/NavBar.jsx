@@ -9,14 +9,14 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({handleSearchInputChange}) => {
 
   const navigate = useNavigate();
 
   const auth = getAuth();
   const [signedIn, setSignedIn] = useState(false);
 
-  onAuthStateChanged(auth, (user) => {
+  /* onAuthStateChanged(auth, (user) => {
     if (user) {
       setSignedIn(true);
       console.log('setSginedIn körs - to true')
@@ -25,7 +25,7 @@ const Navbar = () => {
       setSignedIn(false);
       console.log('setSginedIn körs - to false')
     }
-  });
+  }); */
 
   const handleUserCircleClick = () => {
     navigate('/login');
@@ -44,7 +44,7 @@ const Navbar = () => {
     <nav className="navbar">
       <img src={Logo} alt="Movie Wheel Logo" className="movie_wheel"  />
       <div className="search_bar">
-        <input type="text" placeholder="Search movies..." />
+        <input type="text" placeholder="Search movies..." onChange={handleSearchInputChange} />
         <img src={SearchIcon} alt="Search icon" className="search_icon" />
       </div>
       {renderButton()}
