@@ -20,7 +20,6 @@ const Settings = () => {
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-        //setUserEmail(user.email);
         setCurrentUser(user);
         } 
       });
@@ -75,6 +74,16 @@ const Settings = () => {
                 <p><strong>Signed in as:</strong> {username}</p>
                 <p><strong>Your email:</strong>{userEmail}</p>
 
+            </section>
+
+            <section>
+              <h4>Change color of background</h4>
+              <section className='color-container'>
+                <p className='black-circle'></p>
+                <p className='white-circle'></p>
+                <p className='purple-circle'></p>
+                <p className='pink-circle'></p>
+              </section>
             </section>
 
             <section>

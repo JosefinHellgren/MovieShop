@@ -38,6 +38,12 @@
     
 }
 
+.user-page .menu_icon {
+    color: white;
+    font-size: 35px;
+    padding: 1rem;
+}
+
 .user-page > h3 {
     color: white;
 }
