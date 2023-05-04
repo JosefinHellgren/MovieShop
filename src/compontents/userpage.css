@@ -20,7 +20,7 @@
     background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%);
     z-index: 1;
     height: 60px;
-    background-color: azure;
+
   }
 
 .user-page .navbar-section .mov-wheel {
@@ -84,7 +84,7 @@
 @media only screen and (min-width: 768px) { 
     .user-page {
         width: 80vw;
-        background-color: aqua;
+    
         text-align: start;
     }
 

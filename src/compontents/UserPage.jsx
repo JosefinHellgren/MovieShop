@@ -95,7 +95,7 @@ const UserPage = () => {
             </section>
             <h3>My watchlist</h3>
             <section className="watchList-container">
-              
+              {movies}
                <p>{emptyWatchList ? "You haven't added any movies to your watchlist yet" : ""}</p> 
               
             </section>
