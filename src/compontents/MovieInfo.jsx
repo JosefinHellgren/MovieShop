@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 
 function MovieInfo(props) {
-  const imgUrlStart = "https://image.tmdb.org/t/p/w185"
+  
 
   //CILIA REDUX SELECTEDMOVIE
  //how to get the selectedmovie from redux, must also import useSelector from react-redux
