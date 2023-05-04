@@ -3,7 +3,7 @@ body{
 }
 
 #root {
-  
+  padding: 1rem;
   margin: 0 auto;
   text-align: center;
   background-color: black;

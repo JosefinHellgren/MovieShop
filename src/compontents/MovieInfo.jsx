@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 
 
 function MovieInfo(props) {
+  const imgUrlStart = "https://image.tmdb.org/t/p/w185"
 
   //CILIA REDUX SELECTEDMOVIE
  //how to get the selectedmovie from redux, must also import useSelector from react-redux
@@ -17,17 +18,18 @@ function MovieInfo(props) {
  console.log("movieinfo: " + selectedMovie.title);
 
 
+  const [genres, setGenres] = useState([]);
+  const { movie } = props;
+  const rating = selectedMovie.vote_average; // ändring här!
 
 
- 
- const [genres, setGenres] = useState([]);
  const [trailerKey, setTrailerKey] = useState(null);
  const [showOverview, setShowOverview] = useState(true);
  const [showTrailer, setShowTrailer] = useState(false);
  const [showComments, setShowComments] = useState(false);
- const { movie } = props;
- const rating = movie.vote_average;
+
  const imgUrlStart = "https://image.tmdb.org/t/p/w185";
+
 
 
   useEffect(() => {
@@ -58,7 +60,7 @@ function MovieInfo(props) {
   }, [movie.id]);
 
   // find genre names for each genre ID in the movie's genre_ids array
-  const genreNames = props.movie.genre_ids.map(id => {
+  const genreNames = selectedMovie.genre_ids.map(id => {
     const genre = genres.find(g => g.id === id);
     return genre ? genre.name : "";
   });
@@ -86,13 +88,13 @@ function MovieInfo(props) {
 
   return (
     <div className="movieinfo">
-    <h1>{props.movie.title}</h1>
+    <h1>{selectedMovie.title}</h1>
     <div className="poster-container">
-      <img src={imgUrlStart + props.movie.poster_path} alt={props.movie.title} />
+      <img src={imgUrlStart + selectedMovie.poster_path} alt={selectedMovie.title} />
       <div className="movie-details">
         <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
-        <p className="movie-detail"><strong>Language: </strong>{props.movie.original_language}</p>
-        <p className="movie-detail"><strong>Release: </strong>{props.movie.release_date}</p>  
+        <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
+        <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>  
         <p><strong>Rating:</strong> {rating}</p>
         <div className="details-nav">
         <button className="ratebtn"><FontAwesomeIcon icon={faThumbsUp} /></button>
@@ -122,9 +124,10 @@ function MovieInfo(props) {
         </button>
       </div>
          
+
       {showOverview && (
         <div className="">
-          <p className="overview"><strong>Overview</strong> <br></br> {props.movie.overview}</p>
+          <p className="overview"><strong>Overview</strong> <br></br> {selectedMovie.overview}</p>
         </div>
       )}
 
