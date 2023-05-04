@@ -45,7 +45,7 @@ function MovieInfo(props) {
 
     // fetch movie trailer from API
     fetch(
-      `https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=305f99214975faee28a0f129881c6ec9&language=en-US`
+      `https://api.themoviedb.org/3/movie/${selectedMovie.id}/videos?api_key=305f99214975faee28a0f129881c6ec9&language=en-US`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -57,7 +57,7 @@ function MovieInfo(props) {
         }
       })
       .catch((error) => console.log(error));
-  }, [movie.id]);
+  }, [selectedMovie.id]);
 
   // find genre names for each genre ID in the movie's genre_ids array
   const genreNames = selectedMovie.genre_ids.map(id => {
