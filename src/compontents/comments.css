@@ -12,14 +12,14 @@
 }
 
 
-.comments-list{
+.comments-wrapper .comments-list{
     height: 100px;
      width: 300px;
       overflow: auto;
 }
 
 
-.comment-input{
+.comments-wrapper .comment-input{
     height: 50px;
     width: 100%;
 }

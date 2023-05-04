@@ -4,17 +4,22 @@ import { useEffect } from "react";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import '../compontents/comments.css'
+import { useSelector } from "react-redux";
 
-const Comments = (props) => {
+const Comments = () => {
     const [commentText, setCommentText] = useState('');
     const [userName,setUserName] = useState('');
     const timeStamp = new Date();
-    const movie = props.movie;
+   
     const auth = getAuth();
     const db = firebase.firestore();
     const [comments,setComments] = useState([]);
     const [user, setUser] = useState('');
-
+  
+    const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
+    const movie = selectedMovie;
+   
+    console.log("comments: " + selectedMovie.title);
    
 
 useEffect(() => {
