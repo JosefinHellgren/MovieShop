@@ -1,0 +1,40 @@
+
+.movie_grid_item{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    
+}
+.movie_grid_item .movie_title {
+    font-size: 11px;
+    width: 24vw;
+    max-width: 120px;
+    color: lightgrey;
+    margin-top: 5px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-bottom: 0.5vh;
+}
+
+.movie_grid_item .movie_poster {
+    width: 24vw;
+    max-width: 120px;
+    height: 0 auto;
+}
+
+.movie_grid_item .payment_button {
+    width: 18vw;
+    min-width: 20px;
+    max-width: 100px;
+    height: fit-content;
+    font-size: 10px;
+    background-color: lightgray; 
+    position: fixed;
+    bottom: 0;
+
+    
+}

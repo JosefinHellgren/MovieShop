@@ -9,7 +9,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 
-const Navbar = ({handleSearchInputChange}) => {
+const Navbar = ({handleSearchInputChange, handleSearchClick}) => {
 
   const navigate = useNavigate();
 
@@ -39,13 +39,12 @@ const Navbar = ({handleSearchInputChange}) => {
     return signedIn ? <img src={PlayButton} onClick = {handlePlayButtonPressed} alt="Play Button" className="play_folder" /> :  <HiOutlineUserCircle className="user_icon" onClick={handleUserCircleClick} />
   };
 
-
   return (
     <nav className="navbar">
-      <img src={Logo} alt="Movie Wheel Logo" className="movie_wheel"  />
+      <img src={Logo} alt="Movie Wheel Logo" className="movie_wheel" />
       <div className="search_bar">
         <input type="text" placeholder="Search movies..." onChange={handleSearchInputChange} />
-        <img src={SearchIcon} alt="Search icon" className="search_icon" />
+        <img src={SearchIcon} alt="Search icon" className="search_icon" onClick={handleSearchClick} />
       </div>
       {renderButton()}
      
