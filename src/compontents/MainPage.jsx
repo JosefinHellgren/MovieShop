@@ -53,11 +53,11 @@ const MainPage = (props) => {
   }, [location.pathname, dispatch]);
 
   const handleSearchInputChange = async (event) => {
-
-    setQuery(event.target.value);
-
-    if (query !== '') {
-      const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}`);
+    const newQuery = event.target.value;
+    setQuery(newQuery);
+  
+    if (newQuery !== '') {
+      const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${newQuery}`);
       const data = await response.json();
       console.log(data.results);
       setSearchResults(data.results);
@@ -83,7 +83,7 @@ const MainPage = (props) => {
           <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
         </div>
         <div className={showSearchPage ? "" : "hide"}>
-          <SearchResults query={searchWord} searchResults={searchPageResults} handleMovieClick={handleMovieClick}/>
+          <SearchResults query={searchWord} searchResults={searchPageResults} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>
         </div>
       </section>
 

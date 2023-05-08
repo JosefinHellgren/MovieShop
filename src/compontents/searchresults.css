@@ -4,12 +4,10 @@
     position: relative;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(26vw, 1fr));
-    
+  
   }
 
-  .search_results .movie_grid_item {
-    height: 300px;
-  }
+  
 
   .search_results h2 {
     color: white;
@@ -19,3 +17,4 @@
   .search_results {
     margin-top: 12vh;
   }
+

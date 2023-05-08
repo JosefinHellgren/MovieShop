@@ -5,7 +5,7 @@ import "./searchdropdown.css"
 const SearchDropDown = ({ searchResults, handleSearchClick, handleMovieClick }) => {
 
     const imgUrlStart = "https://image.tmdb.org/t/p/w185";
-    const MAX_RESULTS = 7;
+    const MAX_RESULTS = 6;
     const displayResults = searchResults.slice(0, MAX_RESULTS);
 
     return (
