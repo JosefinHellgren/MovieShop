@@ -33,7 +33,7 @@ const MovieSlider = ({ category, handleButtonClick, handleMovieClick }) => {
     }
 
     return (
-        <Slider className="slick-slider" slidesToShow={3} slidesToScroll={1} >
+        <Slider key={moviesObject.status} className="slick-slider" slidesToShow={3} slidesToScroll={1} >
             {content &&
                 content.map((movie, index) => (
                     <div key={index} className="slider_container">

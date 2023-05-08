@@ -32,7 +32,6 @@ const MainPage = (props) => {
 
     //this is what sets the selectedmovie to redux
     dispatch(selectActions.selectMovie(movie));
-
     navigate("/movieinfo/");
   };
 
@@ -41,7 +40,6 @@ const MainPage = (props) => {
 
     //this is what sets the selectedmovie to redux
     dispatch(selectActions.selectMovie(movie));
-
     navigate("/payment/");
   };
 
@@ -70,14 +68,10 @@ const MainPage = (props) => {
   }
 
   const handleSearchClick = () => {
-
     setSearchWord(query);
     setSearchPagResults(searchResults);
-
     setShowSearchDropdown(false);
     setShowSearchPage(true);
-
-    
   }
 
   //className={`initial_page ${showSearchPage ? "hide" : ""}`}
@@ -89,7 +83,7 @@ const MainPage = (props) => {
           <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
         </div>
         <div className={showSearchPage ? "" : "hide"}>
-          <SearchResults query={searchWord} searchResults={searchPageResults} />
+          <SearchResults query={searchWord} searchResults={searchPageResults} handleMovieClick={handleMovieClick}/>
         </div>
       </section>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../images/movie_wheel.png";
 import SearchIcon from "../images/search_icon.png";
 import PlayButton from "../images/play.png";
@@ -16,16 +16,20 @@ const Navbar = ({handleSearchInputChange, handleSearchClick}) => {
   const auth = getAuth();
   const [signedIn, setSignedIn] = useState(false);
 
-  /* onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setSignedIn(true);
-      console.log('setSginedIn körs - to true')
-     // auth.signOut();
-    } else {
-      setSignedIn(false);
-      console.log('setSginedIn körs - to false')
-    }
-  }); */
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setSignedIn(true);
+        console.log('setSginedIn körs - to true')
+       // auth.signOut();
+      } else {
+        setSignedIn(false);
+        console.log('setSginedIn körs - to false')
+      }
+    });
+}, []);
+
+  
 
   const handleUserCircleClick = () => {
     navigate('/login');
