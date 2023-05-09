@@ -3,7 +3,6 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { imgUrlStart } from "./MainPage";
 import './userpage.css'
 
 const UserPage = ({handleMovieClick}) => {

@@ -23,6 +23,8 @@ const MainPage = (props) => {
 
   let navigate = useNavigate();
 
+ 
+
   //this line of code and the import of useDispatch is
   // needed to save and clear selectedmovie to redux
   let dispatch = useDispatch();
@@ -74,7 +76,6 @@ const MainPage = (props) => {
     setShowSearchPage(true);
   }
 
-  //className={`initial_page ${showSearchPage ? "hide" : ""}`}
   return (
     <div className="mainpage_container">
       <section>
@@ -106,5 +107,3 @@ const MainPage = (props) => {
 };
 
 export default MainPage;
-
-export const imgUrlStart = "https://image.tmdb.org/t/p/w185";
