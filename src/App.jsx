@@ -13,7 +13,7 @@ import Navbar from './compontents/NavBar.jsx';
 import SearchResults from './compontents/SearchResults';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-
+import { actions as selectActions } from "./features/selectedmovie"
 
 
 function App() {
@@ -37,7 +37,6 @@ function App() {
     //this is what sets the selectedmovie to redux
     console.log('handleMovieclick körs')
     dispatch(selectActions.selectMovie(movie));
-    setShowSearchDropdown(false)
     navigate("/movieinfo/");
   };
 
@@ -52,7 +51,7 @@ function App() {
     <div className="App">
       <Navbar onSearchClick={handleSearchClick}/>
       <Routes>
-        <Route path="/" element={<MainPage />}/>
+        <Route path="/" element={<MainPage onCategoryClick={handleSearchClick}/>}/>
         <Route path="/movieinfo" element={<MovieInfo />}/>
         <Route path='/login' element={<LoginPage/>} />
         <Route path='/userpage'element= {<UserPage/>} />
@@ -61,7 +60,7 @@ function App() {
         <Route path='/settings' element= {<Settings />} />
 
         <Route path='/searchresults' element= {<SearchResults 
-        query={searchWord} searchResults={searchPageResults} 
+        title={`Showing results for ${searchWord}`} searchResults={searchPageResults} 
         handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>} />
       </Routes>
     </div>

@@ -1,10 +1,10 @@
 import MovieGridItem from "./MovieGridItem";
 import './searchresults.css'
 
-const SearchResults = ({ query, searchResults, handleMovieClick, handleButtonClick }) => {
+const SearchResults = ({ title, searchResults, handleMovieClick, handleButtonClick }) => {
   return (
     <div className="search_results">
-      <h2>Showing results for "{query}"</h2>
+      <h2>{title}</h2>
       <div className="movie_grid">
         {searchResults && searchResults.map((movie, index) => (
             <div className="movie_item" key={index}>

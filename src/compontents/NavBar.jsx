@@ -180,9 +180,6 @@ const Navbar = ({onSearchClick}) => {
       <div className={`search_dropdown ${showSearchDropdown ? "" : "hide"}`}>
           <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
         </div>
-        {/* <div className={showSearchPage ? "" : "hide"}>
-          <SearchResults query={searchWord} searchResults={searchPageResults} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>
-        </div> */}
       </section>
       
     </nav>
