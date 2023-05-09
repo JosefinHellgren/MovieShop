@@ -1,4 +1,8 @@
 
+.mainpage_container {
+    position: relative;
+  }
+
 .mainpage_container h4 {
     color: lightgray;
     width: fit-content;
@@ -6,9 +10,14 @@
 }
 
 .mainpage_container .popular_movies_section {
-    margin-top: 80px;
+    margin-top: 100px;
 }
 
+.mainpage_container .hide {
+    display: none;
+  }
+
+ 
 
 
 
