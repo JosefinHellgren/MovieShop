@@ -4,12 +4,19 @@ import MovieSlider from "./MovieSlider";
 import "./mainpage.css";
 import Navbar from "./NavBar"
 import { useDispatch, useSelector } from "react-redux";
+
 import { actions as selectActions } from "../features/selectedmovie"
 import { useEffect, useState } from "react";
 import SearchResults from "./SearchResults";
 import SearchDropDown from "./SearchDropDown";
 
+
+import { fromPayment } from "../features/navigatePayment";
+import { useEffect } from "react";
+import { getAuth,onAuthStateChanged } from "firebase/auth";
+import { useState } from "react";
 const MainPage = (props) => {
+
 
   const apiKey = "305f99214975faee28a0f129881c6ec9";
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
@@ -21,6 +28,9 @@ const MainPage = (props) => {
   const [query, setQuery] = useState('');
   const [searchWord, setSearchWord] = useState('');
 
+
+  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
+
   let navigate = useNavigate();
 
  
@@ -28,6 +38,20 @@ const MainPage = (props) => {
   //this line of code and the import of useDispatch is
   // needed to save and clear selectedmovie to redux
   let dispatch = useDispatch();
+  const auth = getAuth();
+
+  const [user, setUser] = useState(false);
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setUser(true);
+      console.log('we have a logged in user')
+      //auth.signOut();
+    } else {
+      setUser(false);
+      console.log('No logged in user')
+    }
+  });
 
   const handleMovieClick = (movie) => {
     props.setMovie(movie);
@@ -39,10 +63,28 @@ const MainPage = (props) => {
 
   const handleButtonClick = (movie) => {
     props.setMovie(movie);
-
-    //this is what sets the selectedmovie to redux
+   //this is what sets the selectedmovie to redux
     dispatch(selectActions.selectMovie(movie));
-    navigate("/payment/");
+
+    
+    //if we have a user navigate to Payment:
+
+    if(user){
+      navigate("/payment/");
+   }
+    else{
+      //set state to true
+      console.log("the state"+navigatePayment);
+      dispatch(fromPayment())
+      navigate("/login");
+      
+    
+      
+    }
+
+    //if we doesnt have a user, navigate to login:
+    
+
   };
 
   //this useeffect clears the movie from redux 

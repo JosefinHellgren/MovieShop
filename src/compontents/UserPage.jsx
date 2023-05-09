@@ -2,15 +2,25 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import './userpage.css'
 
-const UserPage = ({handleMovieClick}) => {
+import { actions } from "../features/selectedmovie";
+
+import './userpage.css'
+import Logo from "../images/movie_wheel.png";
+import { FiSettings } from "react-icons/fi";
+
+
+const UserPage = () => {
+
+  const imgUrlStart = "https://image.tmdb.org/t/p/w185"
 
     const [purchasedMovies, setPurchasedMovies] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
     const navigate = useNavigate();
     const [emptyWatchList, setEmptyWatchList] = useState(true);
+    const dispatch = useDispatch();
 
     const db = firebase.firestore();
     const auth = getAuth();
@@ -46,8 +56,21 @@ const UserPage = ({handleMovieClick}) => {
           }
         }
         fetchData();
-      }, [currentUser]);
-    
+    }, [currentUser]);
+
+    const handlePurchasedMovieClick = (movie) => {
+      dispatch(actions.selectMovie(movie))
+
+      navigate("/movieinfo/");
+    }
+
+    const handleMovWheelClick = () => {
+      navigate("/");
+    }
+
+    const handleSettingsClick = () => {
+      navigate('/settings');
+    }
 
     const movies = purchasedMovies && purchasedMovies.map((movie, i) => (
         <div key={i} className='purchased-item'>
@@ -55,7 +78,8 @@ const UserPage = ({handleMovieClick}) => {
                 <p className="purchased-title">Purchased</p>
                 <img src={imgUrlStart + movie.poster_path} 
                 alt={movie.title} 
-                className= 'purchased-img' 
+                className= 'purchased-img'
+                onClick={() => handlePurchasedMovieClick(movie)}
               />
             </section>
         </div>
@@ -63,14 +87,19 @@ const UserPage = ({handleMovieClick}) => {
 
     return (
         <div className="user-page">
-            <h3>My movies</h3>
+          <section className="navbar-section">
+          <img src={Logo} alt="Movie Wheel Logo" className="mov-wheel" onClick={handleMovWheelClick} />
+          <FiSettings className="settings_icon" onClick={handleSettingsClick} />
+          </section>
+            <h3><br/>My movies</h3>
             <section className="purchased-container">
                {movies} 
             </section>
             <h3>My watchlist</h3>
             <section className="watchList-container">
+              {movies}
+               <p>{emptyWatchList ? "You haven't added any movies to your watchlist yet" : ""}</p> 
               
-               <p>You haven't added any movies to your watchlist yet</p> 
             </section>
         </div>
     )

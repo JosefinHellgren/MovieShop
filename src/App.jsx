@@ -10,6 +10,7 @@ import SignUpPage from './compontents/SignUpPage';
 import LoginPage from './compontents/LoginPage';
 import Payment from './compontents/Payment';
 import UserPage from './compontents/UserPage';
+import Settings from './compontents/Settings';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path='/userpage'element= {<UserPage/>} />
         <Route path= "/signup" element={<SignUpPage/>}/>
         <Route path="/payment" element={<Payment movie={movie}/>}/>
+        <Route path='/settings' element= {<Settings />} />
       </Routes>
     </div>
   )

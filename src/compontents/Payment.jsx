@@ -2,9 +2,9 @@ import '../compontents/payment.css'
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-import visa from '../assets/Visa.png'
-import americanexpress from '../assets/AmericanExpress.png'
-import mastercard from '../assets/Mastercard.png'
+import visa from '../images/visa.png'
+import americanexpress from '../images/AmericanExpress.png'
+import mastercard from '../images/Mastercard.png'
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
@@ -12,15 +12,7 @@ import { getAuth } from "firebase/auth"
 import { useSelector } from 'react-redux';
 
 
-
-
-
-
-
-const AmexForm = ({setIsPaymentSuccessful,cardName,cardNumber,expDate,cvv,setCVV,setCardNumber,setCardName,setExpDate}) => {
-
- 
-
+const AmexForm = ({setIsPaymentSuccessful,cardName,cardNumber,expDate,cvv,setCVV,setCardNumber,setCardName,setExpDate,saveMovieToFirebase}) => {
 
 
     const [cardNumberValid, setCardNumberValid] = useState(false);
@@ -85,7 +77,7 @@ const AmexForm = ({setIsPaymentSuccessful,cardName,cardNumber,expDate,cvv,setCVV
     const handleNameChange = (event) => {
         const { value } = event.target;
 
-        ([A - Z] | Å | Ä | Ö)([a - z] | å | ä | ö)
+      
 
         const isValid = /^[a-zA-Z\u00C0-\u00ff]+\s?[a-zA-Z\u00C0-\u00ff]+$/.test(value)
 
@@ -106,6 +98,7 @@ const AmexForm = ({setIsPaymentSuccessful,cardName,cardNumber,expDate,cvv,setCVV
         if (cardNumberValid == true && cvvNumberValid == true && nameOnCardValid == true && dateExpValid == true) {
             console.log("you now bought the movie")
             setIsPaymentSuccessful(true);
+            saveMovieToFirebase();
             console.log(cardNumberValid, nameOnCardValid, cvvNumberValid, dateExpValid)
 
         } else {
@@ -145,7 +138,7 @@ const AmexForm = ({setIsPaymentSuccessful,cardName,cardNumber,expDate,cvv,setCVV
     );
 };
 
-const Payment = (props) => {
+const Payment = () => {
 
 
     //CILIA REDUX SELECTEDMOVIE
@@ -153,9 +146,6 @@ const Payment = (props) => {
     const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
     // use the selectedMovie like this
     console.log("payment: " + selectedMovie.title);
-
-
-    
 
     const imgUrlStart = "https://image.tmdb.org/t/p/w185";
     const [cardNumber, setCardNumber] = useState('');
@@ -169,17 +159,23 @@ const Payment = (props) => {
     const [cvvNumberValid, setCVVNumberValid] = useState(false);
     const [dateExpValid, setDateExpValid] = useState(false);
     const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
-  
+    const navigatePayment = useSelector((state) => state.navigatePayment.payment);
 
     const auth = getAuth();
 
  
 
-    const movie = props.movie;
+    const movie = selectedMovie;
     let navigate = useNavigate();
 
     const handleExitButtonClick = () => {
+        //should we realy use the state to conditional navigate here?
+        //cus we should allready had turn the state to false again. 
+        if(navigatePayment === true){
+            navigate("/")
+        }else{
         navigate(-1)
+        }
     }
 
     const handleCheckboxChange = (event) => {
@@ -272,51 +268,6 @@ const Payment = (props) => {
 
 
 
-
-    const saveCreditCardToFirebase = () => {
-        setOpenModal(false)
-        const db = firebase.firestore();
-        const user = auth.currentUser;
-
-
-        if (user != null) {
-            const userUID = auth.currentUser.uid;
-
-            db.collection("users").doc(userUID).collection("cards").doc(cardNumber).set({
-                cardNumber: cardNumber,
-                name: cardName,
-                cvv: cvv,
-                expDate: expDate
-            })
-                .then(() => {
-                    console.log("saved creditcard.");
-                })
-                .catch((error) => {
-                    console.error("error saving: ", error);
-                });
-
-        } else {
-
-            db.collection("users").doc("demo-user").collection("cards").doc(cardNumber).set({
-                cardNumber: cardNumber,
-                name: cardName,
-                cvv: cvv,
-                expDate: expDate
-
-            })
-                .then(() => {
-                    console.log("saved creditcard.");
-                })
-                .catch((error) => {
-                    console.error("error saving: ", error);
-                });
-        }
-
-
-    }
-
-
-
     const saveMovieToFirebase = () => {
         const db = firebase.firestore();
         const user = auth.currentUser;
@@ -365,7 +316,7 @@ const Payment = (props) => {
             console.log("fields are not valid")
             console.log(cardNumber, cardName, cvv, expDate)
         }
-
+       
     
     }
     return (
@@ -380,7 +331,7 @@ const Payment = (props) => {
 
                     {isPaymentSuccessful ? ( <div>
                         
-                        <h2>Purchased:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <button id='playButton'>Play movie</button> </div>) : (<div> <h2>Checkout:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <h2>{movie.title}</h2> </div>)}
+                        <h2>Purchased:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <button /*onClick för att spela film*/  id='playButton'>Play movie</button> </div>) : (<div> <h2>Checkout:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <h2>{movie.title}</h2> </div>)}
 
 
 
@@ -408,7 +359,7 @@ const Payment = (props) => {
 
                     </div>
                     
-                    {cardType === "American Express" ? (<AmexForm setIsPaymentSuccessful={setIsPaymentSuccessful} setCardName={setCardName} setCVV={setCVV} setCardNumber={setCardNumber} setExpDate={setExpDate} cardName={cardName} cardNumber={cardNumber } cvv={cvv} expDate={expDate}/>) : (
+                    {cardType === "American Express" ? (<AmexForm setIsPaymentSuccessful={setIsPaymentSuccessful} saveMovieToFirebase={saveMovieToFirebase} setCardName={setCardName} setCVV={setCVV} setCardNumber={setCardNumber} setExpDate={setExpDate} cardName={cardName} cardNumber={cardNumber } cvv={cvv} expDate={expDate}/>) : (
 
                         <form onSubmit={handleSubmit}>
                             <div className='paymentform'>
