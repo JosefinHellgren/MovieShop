@@ -115,8 +115,7 @@ const UserPage = () => {
     
   return (
     <div className="user-page">
-      <section className="navbar_section">
-        {/* <img src={Logo} alt="Movie Wheel Logo" className="mov-wheel" onClick={handleMovWheelClick} /> */}
+      {/* <section className="navbar_section">
         <img src={movie_wheel} alt="Movie Wheel Logo" className="mov-wheel" onClick={handleMovWheelClick} />
         <details className="dropdown">
           <summary role="button">
@@ -131,7 +130,7 @@ const UserPage = () => {
             <li onClick={handleSignOutClick}><a >Sign out</a></li>
           </ul>
         </details>
-      </section>
+      </section> */}
       <h3><br/>My movies</h3>
       <section className="purchased-container">
         {movies} 

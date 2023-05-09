@@ -80,14 +80,9 @@ const MainPage = (props) => {
       console.log("the state"+navigatePayment);
       dispatch(fromPayment())
       navigate("/login");
-      
-    
-      
     }
 
     //if we doesnt have a user, navigate to login:
-    
-
   };
 
   //this useeffect clears the movie from redux 
@@ -123,7 +118,7 @@ const MainPage = (props) => {
 
   return (
     <div className="mainpage_container">
-      <section>
+      {/* <section>
         <Navbar handleSearchInputChange={handleSearchInputChange} handleSearchClick={handleSearchClick} />
         <div className={`search_dropdown ${showSearchDropdown ? "" : "hide"}`}>
           <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
@@ -131,7 +126,7 @@ const MainPage = (props) => {
         <div className={showSearchPage ? "" : "hide"}>
           <SearchResults query={searchWord} searchResults={searchPageResults} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>
         </div>
-      </section>
+      </section> */}
 
       <div className={showSearchPage ? "hide" : ""} >
         <section className="popular_movies_section">
