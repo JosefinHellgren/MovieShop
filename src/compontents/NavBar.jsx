@@ -11,17 +11,24 @@ import 'firebase/compat/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { BsSearch } from "react-icons/bs";
+import { actions as selectActions } from "../features/selectedmovie"
 import {ImSearch} from "react-icons/im"
 import { useNavigate } from "react-router-dom";
+import SearchDropDown from "./SearchDropDown";
+import SearchResults from "./SearchResults";
+import { useDispatch } from "react-redux";
+import movie_wheel from "../images/movie-wheel.png";
+import { FiSettings } from "react-icons/fi";
 
 
-const Navbar = ({handleSearchInputChange, handleSearchClick}) => {
+const Navbar = () => {
   const pinkGradient = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
   const blackGradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0% rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%';
   const TurkqioseGradient = 'linear-gradient(to bottom, #06acb8 0%, #06acb8 80%, rgba(0, 0, 0, 0) 100%)';
 
-
+  const apiKey = "305f99214975faee28a0f129881c6ec9";
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const auth = getAuth();
   const db = firebase.firestore();
@@ -62,9 +69,6 @@ const Navbar = ({handleSearchInputChange, handleSearchClick}) => {
   }, [userUID]);
 
   const changeBackground = (background) => {
-    
-
-
     if (background === 'black') {
       document.body.style.backgroundColor = "black";
       document.querySelector('#root').style.backgroundColor = 'black';
@@ -83,6 +87,54 @@ const Navbar = ({handleSearchInputChange, handleSearchClick}) => {
       document.querySelector('#root').style.backgroundColor = 'orange';
     }
   }
+
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [showSearchPage, setShowSearchPage] = useState(false);
+
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchPageResults, setSearchPagResults] = useState([]);
+
+  const [query, setQuery] = useState('');
+  const [searchWord, setSearchWord] = useState('');
+
+  const handleSearchInputChange = async (event) => {
+    const newQuery = event.target.value;
+    setQuery(newQuery);
+  
+    if (newQuery !== '') {
+      const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${newQuery}`);
+      const data = await response.json();
+      console.log(data.results);
+      setSearchResults(data.results);
+      setShowSearchDropdown(true);
+    } else {
+      setShowSearchDropdown(false);
+    }
+  }
+
+  const handleSearchClick = () => {
+    setSearchWord(query);
+    setSearchPagResults(searchResults);
+    setShowSearchDropdown(false);
+    setShowSearchPage(true);
+  }
+
+  const handleMovieClick = (movie) => {
+
+    //this is what sets the selectedmovie to redux
+    console.log('handleMovieclick körs')
+    dispatch(selectActions.selectMovie(movie));
+    setShowSearchDropdown(false)
+    navigate("/movieinfo/");
+  };
+
+  const handleButtonClick = (movie) => {
+    props.setMovie(movie);
+   //this is what sets the selectedmovie to redux
+   console.log('handleButtonclick körs')
+    dispatch(selectActions.selectMovie(movie));
+    navigate('/movieinfo')
+  };
   
   const handleUserCircleClick = () => {
     navigate('/login');
@@ -90,6 +142,21 @@ const Navbar = ({handleSearchInputChange, handleSearchClick}) => {
 
   const handlePlayButtonPressed = () => {
     navigate('/userpage')
+  }
+
+  const handleClick = (title) => {
+    document.querySelector('.navbar_section').style.background = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
+    saveBackcolorFirestore(title);
+      
+  };
+
+  const handleSignOutClick = () => {
+    navigate('/');
+    auth.signOut();
+  }
+
+  const handleMovWheelClick = () => {
+    navigate("/");
   }
 
   const renderButton = () => {
@@ -102,16 +169,41 @@ const Navbar = ({handleSearchInputChange, handleSearchClick}) => {
 
   return (
     <nav className="navbar">
-
-     
-      <img src={Movie_wheel} alt="Movie Wheel Logo" className="movie_wheel"  />
+      <section className="navbar-container">
+        <img src={Movie_wheel} alt="Movie Wheel Logo" className="movie_wheel" onClick={handleMovWheelClick} />
       <div className="search_bar">
         <input type="text" placeholder="Search movies..." onChange={handleSearchInputChange} />
         <ImSearch className="search_icon" onClick={handleSearchClick} />
-
       </div>
+      <section className="navbar_section">
+        
+        <details className="dropdown">
+          <summary role="button">
+            <FiSettings className="settings_icon"/>
+          </summary>
+          <ul>
+            <li className="dropdown-title"> <strong> Change background to:</strong></li>
+            <li onClick= {() => handleClick('black')}><a className="li-color"> <p className= "black-circle"></p>Black</a></li>
+            <li onClick= {() => handleClick('turquoise')}><a className="li-color"> <p className="white-circle"></p>Turquoise</a></li>
+            <li onClick= {() => handleClick('pink')}><a className="li-color"> <p className="pink-circle"></p>Pink</a></li>
+            <li onClick= {() => handleClick('orange')}><a className="li-color"> <p className="orange-circle"></p>Orange</a></li>
+            <li onClick={handleSignOutClick}><a >Sign out</a></li>
+          </ul>
+        </details>
+      </section>
       {renderButton()}
+      </section>
+      <section>
+      <div className={`search_dropdown ${showSearchDropdown ? "" : "hide"}`}>
+          <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
+        </div>
+        <div className={showSearchPage ? "" : "hide"}>
+          <SearchResults query={searchWord} searchResults={searchPageResults} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>
+        </div>
+      </section>
+      
     </nav>
+    
   );
 }
 
