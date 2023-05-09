@@ -1,9 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 
-import Logo from "../images/movie_wheel.png";
 import Movie_wheel from "../images/movie-wheel.png";
-import SearchIcon from "../images/search_icon.png";
 import PlayButton from "../images/play.png";
 import "./navbar.css";
 import firebase from 'firebase/compat/app';
@@ -21,7 +19,7 @@ import movie_wheel from "../images/movie-wheel.png";
 import { FiSettings } from "react-icons/fi";
 
 
-const Navbar = () => {
+const Navbar = ({onSearchClick}) => {
   const pinkGradient = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
   const blackGradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0% rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%';
   const TurkqioseGradient = 'linear-gradient(to bottom, #06acb8 0%, #06acb8 80%, rgba(0, 0, 0, 0) 100%)';
@@ -89,13 +87,8 @@ const Navbar = () => {
   }
 
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
-  const [showSearchPage, setShowSearchPage] = useState(false);
-
   const [searchResults, setSearchResults] = useState([]);
-  const [searchPageResults, setSearchPagResults] = useState([]);
-
   const [query, setQuery] = useState('');
-  const [searchWord, setSearchWord] = useState('');
 
   const handleSearchInputChange = async (event) => {
     const newQuery = event.target.value;
@@ -113,10 +106,8 @@ const Navbar = () => {
   }
 
   const handleSearchClick = () => {
-    setSearchWord(query);
-    setSearchPagResults(searchResults);
     setShowSearchDropdown(false);
-    setShowSearchPage(true);
+    onSearchClick(query, searchResults);
   }
 
   const handleMovieClick = (movie) => {
@@ -126,14 +117,6 @@ const Navbar = () => {
     dispatch(selectActions.selectMovie(movie));
     setShowSearchDropdown(false)
     navigate("/movieinfo/");
-  };
-
-  const handleButtonClick = (movie) => {
-    props.setMovie(movie);
-   //this is what sets the selectedmovie to redux
-   console.log('handleButtonclick körs')
-    dispatch(selectActions.selectMovie(movie));
-    navigate('/movieinfo')
   };
   
   const handleUserCircleClick = () => {
@@ -197,9 +180,9 @@ const Navbar = () => {
       <div className={`search_dropdown ${showSearchDropdown ? "" : "hide"}`}>
           <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
         </div>
-        <div className={showSearchPage ? "" : "hide"}>
+        {/* <div className={showSearchPage ? "" : "hide"}>
           <SearchResults query={searchWord} searchResults={searchPageResults} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>
-        </div>
+        </div> */}
       </section>
       
     </nav>

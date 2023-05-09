@@ -53,19 +53,14 @@ const MainPage = (props) => {
       }
     });
 }, []);
-  
-  
 
   const handleMovieClick = (movie) => {
-    props.setMovie(movie);
-
     //this is what sets the selectedmovie to redux
     dispatch(selectActions.selectMovie(movie));
     navigate("/movieinfo/");
   };
 
   const handleButtonClick = (movie) => {
-    props.setMovie(movie);
    //this is what sets the selectedmovie to redux
     dispatch(selectActions.selectMovie(movie));
 
@@ -94,41 +89,11 @@ const MainPage = (props) => {
     }
   }, [location.pathname, dispatch]);
 
-  const handleSearchInputChange = async (event) => {
-    const newQuery = event.target.value;
-    setQuery(newQuery);
-  
-    if (newQuery !== '') {
-      const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${newQuery}`);
-      const data = await response.json();
-      console.log(data.results);
-      setSearchResults(data.results);
-      setShowSearchDropdown(true);
-    } else {
-      setShowSearchDropdown(false);
-    }
-  }
 
-  const handleSearchClick = () => {
-    setSearchWord(query);
-    setSearchPagResults(searchResults);
-    setShowSearchDropdown(false);
-    setShowSearchPage(true);
-  }
 
   return (
     <div className="mainpage_container">
-      {/* <section>
-        <Navbar handleSearchInputChange={handleSearchInputChange} handleSearchClick={handleSearchClick} />
-        <div className={`search_dropdown ${showSearchDropdown ? "" : "hide"}`}>
-          <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
-        </div>
-        <div className={showSearchPage ? "" : "hide"}>
-          <SearchResults query={searchWord} searchResults={searchPageResults} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>
-        </div>
-      </section> */}
-
-      <div className={showSearchPage ? "hide" : ""} >
+      
         <section className="popular_movies_section">
           <h4>Popular Movies</h4>
           <MovieSlider category="popular" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} />
@@ -141,7 +106,7 @@ const MainPage = (props) => {
           <h4>In Theaters Now</h4>
           <MovieSlider category="now_playing" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} />
         </section>
-      </div>
+      
     </div>
   );
 };
