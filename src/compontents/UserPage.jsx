@@ -64,15 +64,11 @@ const UserPage = () => {
         fetchData();
     }, [currentUser]);
 
-    const handlePurchasedMovieClick = (movie) => {
-      dispatch(actions.selectMovie(movie))
+  const handlePurchasedMovieClick = (movie) => {
+    dispatch(actions.selectMovie(movie))
 
-      navigate("/movieinfo/");
-    }
-
-    const handleMovWheelClick = () => {
-      navigate("/");
-    }
+    navigate("/movieinfo/");
+  }
 
   const saveBackcolorFirestore = (background) => {
     const userUID = auth.currentUser.uid;
@@ -88,17 +84,7 @@ const UserPage = () => {
       });
   }
 
-  const handleClick = (title) => {
-    document.querySelector('.navbar_section').style.background = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
-    saveBackcolorFirestore(title);
-      
-  };
 
-  const handleSignOutClick = () => {
-    navigate('/');
-    auth.signOut();
-    
-  }
 
     const movies = purchasedMovies && purchasedMovies.map((movie, i) => (
         <div key={i} className='purchased-item'>
@@ -115,22 +101,6 @@ const UserPage = () => {
     
   return (
     <div className="user-page">
-      {/* <section className="navbar_section">
-        <img src={movie_wheel} alt="Movie Wheel Logo" className="mov-wheel" onClick={handleMovWheelClick} />
-        <details className="dropdown">
-          <summary role="button">
-            <FiSettings className="settings_icon"/>
-          </summary>
-          <ul>
-            <li className="dropdown-title"> <strong> Change background to:</strong></li>
-            <li onClick= {() => handleClick('black')}><a className="li-color"> <p className= "black-circle"></p>Black</a></li>
-            <li onClick= {() => handleClick('turquoise')}><a className="li-color"> <p className="white-circle"></p>Turquoise</a></li>
-            <li onClick= {() => handleClick('pink')}><a className="li-color"> <p className="pink-circle"></p>Pink</a></li>
-            <li onClick= {() => handleClick('orange')}><a className="li-color"> <p className="orange-circle"></p>Orange</a></li>
-            <li onClick={handleSignOutClick}><a >Sign out</a></li>
-          </ul>
-        </details>
-      </section> */}
       <h3><br/>My movies</h3>
       <section className="purchased-container">
         {movies} 

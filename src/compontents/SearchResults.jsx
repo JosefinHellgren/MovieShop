@@ -17,3 +17,4 @@ const SearchResults = ({ query, searchResults, handleMovieClick, handleButtonCli
 };
 
 export default SearchResults;
+
