@@ -13,6 +13,9 @@ import {ImSearch} from "react-icons/im"
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const pinkGradient = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
+  const blackGradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0% rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%';
+  const TurkqioseGradient = 'linear-gradient(to bottom, #06acb8 0%, #06acb8 80%, rgba(0, 0, 0, 0) 100%)';
 
   const navigate = useNavigate();
 
@@ -30,6 +33,9 @@ const Navbar = () => {
       } else {
         setSignedIn(false);
         setUserUID(null);
+        document.body.style.backgroundColor = "black";
+        document.querySelector('#root').style.backgroundColor = 'black';
+        document.querySelector('.navbar').style.background = blackGradient;
       }
     });
   }, [])
@@ -51,9 +57,6 @@ const Navbar = () => {
   }, [userUID]);
 
   const changeBackground = (background) => {
-    const pinkGradient = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
-    const blackGradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0% rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%';
-    const TurkqioseGradient = 'linear-gradient(to bottom, #06acb8 0%, #06acb8 80%, rgba(0, 0, 0, 0) 100%)';
     
 
     if (background === 'black') {

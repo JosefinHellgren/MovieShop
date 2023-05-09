@@ -92,6 +92,12 @@ const UserPage = () => {
       
   };
 
+  const handleSignOutClick = () => {
+    navigate('/');
+    auth.signOut();
+    
+  }
+
     const movies = purchasedMovies && purchasedMovies.map((movie, i) => (
         <div key={i} className='purchased-item'>
             <section>
@@ -120,7 +126,7 @@ const UserPage = () => {
             <li onClick= {() => handleClick('turquoise')}><a className="li-color"> <p className="white-circle"></p>Turquoise</a></li>
             <li onClick= {() => handleClick('pink')}><a className="li-color"> <p className="pink-circle"></p>Pink</a></li>
             <li onClick= {() => handleClick('orange')}><a className="li-color"> <p className="orange-circle"></p>Orange</a></li>
-            <li><a >Sign out</a></li>
+            <li onClick={handleSignOutClick}><a >Sign out</a></li>
           </ul>
         </details>
       </section>
