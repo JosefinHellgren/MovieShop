@@ -17,7 +17,7 @@ function MovieInfo(props) {
  //how to get the selectedmovie from redux, must also import useSelector from react-redux
  const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
  // use the selectedMovie like this
- console.log("movieinfo: " + selectedMovie.title);
+ console.log("movieinfo: " + selectedMovie.id);
 
 
   const [genres, setGenres] = useState([]);
