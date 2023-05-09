@@ -37,7 +37,7 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
       }
 
     return (
-        <div>
+        <div className="movie_slider">
         <h4 onClick={handleCategoryClick} >{title} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'>'}  </h4>
         <Slider key={moviesObject.status} className="slick-slider" slidesToShow={3} slidesToScroll={1} >
             {content &&

@@ -2,64 +2,25 @@
 import { useNavigate } from "react-router-dom";
 import MovieSlider from "./MovieSlider";
 import "./mainpage.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { actions as selectActions } from "../features/selectedmovie"
 import { useEffect, useState } from "react";
-import { fromPayment } from "../features/navigatePayment";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-const MainPage = ({ onCategoryClick }) => {
+
+const MainPage = ({ onCategoryClick, handleButtonClick, handleMovieClick }) => {
 
   const apiKey = "305f99214975faee28a0f129881c6ec9";
 
-  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
+  
 
   let navigate = useNavigate();
 
   //this line of code and the import of useDispatch is
   // needed to save and clear selectedmovie to redux
   let dispatch = useDispatch();
-  const auth = getAuth();
+  
 
-  const [user, setUser] = useState(false);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(true);
-        console.log('we have a logged in user')
-        //auth.signOut();
-      } else {
-        setUser(false);
-        console.log('No logged in user')
-      }
-    });
-  }, []);
-
-  const handleMovieClick = (movie) => {
-    //this is what sets the selectedmovie to redux
-    dispatch(selectActions.selectMovie(movie));
-    navigate("/movieinfo/");
-  };
-
-  const handleButtonClick = (movie) => {
-    //this is what sets the selectedmovie to redux
-    dispatch(selectActions.selectMovie(movie));
-
-    //if we have a user navigate to Payment:
-
-    if (user) {
-      navigate("/payment/");
-    }
-    else {
-      //set state to true
-      console.log("the state" + navigatePayment);
-      dispatch(fromPayment())
-      navigate("/login");
-    }
-
-    //if we dont have a user, navigate to login:
-  };
+ 
 
   //this useeffect clears the movie from redux 
   //when the pathname no longer is movieinfo or payment
