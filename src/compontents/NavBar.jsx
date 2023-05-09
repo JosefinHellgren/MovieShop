@@ -21,7 +21,7 @@ import { FiSettings } from "react-icons/fi";
 
 const Navbar = ({onSearchClick}) => {
   const pinkGradient = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
-  const blackGradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0% rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%';
+  const blackGradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%';
   const TurkqioseGradient = 'linear-gradient(to bottom, #06acb8 0%, #06acb8 80%, rgba(0, 0, 0, 0) 100%)';
 
   const apiKey = "305f99214975faee28a0f129881c6ec9";
@@ -43,9 +43,6 @@ const Navbar = ({onSearchClick}) => {
       } else {
         setSignedIn(false);
         setUserUID(null);
-        document.body.style.backgroundColor = "black";
-        document.querySelector('#root').style.backgroundColor = 'black';
-        document.querySelector('.navbar').style.background = blackGradient;
       }
     });
   }, [])
@@ -70,16 +67,16 @@ const Navbar = ({onSearchClick}) => {
     if (background === 'black') {
       document.body.style.backgroundColor = "black";
       document.querySelector('#root').style.backgroundColor = 'black';
-      document.querySelector('.navbar').style.background = blackGradient;
+      document.querySelector('.navbar-container').style.background = blackGradient;
     } else if (background === 'turquoise') {
       document.body.style.backgroundColor = "#06acb8";
       document.querySelector('#root').style.backgroundColor = '#06acb8';
-      document.querySelector('.navbar').style.background = TurkqioseGradient;
+      document.querySelector('.navbar-container').style.background = TurkqioseGradient;
     } else if (background === 'pink') {
       document.body.style.backgroundColor = "#d70dff";
       document.querySelector('#root').style.backgroundColor = '#d70dff';
-      document.querySelector('.navbar').style.background = pinkGradient;
-      document.querySelector('.navbar_section').style.backgroundColor = 'white !important';
+      document.querySelector('.navbar-container').style.background = pinkGradient;
+      //document.querySelector('.navbar_section').style.backgroundColor = 'white !important';
     } else if (background === 'orange') {
       document.body.style.backgroundColor = "orange";
       document.querySelector('#root').style.backgroundColor = 'orange';
@@ -134,8 +131,28 @@ const Navbar = ({onSearchClick}) => {
   };
 
   const handleSignOutClick = () => {
+    document.body.style.backgroundColor = "black";
+    document.querySelector('#root').style.backgroundColor = 'black';
+    document.querySelector('.navbar-container').style.background = blackGradient;
+
+    const dropdown = document.querySelector('.dropdown');
+    dropdown.removeAttribute('open');
     navigate('/');
     auth.signOut();
+  }
+
+  const saveBackcolorFirestore = (background) => {
+    const userUID = auth.currentUser.uid;
+        
+    db.collection("users").doc(userUID).set({
+      background : background
+      }, {merge: true})
+      .then(() => {
+          console.log("Document successfully written!");
+      })
+      .catch((error) => {
+          console.error("Error writing document: ", error);
+      });
   }
 
   const handleMovWheelClick = () => {
@@ -158,7 +175,7 @@ const Navbar = ({onSearchClick}) => {
         <input type="text" placeholder="Search movies..." onChange={handleSearchInputChange} />
         <ImSearch className="search_icon" onClick={handleSearchClick} />
       </div>
-      <section className="navbar_section">
+      <section className= {signedIn ? 'navbar_section' : 'navbar_section hide'}>
         
         <details className="dropdown">
           <summary role="button">

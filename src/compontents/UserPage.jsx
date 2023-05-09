@@ -70,19 +70,19 @@ const UserPage = () => {
     navigate("/movieinfo/");
   }
 
-  const saveBackcolorFirestore = (background) => {
-    const userUID = auth.currentUser.uid;
+  // const saveBackcolorFirestore = (background) => {
+  //   const userUID = auth.currentUser.uid;
         
-    db.collection("users").doc(userUID).set({
-      background : background
-      }, {merge: true})
-      .then(() => {
-          console.log("Document successfully written!");
-      })
-      .catch((error) => {
-          console.error("Error writing document: ", error);
-      });
-  }
+  //   db.collection("users").doc(userUID).set({
+  //     background : background
+  //     }, {merge: true})
+  //     .then(() => {
+  //         console.log("Document successfully written!");
+  //     })
+  //     .catch((error) => {
+  //         console.error("Error writing document: ", error);
+  //     });
+  // }
 
 
 
