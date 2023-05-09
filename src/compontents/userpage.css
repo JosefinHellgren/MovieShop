@@ -8,9 +8,9 @@
     text-align: center;
 }
 
-.user-page .navbar-section {
+.user-page .navbar_section {
     display: flex;
-    justify-content: space-between;
+    justify-self: space-between;
     align-items: center;
     position: fixed;
     top: 0;
@@ -20,28 +20,13 @@
     background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%);
     z-index: 1;
     height: 60px;
-
   }
 
-.user-page .navbar-section .mov-wheel {
-    width: 100px;
-    height: 100px;
-
-    -webkit-clip-path: circle(35px at center);
-    clip-path: circle(35px at center);
-}
-
-.user-page .settings_icon {
-    color: white;
-    font-size: 35px;
-    padding: 1rem;
-    
-}
-
-.user-page .menu_icon {
-    color: white;
-    font-size: 35px;
-    padding: 1rem;
+.user-page .navbar_section .mov-wheel {
+  width: 75px;
+  height: 75px;
+  -webkit-clip-path: circle(40px at center);
+  clip-path: circle(40px at center);
 }
 
 .user-page > h3 {
@@ -59,11 +44,6 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 1em;
 }
-
-/* .user-page .purchased-item {
-    display: flex;
-    flex-direction: column;
-} */
 
 .user-page .purchased-item > section {
     position: relative;
@@ -86,6 +66,173 @@
     width: 35vw;
     border-radius: 10px;
 }
+
+.user-page .li-color {
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+.user-page .black-circle {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: black;
+  border-style: solid;
+  border-color: white;
+  margin-right: 10px;
+}
+
+.user-page .white-circle {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: #06acb8;
+  border-style: solid;
+  border-color: black;
+  margin-right: 10px;
+}
+
+.user-page .pink-circle {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: #d70dff;
+  border-style: solid;
+  border-color: black;
+  margin-right: 10px;
+}
+
+.user-page .orange-circle {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: orange;
+  border-style: solid;
+  border-color: black;
+  margin-right: 10px;
+}
+
+.user-page .settings_icon {
+  color: white;
+  font-size: 35px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(130%, -50%);
+}
+
+:root {
+  --dropdown-highlight: gray;
+  --dropdown-width: 200px;
+  --dropdown-background: white;
+  --dropdown-color: black;
+  }
+  
+  /* Dropdown styles */
+.user-page .dropdown {
+  position: absolute;
+  right: 5px;
+  margin-right:7em;
+  border: none;
+}
+  
+.user-page .dropdown summary {
+  list-style: none;
+  list-style-type: none;
+}
+  
+.user-page .dropdown > summary::-webkit-details-marker {
+  display: none;
+}
+  
+.user-page .dropdown summary:focus {
+  outline: none;
+}
+  
+.user-page .dropdown summary:focus a.button {
+  border: 2px solid white;
+}
+  
+.user-page .dropdown summary:focus {
+  outline: none;
+}
+
+.user-page .dropdown-title {
+  display: flex;
+  justify-content: center;
+}
+  
+.user-page .dropdown ul {
+  position: absolute;
+  margin: 35px 0 0 0;
+  padding: 20px 0;
+  width: var(--dropdown-width);
+  left: 0%;
+  margin-left: calc((var(--dropdown-width) / 2)  * -1);
+  box-sizing: border-box;
+  z-index: 2; 
+  background: var(--dropdown-background);
+  border-radius: 6px;
+  list-style: none;
+}
+
+.user-page .dropdown ul li a:link,
+.dropdown ul li a:visited,
+a:not([href]) {
+display: inline-block;
+padding: 10px 0.8rem;
+width: 100%;
+box-sizing: border-box;
+color: var(--dropdown-color);
+text-decoration: none;
+}
+  
+.user-page .dropdown ul li a:hover {
+  background-color: var(--dropdown-highlight);
+  color: var(--dropdown-background);
+}
+  
+  /* Dropdown triangle */
+.user-page .dropdown ul::before {
+  content: ' ';
+  position: absolute;
+  width: 0;
+  height: 0;
+  top: -10px;
+  left: 80%;
+  margin-left: -10px;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent var(--dropdown-background) transparent;
+  }
+  
+  
+  /* Close the dropdown with outside clicks */
+.user-page .dropdown > summary::before {
+  display: none;
+}
+  
+.user-page .dropdown[open] > summary::before {
+  content: ' ';
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.user-page ul li:last-child::before {
+  content: "";
+  display: block;
+  height: 1px;
+  background-color: gray;
+  margin: 10px 0;
+  }
+
+
 
 @media only screen and (min-width: 768px) { 
     .user-page {

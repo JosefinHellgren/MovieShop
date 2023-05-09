@@ -10,15 +10,13 @@
   background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%);
   z-index: 1;
   height: 60px;
-
   }
   
   .navbar .movie_wheel {
-    width: 100px;
-    height: 100px;
-
-    -webkit-clip-path: circle(35px at center);
-    clip-path: circle(35px at center);
+    width: 75px;
+    height: 75px;
+    -webkit-clip-path: circle(45px at center);
+    clip-path: circle(45px at center);
   }
   
   .navbar .play_folder {
@@ -37,6 +35,7 @@
     width: 16px;
     height: 16px;
     padding-left: 10px;
+    color: white;
   }
   
   .navbar .search_bar {
