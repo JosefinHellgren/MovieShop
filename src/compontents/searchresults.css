@@ -1,0 +1,20 @@
+.search_results .movie_grid {
+    width: 86vw;
+    min-width: 200px;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(26vw, 1fr));
+  
+  }
+
+  
+
+  .search_results h2 {
+    color: white;
+    font-size: medium;
+  }
+
+  .search_results {
+    margin-top: 12vh;
+  }
+

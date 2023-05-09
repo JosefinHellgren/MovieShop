@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import PasswordInput from './PasswordInput';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+
 
 const LoginPage = () => {
     const auth = getAuth();
@@ -12,6 +14,7 @@ const LoginPage = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [errorEmail, setErrorEmail] = useState(false);
     const [errorPassword, setErrorPassword] = useState(false);
+    const navigatePayment = useSelector((state) => state.navigatePayment.payment);
 
     const ERROR  = {
       EMAILMISSING : 'Please enter your email',
@@ -37,7 +40,16 @@ const LoginPage = () => {
         .then((userCredential) => { 
             const user = userCredential.user;
             console.log(user.uid);
-            navigate(-1)
+
+            //here we want to go to  payment if we try.
+            if(navigatePayment){
+              navigate("/payment/")
+              //here we also want to change back to the state being false?
+
+            }else{navigate(-1)
+            console.log("redux statet payment "+navigatePayment)}
+
+            
           })
           .catch((error) => {
             if(error.code === 'auth/wrong-password') {

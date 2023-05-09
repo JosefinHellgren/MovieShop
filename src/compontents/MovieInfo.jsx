@@ -3,9 +3,11 @@ import './movieInfo.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp , faCartPlus , faThumbsDown } from '@fortawesome/free-solid-svg-icons'
 import { Container } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-
-
+import { useSelector,useDispatch } from 'react-redux';
+import Comments from "./Comments";
+import { useNavigate } from "react-router-dom";
+import { getAuth,onAuthStateChanged } from "firebase/auth";
+import { fromPayment } from "../features/navigatePayment";
 
 
 function MovieInfo(props) {
@@ -29,8 +31,17 @@ function MovieInfo(props) {
  const [showComments, setShowComments] = useState(false);
 
  const imgUrlStart = "https://image.tmdb.org/t/p/w185";
+ const navigatePayment = useSelector((state) => state.navigatePayment.payment);
+ const auth = getAuth();
+ let dispatch = useDispatch();
 
 
+
+ 
+
+
+
+ let navigate = useNavigate();
 
   useEffect(() => {
     // fetch movie genres from API
@@ -64,6 +75,27 @@ function MovieInfo(props) {
     const genre = genres.find(g => g.id === id);
     return genre ? genre.name : "";
   });
+
+
+
+const handleBuy = () =>{
+
+//if we have a user, then we want to navigate to payment and set the navigatetoPayment statet till true.
+onAuthStateChanged(auth,(user) =>{
+  if (user){
+   
+    navigate('/payment/');
+  }
+ })
+ dispatch(fromPayment())
+    console.log(navigatePayment)
+    navigate("/login");
+   
+    
+  
+   
+}
+
 
 
   const handleShowOverview = () => {
@@ -108,7 +140,7 @@ function MovieInfo(props) {
     </div>
      
      <div className="movieinfobuybtns">
-          <button className="movieinfobtn" onClick={() => handleBuy(movie)}><FontAwesomeIcon icon={faCartPlus} />Buy 199Kr</button>
+          <button className="movieinfobtn" onClick={handleBuy}><FontAwesomeIcon icon={faCartPlus} />Buy 199Kr</button>
           <button className="movieinfobtn" onClick={() => handleAddtolist(movie)}>+ Add to watch list</button>
      </div>
           
@@ -123,7 +155,6 @@ function MovieInfo(props) {
           Comments
         </button>
       </div>
-         
 
       {showOverview && (
         <div className="">
@@ -143,7 +174,7 @@ function MovieInfo(props) {
 
       {showComments && (
         <div>
-          <h1>HEJ detta är Comments</h1>
+        <Comments />
         </div>
       )}
     </div>

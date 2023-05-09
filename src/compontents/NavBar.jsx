@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useMemo } from "react";
+
+import React, { useState, useEffect } from "react";
+
 import Logo from "../images/movie_wheel.png";
 import Movie_wheel from "../images/movie-wheel.png";
 import SearchIcon from "../images/search_icon.png";
@@ -12,10 +14,12 @@ import { BsSearch } from "react-icons/bs";
 import {ImSearch} from "react-icons/im"
 import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
+
+const Navbar = ({handleSearchInputChange, handleSearchClick}) => {
   const pinkGradient = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
   const blackGradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0% rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%';
   const TurkqioseGradient = 'linear-gradient(to bottom, #06acb8 0%, #06acb8 80%, rgba(0, 0, 0, 0) 100%)';
+
 
   const navigate = useNavigate();
 
@@ -24,6 +28,7 @@ const Navbar = () => {
   const [userUID, setUserUID] = useState(null);
 
   const [signedIn, setSignedIn] = useState(false);
+
 
   useEffect (() => {
     onAuthStateChanged(auth, (user) => {
@@ -58,6 +63,7 @@ const Navbar = () => {
 
   const changeBackground = (background) => {
     
+
 
     if (background === 'black') {
       document.body.style.backgroundColor = "black";
@@ -94,15 +100,15 @@ const Navbar = () => {
     onClick={handleUserCircleClick} />
   };
 
-
   return (
     <nav className="navbar">
-      {/* <img src={Logo} alt="Movie Wheel Logo" className="movie_wheel"  /> */}
+
+     
       <img src={Movie_wheel} alt="Movie Wheel Logo" className="movie_wheel"  />
       <div className="search_bar">
-        <input type="text" placeholder="Search movies..." />
-        {/* <img src={SearchIcon} alt="Search icon" className="search_icon" /> */}
-        <ImSearch className="search_icon" />
+        <input type="text" placeholder="Search movies..." onChange={handleSearchInputChange} />
+        <ImSearch className="search_icon" onClick={handleSearchClick} />
+
       </div>
       {renderButton()}
     </nav>

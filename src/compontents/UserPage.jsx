@@ -4,7 +4,9 @@ import 'firebase/compat/firestore';
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
 import { actions } from "../features/selectedmovie";
+
 import './userpage.css'
 import Logo from "../images/movie_wheel.png";
 import movie_wheel from "../images/movie-wheel.png";

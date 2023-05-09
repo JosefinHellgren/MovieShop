@@ -12,14 +12,14 @@
 }
 
 
-.comments-list{
+.comments-wrapper .comments-list{
     height: 100px;
      width: 300px;
       overflow: auto;
 }
 
 
-.comment-input{
+.comments-wrapper .comment-input{
     height: 50px;
     width: 100%;
 }
@@ -27,4 +27,21 @@
 .comments-wrapper button{
     border-radius: 50px;
     width: 100%;
+    
+}
+
+.comments-wrapper .thumbUp{
+width: 16px;
+height: 16px;
+margin-right: 1rem;
+margin-left: 1rem;
+color: green;
+}
+
+.comments-wrapper .thumbDown{
+    width: 16px;
+height: 16px;
+color: red;
+
+
 }
