@@ -12,9 +12,8 @@ import SearchDropDown from "./SearchDropDown";
 
 
 import { fromPayment } from "../features/navigatePayment";
-import { useEffect } from "react";
 import { getAuth,onAuthStateChanged } from "firebase/auth";
-import { useState } from "react";
+
 const MainPage = (props) => {
 
 
@@ -42,16 +41,20 @@ const MainPage = (props) => {
 
   const [user, setUser] = useState(false);
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setUser(true);
-      console.log('we have a logged in user')
-      //auth.signOut();
-    } else {
-      setUser(false);
-      console.log('No logged in user')
-    }
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(true);
+        console.log('we have a logged in user')
+        //auth.signOut();
+      } else {
+        setUser(false);
+        console.log('No logged in user')
+      }
+    });
+}, []);
+  
+  
 
   const handleMovieClick = (movie) => {
     props.setMovie(movie);
