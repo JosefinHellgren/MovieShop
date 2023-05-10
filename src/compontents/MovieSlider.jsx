@@ -7,13 +7,13 @@ import { STATUS, actions } from "../features/movies";
 import MovieGridItem from "./MovieGridItem";
 import { useNavigate } from "react-router-dom";
 
-const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onCategoryClick }) => {
+const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onCategoryClick, genre_id }) => {
    
     const moviesObject = useSelector(state => state.movies);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchMovies(category, dispatch)
+        fetchMovies(genre_id, category, dispatch)
     }, []);
 
     let content = null;
@@ -50,10 +50,15 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
         </div>
     );
 
-    async function fetchMovies(category, dispatch) {
+    async function fetchMovies( genre_id, category, dispatch) {
         const apiKey = "305f99214975faee28a0f129881c6ec9";
-        const URL = `https://api.themoviedb.org/3/movie/${category}?api_key=${apiKey}&language=en-US&region=SE`;
-      
+
+        let URL = `https://api.themoviedb.org/3/movie/${category}?api_key=${apiKey}&language=en-US&region=SE`;
+
+        if (genre_id !== ""){
+            URL = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&region=SE&with_genres=${genre_id}`;
+        }
+
         dispatch(actions.isFetching());
       
         try {
