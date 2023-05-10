@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions as selectActions } from "./features/selectedmovie"
 import { fromPayment } from "./features/navigatePayment";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { actions as searchDropDownActions } from "./features/searchdropdown"
 
 function App() {
 
@@ -45,13 +46,14 @@ function App() {
   }, []);
 
   const handleSearchClick = (newQuery, searchPageResults) => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
     setSearchWord(newQuery);
     setSearchPagResults(searchPageResults);
     navigate('/searchResults');
   }
 
   const handleMovieClick = (movie) => {
-    //setShowSearchDropdown(false);
+    dispatch(searchDropDownActions.hideSearchDropDown());
     //this is what sets the selectedmovie to redux
     console.log('handleMovieclick körs')
     dispatch(selectActions.selectMovie(movie));
@@ -59,7 +61,8 @@ function App() {
   };
 
   const handleButtonClick = (movie) => {
-    //setShowSearchDropdown(false);
+    dispatch(searchDropDownActions.hideSearchDropDown());
+
     //this is what sets the selectedmovie to redux
     dispatch(selectActions.selectMovie(movie));
 

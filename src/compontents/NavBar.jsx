@@ -1,6 +1,4 @@
-
 import React, { useState, useEffect } from "react";
-
 import Movie_wheel from "../images/movie-wheel.png";
 import PlayButton from "../images/play.png";
 import "./navbar.css";
@@ -13,11 +11,9 @@ import { actions as selectActions } from "../features/selectedmovie"
 import {ImSearch} from "react-icons/im"
 import { useNavigate } from "react-router-dom";
 import SearchDropDown from "./SearchDropDown";
-import SearchResults from "./SearchResults";
-import { useDispatch } from "react-redux";
-import movie_wheel from "../images/movie-wheel.png";
+import { useDispatch, useSelector } from "react-redux";
 import { FiSettings } from "react-icons/fi";
-
+import { actions as searchDropDownActions } from "../features/searchdropdown"
 
 const Navbar = ({onSearchClick}) => {
   const pinkGradient = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
@@ -34,6 +30,10 @@ const Navbar = ({onSearchClick}) => {
 
   const [signedIn, setSignedIn] = useState(false);
 
+  const searchDropDown = useSelector(state => state.searchDropdown.searchDropDown);
+
+  const [searchResults, setSearchResults] = useState([]);
+  const [query, setQuery] = useState('');
 
   useEffect (() => {
     onAuthStateChanged(auth, (user) => {
@@ -49,7 +49,6 @@ const Navbar = ({onSearchClick}) => {
       }
     });
   }, [])
-  
   
   useEffect(() => {
     if (userUID) {
@@ -86,9 +85,7 @@ const Navbar = ({onSearchClick}) => {
     }
   }
 
-  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
-  const [query, setQuery] = useState('');
+  
 
   const handleSearchInputChange = async (event) => {
     const newQuery = event.target.value;
@@ -99,19 +96,20 @@ const Navbar = ({onSearchClick}) => {
       const data = await response.json();
       console.log(data.results);
       setSearchResults(data.results);
-      setShowSearchDropdown(true);
+      dispatch(searchDropDownActions.showSearchDropDown());
     } else {
-      setShowSearchDropdown(false);
+      dispatch(searchDropDownActions.hideSearchDropDown());
     }
   }
 
   const handleSearchClick = () => {
-    setShowSearchDropdown(false);
+    dispatch(searchDropDownActions.hideSearchDropDown());
+    console.log("handlesearchclick" + searchDropDown)
     onSearchClick(query, searchResults);
   }
 
   const handleMovieClick = (movie) => {
-    setShowSearchDropdown(false);
+    dispatch(searchDropDownActions.hideSearchDropDown());
     //this is what sets the selectedmovie to redux
     console.log('handleMovieclick körs')
     dispatch(selectActions.selectMovie(movie));
@@ -120,12 +118,12 @@ const Navbar = ({onSearchClick}) => {
   };
   
   const handleUserCircleClick = () => {
-    setShowSearchDropdown(false);
+    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate('/login');
   }
 
   const handlePlayButtonPressed = () => {
-    setShowSearchDropdown(false);
+    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate('/userpage')
   }
 
@@ -141,7 +139,7 @@ const Navbar = ({onSearchClick}) => {
   }
 
   const handleMovWheelClick = () => {
-    setShowSearchDropdown(false);
+    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate("/");
   }
 
@@ -180,7 +178,7 @@ const Navbar = ({onSearchClick}) => {
       {renderButton()}
       </section>
       <section>
-      <div className={`search_dropdown ${showSearchDropdown ? "" : "hide"}`}>
+      <div className={`search_dropdown ${searchDropDown ? '' : 'hide'}`}>
           <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
         </div>
       </section>

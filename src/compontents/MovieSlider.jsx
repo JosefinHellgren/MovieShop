@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Slider from "react-slick";
 import "./movieslider.css";
-import { useMediacategory } from 'react-responsive';
 import { useDispatch, useSelector } from "react-redux";
 import { STATUS, actions } from "../features/movies";
 import MovieGridItem from "./MovieGridItem";
-import { useNavigate } from "react-router-dom";
 
 const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onCategoryClick, genre_id }) => {
    

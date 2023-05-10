@@ -8,6 +8,7 @@ import Comments from "./Comments";
 import { useNavigate } from "react-router-dom";
 import { getAuth,onAuthStateChanged } from "firebase/auth";
 import { fromPayment } from "../features/navigatePayment";
+import { actions as searchDropDownActions } from "../features/searchdropdown"
 
 
 function MovieInfo(props) {
@@ -34,12 +35,6 @@ function MovieInfo(props) {
  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
  const auth = getAuth();
  let dispatch = useDispatch();
-
-
-
- 
-
-
 
  let navigate = useNavigate();
 
@@ -80,6 +75,8 @@ function MovieInfo(props) {
 
 const handleBuy = () =>{
 
+  dispatch(searchDropDownActions.hideSearchDropDown());
+
 //if we have a user, then we want to navigate to payment and set the navigatetoPayment statet till true.
 onAuthStateChanged(auth,(user) =>{
   if (user){
@@ -99,18 +96,21 @@ onAuthStateChanged(auth,(user) =>{
 
 
   const handleShowOverview = () => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(true);
     setShowTrailer(false);
     setShowComments(false);
   };
 
   const handleShowTrailer = () => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(false);
     setShowTrailer(true);
     setShowComments(false);
   };
 
   const handleShowComments = () => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(false);
     setShowTrailer(false);
     setShowComments(true);

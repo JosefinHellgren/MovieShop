@@ -4,7 +4,7 @@ import MovieSlider from "./MovieSlider";
 import "./mainpage.css";
 import { useDispatch } from "react-redux";
 import { actions as selectActions } from "../features/selectedmovie"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 
 const MainPage = ({ onCategoryClick, handleButtonClick, handleMovieClick }) => {
@@ -43,9 +43,11 @@ const MainPage = ({ onCategoryClick, handleButtonClick, handleMovieClick }) => {
       <section className="action_section">
         <MovieSlider genre_id="28" title="Action" category="action" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick} />
       </section>
-      
       <section className="now_playing_section">
         <MovieSlider genre_id="" title="In Theaters Now" category="now_playing" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick} />
+      </section>
+      <section className="drama_section">
+        <MovieSlider genre_id="18" title="Drama" category="drama" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick} />
       </section>
       
     </div>
