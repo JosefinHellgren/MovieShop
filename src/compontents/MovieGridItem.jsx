@@ -2,7 +2,7 @@ import "./moviegriditem.css"
 
 const MovieGridItem = ({movie, handleButtonClick, handleMovieClick}) => {
 
-    const imgUrlStart = "https://image.tmdb.org/t/p/w185";
+    const imgUrlStart = "https://image.tmdb.org/t/p/original";
 
     return (
         <div className="movie_grid_item">

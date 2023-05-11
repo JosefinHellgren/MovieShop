@@ -16,15 +16,12 @@ import { fromPayment } from "./features/navigatePayment";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function App() {
-
-
   const navigate = useNavigate();
 
-  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
 
+  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
   const dispatch = useDispatch();
   const [searchPageResults, setSearchPagResults] = useState([]);
-
   const [searchWord, setSearchWord] = useState('');
 
   const auth = getAuth();
@@ -61,6 +58,7 @@ function App() {
   const handleButtonClick = (movie) => {
     //setShowSearchDropdown(false);
     //this is what sets the selectedmovie to redux
+
     dispatch(selectActions.selectMovie(movie));
 
     //if we have a user navigate to Payment:
@@ -80,7 +78,7 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar onSearchClick={handleSearchClick}/>
+      <Navbar onSearchClick={handleSearchClick} />
       <Routes>
         <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>}/>
         <Route path="/movieinfo" element={<MovieInfo />}/>
@@ -89,7 +87,6 @@ function App() {
         <Route path= "/signup" element={<SignUpPage/>}/>
         <Route path="/payment" element={<Payment />}/>
         <Route path='/settings' element= {<Settings />} />
-
         <Route path='/searchresults' element= {<SearchResults 
         title={`Showing results for ${searchWord}`} searchResults={searchPageResults} 
         handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>} />

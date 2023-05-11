@@ -13,6 +13,11 @@
     flex-direction: row;
     align-items: flex-start;
   }
+
+  .movieinfo .poster-img {
+    width: 40vw;
+    border-radius: 5%;
+  }
   
   .poster-container img {
     margin-right: 20px;
@@ -60,6 +65,12 @@
   .ratebtn{
     margin: 10px;
     background-color: grey;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .movieinfo .poster-img {
+      width: 20vw;
+    }
   }
 
  
