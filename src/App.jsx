@@ -6,6 +6,7 @@ import SignUpPage from './compontents/SignUpPage';
 import LoginPage from './compontents/LoginPage';
 import Payment from './compontents/Payment';
 import UserPage from './compontents/UserPage';
+import Playmovie from './compontents/Playmovie';
 import Settings from './compontents/Settings';
 import Navbar from './compontents/NavBar.jsx';
 import SearchResults from './compontents/SearchResults';
@@ -14,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions as selectActions } from "./features/selectedmovie"
 import { fromPayment } from "./features/navigatePayment";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 
 function App() {
   const navigate = useNavigate();
@@ -85,6 +87,7 @@ function App() {
         <Route path='/login' element={<LoginPage/>} />
         <Route path='/userpage'element= {<UserPage/>} />
         <Route path= "/signup" element={<SignUpPage/>}/>
+        <Route path="/video" element={<Playmovie/>}/>
         <Route path="/payment" element={<Payment />}/>
         <Route path='/settings' element= {<Settings />} />
         <Route path='/searchresults' element= {<SearchResults 

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import './movieInfo.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -13,12 +14,32 @@ import 'firebase/compat/firestore';
 
 
 function MovieInfo() {
-
-
+ 
   //CILIA REDUX SELECTEDMOVIE
   //how to get the selectedmovie from redux, must also import useSelector from react-redux
-  const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
+  const selectedMovie = useSelector(
+    (state) => state.selectedMovie.selectedMovie
+  );
   // use the selectedMovie like this
+  //console.log("movieinfo: " + selectedMovie.title);
+
+
+  const [isPurchased, setIsPurchased] = useState(false);
+
+  
+
+  const [currentUser, setCurrentUser] = useState(null);
+  const [purchasedMovies, setPurchasedMovies] = useState([]);
+
+  //const [playing, setPlaying] = useState(false);
+  const videoRef = useRef(null);
+
+  
+ 
+
+  
+
+ 
   const [genres, setGenres] = useState([]);
   const rating = selectedMovie.vote_average;
   const [trailerKey, setTrailerKey] = useState(null);
@@ -94,6 +115,43 @@ function MovieInfo() {
       .catch((error) => console.log(error));
   }, [selectedMovie.id]);
 
+
+  
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log('user hämtats')
+        setCurrentUser(user);
+      }
+    });
+  }, [])
+
+
+  useEffect(() => {
+    console.log('before async')
+    async function fetchData() {
+      if (currentUser != null) {
+        console.log("user: " ,currentUser)
+        const purchasedRef = db.collection('users').doc(currentUser.uid).collection('purchased');
+        const querySnapshot = await purchasedRef.get();
+        const purchasedMovies = querySnapshot.docs.map(doc => doc.data());
+        setPurchasedMovies(purchasedMovies);
+      }
+    }
+    fetchData();
+  }, [currentUser]);
+
+
+  useEffect(() => {
+    setIsPurchased(!!purchasedMovies.find(movie => movie.id === selectedMovie.id));
+  }, [purchasedMovies, selectedMovie.id]);
+
+
+
+
+
+
+
   // find genre names for each genre ID in the movie's genre_ids array
   const genreNames = selectedMovie.genre_ids.map(id => {
     const genre = genres.find(g => g.id === id);
@@ -139,6 +197,7 @@ function MovieInfo() {
     }
   }
 
+
   const handleShowOverview = () => {
     setShowOverview(true);
     setShowTrailer(false);
@@ -159,10 +218,33 @@ function MovieInfo() {
 
 
 
+
+ 
+
+  const handlePlayButtonClick = () => {
+    console.log('Play button clicked');
+    if (currentUser) {
+      console.log('purchasedMovies:', purchasedMovies);
+      const isPurchased = purchasedMovies.find((movie) => movie.id === selectedMovie.id);
+      console.log(isPurchased)
+      if (isPurchased) {
+        navigate("/video");
+        console.log('handlePlayButtonClick function called');
+      } else {
+        console.log("You haven't purchased this movie yet!");
+      }
+    }
+  };
+
+
+
+
+ 
   return (
     <div className="movieinfo">
       <h1>{selectedMovie.title}</h1>
       <div className="poster-container">
+
         <img className = 'poster-img' src={imgUrlStart + selectedMovie.poster_path} alt={selectedMovie.title} />
         <div className="movie-details">
           <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
@@ -174,11 +256,20 @@ function MovieInfo() {
             <button className="ratebtn"><FontAwesomeIcon icon={faThumbsDown} /></button>
           </div>
 
+
         </div>
       </div>
 
       <div className="movieinfobuybtns">
-        <button className="movieinfobtn" onClick={handleBuy}><FontAwesomeIcon icon={faCartPlus} /> Buy 199Kr</button>
+
+       
+        
+        {isPurchased ? (
+          <button onClick={handlePlayButtonClick} className="movieinfobtn">Play</button>
+            ) : (
+          <button  onClick={handleBuy} className="movieinfobtn">Buy</button>
+            )}
+
         <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
       </div>
 
@@ -195,19 +286,23 @@ function MovieInfo() {
       </div>
 
       {showOverview && (
-        <div className="">
+
+        <div className="info-overview">
           <p className="overview"><strong>Overview</strong> <br></br> {selectedMovie.overview}</p>
+
         </div>
       )}
 
       {showTrailer && (
-        <Container>
-          <iframe
-            src={`https://www.youtube.com/embed/${trailerKey}`}
-            title="YouTube video player"
-            allowFullScreen
-          ></iframe>
-        </Container>
+        <iframe
+          ref={videoRef}
+          src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
+          title="YouTube video player"
+          display="initial"
+          webkitallowfullscreen="true"
+          allowFullScreen={true}
+          allow="autoplay; encrypted-media"
+        ></iframe>
       )}
 
       {showComments && (
@@ -221,4 +316,3 @@ function MovieInfo() {
 }
 
 export default MovieInfo;
-
