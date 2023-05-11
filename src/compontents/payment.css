@@ -1,25 +1,23 @@
 
-
-
-
 .payment-container .poster{
 width: 50%;
 height: 50%;
 top: 10%;
+
 }
 
-
-.payment-container{
-    
+.payment-container {
     top: 0%;
     width: 100%;
     height: 100%;
     margin: 0 auto;
     padding: 0;
     color: white;
+    margin-top: 60px;
+
 }
 
-.payment-container .exit-button{
+.payment-container .exit-button {
     position: absolute;
     border-radius: 50%;
     top: 1%;
@@ -31,61 +29,56 @@ top: 10%;
     font-weight: bold;
 }
 
+
 .payment-container .small-info{
-   
    width: 500px;
 }
 
-.payment-container .paymentform{
+.payment-container .paymentform {
     display: grid;
     grid-template-columns: 2fr 2fr;
 }
 
-.payment-container .paymentform input{
+.payment-container .paymentform input {
     border-radius: 10px;
     padding: 10px;
     width: 80%;
-
 }
 
-.payment-container .paymentform button  {
+.payment-container .paymentform button {
     margin-top: 20px;
- }
+}
 
- .payment-container #playButton{
+.payment-container #playButton {
     position: absolute;
     bottom: 15%;
-    right:35%;
+    right: 35%;
     background-color: greenyellow;
 }
 
-.payment-container .credticard{
-width: 50px;
-height: 30px;
-border: 3px solid white;
-
+.payment-container .credticard {
+    width: 50px;
+    height: 30px;
+    border: 3px solid white;
 }
 
-.payment-container .payment-form-wrapper{
+.payment-container .payment-form-wrapper {
     margin: 10px;
     width: 500px;
 }
 
+
 .payment-container .payment-form-wrapper img{
     width: 60px;
-height: 40px;
-
-
+    height: 40px;
 }
 
-.payment-container .submitButton{
+.payment-container .submitButton {
     margin-top: 30px;
 }
 
-.payment-container .selected{
+.payment-container .selected {
     border: 4px solid greenyellow;
-   
-
 }
 
 
@@ -98,27 +91,24 @@ height: 40px;
 
 
 
-    .payment-container .div-for-web{
+    .payment-container .div-for-web {
         display: grid;
         grid-template-columns: 1fr 1fr;
     }
 
-   
-    .payment-container .payment-form-wrapper{
+
+    .payment-container .payment-form-wrapper {
         margin-top: 40%;
-        
+
     }
 
-    .payment-container .paymentform{
+    .payment-container .paymentform {
         font-size: large;
         margin: 27px;
     }
 
-    .payment-container .payment-form-wrapper img{
+    .payment-container .payment-form-wrapper img {
         width: 90px;
         height: 60px;
     }
-.purchased{
-
-}
 }

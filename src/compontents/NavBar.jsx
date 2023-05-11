@@ -112,19 +112,21 @@ const Navbar = ({ onSearchClick }) => {
   }
 
   const handleMovieClick = (movie) => {
-
+    setShowSearchDropdown(false);
     //this is what sets the selectedmovie to redux
     console.log('handleMovieclick körs')
     dispatch(selectActions.selectMovie(movie));
-    setShowSearchDropdown(false)
+    
     navigate("/movieinfo/");
   };
 
   const handleUserCircleClick = () => {
+    setShowSearchDropdown(false);
     navigate('/login');
   }
 
   const handlePlayButtonPressed = () => {
+    setShowSearchDropdown(false);
     navigate('/userpage')
   }
 
@@ -163,6 +165,7 @@ const Navbar = ({ onSearchClick }) => {
   }
 
   const handleMovWheelClick = () => {
+    setShowSearchDropdown(false);
     navigate("/");
   }
 
