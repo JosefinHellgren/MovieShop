@@ -2,7 +2,7 @@
 @import url('../../node_modules/slick-carousel/slick/slick-theme.css');
 
 .slick-slider {
-    height: 0 auto;
+    height: 12rem;
     width: 86vw;
     min-width: 200px;
     position: relative;

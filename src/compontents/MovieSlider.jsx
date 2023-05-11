@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { STATUS, actions } from "../features/movies";
 import MovieGridItem from "./MovieGridItem";
 
-const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onCategoryClick, genre_id }) => {
+const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onCategoryClick, genre_id, movie_id, similar}) => {
    
     const moviesObject = useSelector(state => state.movies);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchMovies(genre_id, category, dispatch)
+        fetchMovies( movie_id, genre_id, category, dispatch, similar)
     }, []);
 
     let content = null;
@@ -36,7 +36,7 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
 
     return (
         <div className="movie_slider">
-        <h4 onClick={handleCategoryClick} >{title} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'>'}  </h4>
+        <h4 onClick={handleCategoryClick} >{title} {'>'}  </h4>
         <Slider key={moviesObject.status} className="slick-slider" slidesToShow={3} slidesToScroll={1} >
             {content &&
                 content.map((movie, index) => (
@@ -48,7 +48,7 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
         </div>
     );
 
-    async function fetchMovies( genre_id, category, dispatch) {
+    async function fetchMovies( movie_id, genre_id, category, dispatch, similar) {
         const apiKey = "305f99214975faee28a0f129881c6ec9";
 
         let URL = `https://api.themoviedb.org/3/movie/${category}?api_key=${apiKey}&language=en-US&region=SE`;
@@ -56,6 +56,14 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
         if (genre_id !== ""){
             URL = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&region=SE&with_genres=${genre_id}`;
         }
+       
+            else if (similar === true) {
+              URL = `https://api.themoviedb.org/3/movie/${movie_id}/similar?api_key=${apiKey}&language=en-US&region=SE`;
+            }
+             else if (movie_id !== "") {
+              URL = `https://api.themoviedb.org/3/movie/${movie_id}/recommendations?api_key=${apiKey}&language=en-US&region=SE`;
+            }
+          
 
         dispatch(actions.isFetching());
       

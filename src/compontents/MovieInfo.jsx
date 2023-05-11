@@ -9,9 +9,10 @@ import { useNavigate } from "react-router-dom";
 import { getAuth,onAuthStateChanged } from "firebase/auth";
 import { fromPayment } from "../features/navigatePayment";
 import { actions as searchDropDownActions } from "../features/searchdropdown"
+import MovieSlider from "./MovieSlider";
 
 
-function MovieInfo(props) {
+function MovieInfo(props, { onCategoryClick, handleButtonClick, handleMovieClick }) {
   
 
   //CILIA REDUX SELECTEDMOVIE
@@ -177,6 +178,10 @@ onAuthStateChanged(auth,(user) =>{
         <Comments />
         </div>
       )}
+      <section>
+      <MovieSlider similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      <MovieSlider similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      </section>
     </div>
   );
   
