@@ -9,7 +9,7 @@ import { HiOutlineUserCircle } from "react-icons/hi";
 import { BsSearch } from "react-icons/bs";
 import { actions as selectActions } from "../features/selectedmovie"
 import {ImSearch} from "react-icons/im"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import SearchDropDown from "./SearchDropDown";
 import { useDispatch, useSelector } from "react-redux";
 import { FiSettings } from "react-icons/fi";
@@ -23,6 +23,7 @@ const Navbar = ({onSearchClick}) => {
   const apiKey = "305f99214975faee28a0f129881c6ec9";
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const auth = getAuth();
   const db = firebase.firestore();
@@ -85,8 +86,6 @@ const Navbar = ({onSearchClick}) => {
     }
   }
 
-  
-
   const handleSearchInputChange = async (event) => {
     const newQuery = event.target.value;
     setQuery(newQuery);
@@ -103,17 +102,19 @@ const Navbar = ({onSearchClick}) => {
   }
 
   const handleSearchClick = () => {
+    setQuery('');
     dispatch(searchDropDownActions.hideSearchDropDown());
-    console.log("handlesearchclick" + searchDropDown)
     onSearchClick(query, searchResults);
   }
+
+  useEffect(() => {
+    setQuery('');
+  }, [location.pathname]);
 
   const handleMovieClick = (movie) => {
     dispatch(searchDropDownActions.hideSearchDropDown());
     //this is what sets the selectedmovie to redux
-    console.log('handleMovieclick körs')
     dispatch(selectActions.selectMovie(movie));
-    
     navigate("/movieinfo/");
   };
   
@@ -139,7 +140,7 @@ const Navbar = ({onSearchClick}) => {
   }
 
   const handleMovWheelClick = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
+   dispatch(searchDropDownActions.hideSearchDropDown());
     navigate("/");
   }
 
@@ -156,7 +157,7 @@ const Navbar = ({onSearchClick}) => {
       <section className="navbar-container">
         <img src={Movie_wheel} alt="Movie Wheel Logo" className="movie_wheel" onClick={handleMovWheelClick} />
       <div className="search_bar">
-        <input type="text" placeholder="Search movies..." onChange={handleSearchInputChange} />
+        <input type="text" value={query} placeholder="Search movies.." onChange={handleSearchInputChange} />
         <ImSearch className="search_icon" onClick={handleSearchClick} />
       </div>
       <section className="navbar_section">
