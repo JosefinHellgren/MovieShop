@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import SearchDropDown from "./SearchDropDown";
 import { useDispatch } from "react-redux";
 import { FiSettings } from "react-icons/fi";
+import {AiOutlinePlayCircle} from 'react-icons/ai'
 
 
 const Navbar = ({ onSearchClick }) => {
@@ -38,7 +39,6 @@ const Navbar = ({ onSearchClick }) => {
       if (user) {
         setSignedIn(true);
         setUserUID(user.uid);
-        console.log('useEffect onauth körs')
       } else {
         setSignedIn(false);
         setUserUID(null);
@@ -169,13 +169,78 @@ const Navbar = ({ onSearchClick }) => {
     navigate("/");
   }
 
-  const renderButton = () => {
-    return signedIn ? <img src={PlayButton}
-      onClick={handlePlayButtonPressed}
-      alt="Play Button" className="play_folder" /> :
-      <HiOutlineUserCircle className="user_icon"
-        onClick={handleUserCircleClick} />
+  const renderButton = (isMobile, signedIn) => {
+    if (isMobile) {
+      if (signedIn) {
+        console.log('mobil läge, signed in körs')
+        return (
+          <img
+            src={PlayButton}
+            onClick={handlePlayButtonPressed}
+            alt="Play Button"
+            className="play_folder"
+          />
+        );
+      } else {
+        console.log('mobil läge, signed out körs')
+        return (
+          <HiOutlineUserCircle
+            className="user_icon"
+            onClick={handleUserCircleClick}
+          />
+        );
+      }
+    } else {
+      if (signedIn) {
+        console.log('dator läge, signed in körs')
+        return (
+          <div className="play-button-div" onClick={handlePlayButtonPressed}>
+           {/* <img
+            src={PlayButton}
+            onClick={handlePlayButtonPressed}
+            alt="Play Button"
+            className="play_folder_computer"
+          />  */}
+          <AiOutlinePlayCircle 
+          className="play-icon-computer"/>
+          <h4>My movies</h4>
+          </div>
+          
+        );
+      } else {
+        console.log('dator läge, signed out körs');
+        return(
+        
+        <div className="user-icon-div" onClick={handleUserCircleClick}>
+         <HiOutlineUserCircle
+            className="user_icon_computer"
+          /> 
+          <h4> Log in</h4>
+        </div>
+        )
+      }
+    }
   };
+  
+ 
+    const [isMobile, setIsMobile] = useState(false);
+  
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+  
+      window.addEventListener("resize", handleResize);
+      handleResize(); // Uppdatera enheten vid första renderingen
+  
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
+  
+  
+  
+  
 
   return (
     <nav className="navbar">
@@ -185,7 +250,7 @@ const Navbar = ({ onSearchClick }) => {
           <input type="text" placeholder="Search movies..." onChange={handleSearchInputChange} />
           <ImSearch className="search_icon" onClick={handleSearchClick} />
         </div>
-        <section className={signedIn ? 'navbar_section' : 'navbar_section hide'}>
+        {/* <section className={signedIn ? 'navbar_section' : 'navbar_section hide'}>
 
           <details className="dropdown">
             <summary role="button">
@@ -200,8 +265,9 @@ const Navbar = ({ onSearchClick }) => {
               <li onClick={handleSignOutClick}><a >Sign out</a></li>
             </ul>
           </details>
-        </section>
-        {renderButton()}
+        </section> */}
+        {/* //{renderButton()} */}
+        {renderButton(isMobile, signedIn)}
       </section>
       <section>
         <div className={`search_dropdown ${showSearchDropdown ? "" : "hide"}`}>

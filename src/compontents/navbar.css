@@ -28,10 +28,48 @@
   padding: 0.5rem;
 }
 
+.navbar .play-button-div {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.navbar .play-icon-computer {
+  font-size: 35px;
+  margin-right: 5px;
+}
+
+/* .navbar .play-button-div > h4::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+} */
+
+
 .navbar .user_icon {
   font-size: 35px;
   color: white;
   padding: 1.5rem;
+}
+
+.navbar .user-icon-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+ .navbar .user-icon-div > h4 {
+  color: white;
+}
+
+.navbar .user_icon_computer {
+  color: white;
+  font-size: 35px;
+  margin-right: 5px;
 }
 
 .navbar .search_icon {
