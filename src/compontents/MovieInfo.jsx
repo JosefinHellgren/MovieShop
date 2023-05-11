@@ -1,34 +1,51 @@
-import React, { useEffect, useState } from "react";
-import './movieInfo.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsUp , faCartPlus , faThumbsDown } from '@fortawesome/free-solid-svg-icons'
-import { Container } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState, useRef } from "react";
+import "./movieInfo.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faThumbsUp,
+  faCartPlus,
+  faThumbsDown,
+} from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
 
-
-
-
-function MovieInfo(props) {
+function MovieInfo() {
+  let navigate = useNavigate();
 
   //CILIA REDUX SELECTEDMOVIE
- //how to get the selectedmovie from redux, must also import useSelector from react-redux
- const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
- // use the selectedMovie like this
- console.log("movieinfo: " + selectedMovie.title);
+  //how to get the selectedmovie from redux, must also import useSelector from react-redux
+  const selectedMovie = useSelector(
+    (state) => state.selectedMovie.selectedMovie
+  );
+  // use the selectedMovie like this
+  //console.log("movieinfo: " + selectedMovie.title);
 
+  const [genres, setGenres] = useState([]);
+  const [trailerKey, setTrailerKey] = useState(null);
+  const [showOverview, setShowOverview] = useState(true);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [showComments, setShowComments] = useState(false);
 
+  const [isPurchased, setIsPurchased] = useState(false);
 
+  // const [purchased, setPurchased] = useState(false);
 
- 
- const [genres, setGenres] = useState([]);
- const [trailerKey, setTrailerKey] = useState(null);
- const [showOverview, setShowOverview] = useState(true);
- const [showTrailer, setShowTrailer] = useState(false);
- const [showComments, setShowComments] = useState(false);
- const { movie } = props;
- const rating = movie.vote_average;
- const imgUrlStart = "https://image.tmdb.org/t/p/w185";
+  const [currentUser, setCurrentUser] = useState(null);
+  const [purchasedMovies, setPurchasedMovies] = useState([]);
 
+  //const [playing, setPlaying] = useState(false);
+  const videoRef = useRef(null);
+
+  const db = firebase.firestore();
+  const auth = getAuth();
+
+  const rating = selectedMovie.vote_average;
+  const imgUrlStart = "https://image.tmdb.org/t/p/w185";
+
+  const movieid = selectedMovie.id
 
   useEffect(() => {
     // fetch movie genres from API
@@ -43,7 +60,7 @@ function MovieInfo(props) {
 
     // fetch movie trailer from API
     fetch(
-      `https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=305f99214975faee28a0f129881c6ec9&language=en-US`
+      `https://api.themoviedb.org/3/movie/${selectedMovie.id}/videos?api_key=305f99214975faee28a0f129881c6ec9&language=en-US`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -55,15 +72,46 @@ function MovieInfo(props) {
         }
       })
       .catch((error) => console.log(error));
-  }, [movie.id]);
+  }, [selectedMovie.id]);
+
+  
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log('user hämtats')
+        setCurrentUser(user);
+      }
+    });
+  }, [])
+
+
+  useEffect(() => {
+    console.log('before async')
+    async function fetchData() {
+      if (currentUser != null) {
+        console.log("user: " ,currentUser)
+        const purchasedRef = db.collection('users').doc(currentUser.uid).collection('purchased');
+        const querySnapshot = await purchasedRef.get();
+        const purchasedMovies = querySnapshot.docs.map(doc => doc.data());
+        setPurchasedMovies(purchasedMovies);
+      }
+    }
+    fetchData();
+  }, [currentUser]);
+
+
+  useEffect(() => {
+    setIsPurchased(!!purchasedMovies.find(movie => movie.id === selectedMovie.id));
+  }, [purchasedMovies, selectedMovie.id]);
+
 
   // find genre names for each genre ID in the movie's genre_ids array
-  const genreNames = props.movie.genre_ids.map(id => {
-    const genre = genres.find(g => g.id === id);
+  const genreNames = selectedMovie.genre_ids.map((id) => {
+    const genre = genres.find((g) => g.id === id);
     return genre ? genre.name : "";
   });
 
-
+  // Event handlers to show and hide content
   const handleShowOverview = () => {
     setShowOverview(true);
     setShowTrailer(false);
@@ -82,35 +130,79 @@ function MovieInfo(props) {
     setShowComments(true);
   };
 
-  
 
+
+ 
+
+  const handlePlayButtonClick = () => {
+    console.log('Play button clicked');
+    if (currentUser) {
+      console.log('purchasedMovies:', purchasedMovies);
+      const isPurchased = purchasedMovies.find((movie) => movie.id === selectedMovie.id);
+      console.log(isPurchased)
+      if (isPurchased) {
+        navigate("/video");
+        console.log('handlePlayButtonClick function called');
+      } else {
+        console.log("You haven't purchased this movie yet!");
+      }
+    }
+  };
+
+  const handleBuyButtonClick = () => {
+
+    // navigera till Payment 
+  }
+
+
+ 
   return (
     <div className="movieinfo">
-    <h1>{props.movie.title}</h1>
-    <div className="poster-container">
-      <img src={imgUrlStart + props.movie.poster_path} alt={props.movie.title} />
-      <div className="movie-details">
-        <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
-        <p className="movie-detail"><strong>Language: </strong>{props.movie.original_language}</p>
-        <p className="movie-detail"><strong>Release: </strong>{props.movie.release_date}</p>  
-        <p><strong>Rating:</strong> {rating}</p>
-        <div className="details-nav">
-        <button className="ratebtn"><FontAwesomeIcon icon={faThumbsUp} /></button>
-        <button className="ratebtn"><FontAwesomeIcon icon={faThumbsDown} /></button>
+      <h1>{selectedMovie.title}</h1>
+      <div className="poster-container">
+        <img
+          src={imgUrlStart + selectedMovie.poster_path}
+          alt={selectedMovie.title}
+        />
+        <div className="movie-details">
+          <p className="movie-detail">
+            <strong>Genres: </strong>
+            {genreNames.join(", ")}
+          </p>
+          <p className="movie-detail">
+            <strong>Language: </strong>
+            {selectedMovie.original_language}
+          </p>
+          <p className="movie-detail">
+            <strong>Release: </strong>
+            {selectedMovie.release_date}
+          </p>
+          <p>
+            <strong>Rating:</strong> {rating}
+          </p>
+          <div className="details-nav">
+            <button className="ratebtn">
+              <FontAwesomeIcon icon={faThumbsUp} />
+            </button>
+            <button className="ratebtn">
+              <FontAwesomeIcon icon={faThumbsDown} />
+            </button>
+          </div>
         </div>
-     
       </div>
 
-      
-      
-    </div>
-     
-     <div className="movieinfobuybtns">
-          <button className="movieinfobtn" onClick={() => handleBuy(movie)}><FontAwesomeIcon icon={faCartPlus} />Buy 199Kr</button>
-          <button className="movieinfobtn" onClick={() => handleAddtolist(movie)}>+ Add to watch list</button>
-     </div>
-          
-         <div className="details-nav">
+      <div className="movieinfobuybtns">
+       
+        
+        {isPurchased ? (
+          <button onClick={handlePlayButtonClick} className="movieinfobtn">Play</button>
+            ) : (
+          <button  onClick={handleBuyButtonClick} className="movieinfobtn">Buy</button>
+            )}
+          <button className="movieinfobtn" onClick={() => handleAddtolist()}>+ Add to watch list</button>
+      </div>
+
+      <div className="details-nav">
         <button className="details-btn" onClick={handleShowOverview}>
           About
         </button>
@@ -121,21 +213,25 @@ function MovieInfo(props) {
           Comments
         </button>
       </div>
-         
+
       {showOverview && (
-        <div className="">
-          <p className="overview"><strong>Overview</strong> <br></br> {props.movie.overview}</p>
+        <div className="info-overview">
+          <p className="overview">
+            <strong>Overview</strong> <br></br> {selectedMovie.overview}
+          </p>
         </div>
       )}
 
       {showTrailer && (
-        <Container>
-          <iframe
-            src={`https://www.youtube.com/embed/${trailerKey}`}
-            title="YouTube video player"
-            allowFullScreen
-          ></iframe>
-        </Container>
+        <iframe
+          ref={videoRef}
+          src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
+          title="YouTube video player"
+          display="initial"
+          webkitallowfullscreen="true"
+          allowFullScreen={true}
+          allow="autoplay; encrypted-media"
+        ></iframe>
       )}
 
       {showComments && (
@@ -145,10 +241,6 @@ function MovieInfo(props) {
       )}
     </div>
   );
-  
 }
 
-
-
 export default MovieInfo;
-
