@@ -4,10 +4,11 @@ import "./movieslider.css";
 import { useMediacategory } from 'react-responsive';
 import { useDispatch, useSelector } from "react-redux";
 import { STATUS, actions } from "../features/movies";
+import MovieGridItem from "./MovieGridItem";
+import { useNavigate } from "react-router-dom";
 
-const MovieSlider = ({ category, handleButtonClick, handleMovieClick }) => {
+const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onCategoryClick }) => {
    
-    const imgUrlStart = "https://image.tmdb.org/t/p/w185";
     const moviesObject = useSelector(state => state.movies);
     const dispatch = useDispatch();
 
@@ -31,23 +32,22 @@ const MovieSlider = ({ category, handleButtonClick, handleMovieClick }) => {
             content = null
     }
 
+    const handleCategoryClick = () => {
+        onCategoryClick(title, content);
+      }
+
     return (
-        <Slider className="slick-slider" slidesToShow={3} slidesToScroll={1} >
+        <div className="movie_slider">
+        <h4 onClick={handleCategoryClick} >{title} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'>'}  </h4>
+        <Slider key={moviesObject.status} className="slick-slider" slidesToShow={3} slidesToScroll={1} >
             {content &&
                 content.map((movie, index) => (
                     <div key={index} className="slider_container">
-                        <img
-                            className="movie_poster"
-                            src={imgUrlStart + movie.poster_path}
-                            onClick={() => handleMovieClick(movie)}
-                        />
-                        <h6 className="movie-title">{movie.title}</h6>
-                        <button className="payment_button" onClick={() => handleButtonClick(movie)}>
-                            59kr
-                        </button>
+                        <MovieGridItem movie={movie} handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} />
                     </div>
                 ))}
         </Slider>
+        </div>
     );
 
     async function fetchMovies(category, dispatch) {

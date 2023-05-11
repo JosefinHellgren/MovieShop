@@ -1,20 +1,20 @@
-import React, { useEffect, useState, useRef } from "react";
-import "./movieInfo.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faThumbsUp,
-  faCartPlus,
-  faThumbsDown,
-} from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
+
+import React, { useEffect, useState } from "react";
+import './movieInfo.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faThumbsUp, faCartPlus, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
+import { Container } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
+import Comments from "./Comments";
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import firebase from "firebase/compat/app";
-import "firebase/compat/firestore";
+import { fromPayment } from "../features/navigatePayment";
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+
 
 function MovieInfo() {
-  let navigate = useNavigate();
-
+ 
   //CILIA REDUX SELECTEDMOVIE
   //how to get the selectedmovie from redux, must also import useSelector from react-redux
   const selectedMovie = useSelector(
@@ -23,15 +23,10 @@ function MovieInfo() {
   // use the selectedMovie like this
   //console.log("movieinfo: " + selectedMovie.title);
 
-  const [genres, setGenres] = useState([]);
-  const [trailerKey, setTrailerKey] = useState(null);
-  const [showOverview, setShowOverview] = useState(true);
-  const [showTrailer, setShowTrailer] = useState(false);
-  const [showComments, setShowComments] = useState(false);
 
   const [isPurchased, setIsPurchased] = useState(false);
 
-  // const [purchased, setPurchased] = useState(false);
+  
 
   const [currentUser, setCurrentUser] = useState(null);
   const [purchasedMovies, setPurchasedMovies] = useState([]);
@@ -39,13 +34,59 @@ function MovieInfo() {
   //const [playing, setPlaying] = useState(false);
   const videoRef = useRef(null);
 
-  const db = firebase.firestore();
-  const auth = getAuth();
+  
+ 
 
+  
+
+ 
+  const [genres, setGenres] = useState([]);
   const rating = selectedMovie.vote_average;
-  const imgUrlStart = "https://image.tmdb.org/t/p/w185";
+  const [trailerKey, setTrailerKey] = useState(null);
+  const [showOverview, setShowOverview] = useState(true);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const [watchList, setWatchList] = useState('Add to watchlist');
 
-  const movieid = selectedMovie.id
+  const imgUrlStart = "https://image.tmdb.org/t/p/original";
+  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
+  const auth = getAuth();
+  const db = firebase.firestore();
+  let dispatch = useDispatch();
+  let navigate = useNavigate();
+  let documentId = '';
+
+  const user = auth.currentUser;
+
+  const WATCHLIST_STATUS = {
+    EXISTS: 'Remove from watchlist',
+    EMPTY: 'Add to watchlist'
+  }
+
+
+  const checkMovieWatchList = () => {
+    if (user) {
+      db.collection('users').doc(user.uid).collection('watchlist')
+        .where('id', '==', selectedMovie.id)
+        .onSnapshot((querySnapshot) => {
+          if (!querySnapshot.empty) {
+            const doc = querySnapshot.docs[0];
+            documentId = doc.id;
+            setWatchList(WATCHLIST_STATUS.EXISTS);
+          } else {
+            setWatchList(WATCHLIST_STATUS.EMPTY);
+            documentId = '';
+          }
+        });
+    }
+  };
+
+
+  if (user) {
+    checkMovieWatchList();
+  } else {
+    console.log('user null')
+  }
 
   useEffect(() => {
     // fetch movie genres from API
@@ -73,6 +114,7 @@ function MovieInfo() {
       })
       .catch((error) => console.log(error));
   }, [selectedMovie.id]);
+
 
   
   useEffect(() => {
@@ -105,13 +147,57 @@ function MovieInfo() {
   }, [purchasedMovies, selectedMovie.id]);
 
 
+
+
+
+
+
   // find genre names for each genre ID in the movie's genre_ids array
-  const genreNames = selectedMovie.genre_ids.map((id) => {
-    const genre = genres.find((g) => g.id === id);
+  const genreNames = selectedMovie.genre_ids.map(id => {
+    const genre = genres.find(g => g.id === id);
     return genre ? genre.name : "";
   });
 
-  // Event handlers to show and hide content
+
+
+  const handleBuy = () => {
+
+    //if we have a user, then we want to navigate to payment and set the navigatetoPayment statet till true.
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate('/payment/');
+      }
+    })
+    dispatch(fromPayment())
+    console.log(navigatePayment)
+    navigate("/login");
+  }
+
+  const handleWatchlistClick = () => {
+    if (user != null) {
+
+      if (watchList == WATCHLIST_STATUS.EMPTY) {
+        db.collection("users").doc(user.uid).collection("watchlist").doc().set(selectedMovie)
+          .then(() => {
+            console.log("saved.");
+          })
+          .catch((error) => {
+            console.error("error saving: ", error);
+          });
+      } else if (watchList === WATCHLIST_STATUS.EXISTS) {
+        db.collection("users").doc(user.uid).collection('watchlist').doc(documentId).delete()
+          .then(() => {
+            console.log("Document successfully deleted!");
+          }).catch((error) => {
+            console.error("Error removing document: ", error);
+          });
+      }
+    } else {
+      navigate('/login');
+    }
+  }
+
+
   const handleShowOverview = () => {
     setShowOverview(true);
     setShowTrailer(false);
@@ -132,6 +218,7 @@ function MovieInfo() {
 
 
 
+
  
 
   const handlePlayButtonClick = () => {
@@ -149,10 +236,7 @@ function MovieInfo() {
     }
   };
 
-  const handleBuyButtonClick = () => {
 
-    // navigera till Payment 
-  }
 
 
  
@@ -160,46 +244,33 @@ function MovieInfo() {
     <div className="movieinfo">
       <h1>{selectedMovie.title}</h1>
       <div className="poster-container">
-        <img
-          src={imgUrlStart + selectedMovie.poster_path}
-          alt={selectedMovie.title}
-        />
+
+        <img className = 'poster-img' src={imgUrlStart + selectedMovie.poster_path} alt={selectedMovie.title} />
         <div className="movie-details">
-          <p className="movie-detail">
-            <strong>Genres: </strong>
-            {genreNames.join(", ")}
-          </p>
-          <p className="movie-detail">
-            <strong>Language: </strong>
-            {selectedMovie.original_language}
-          </p>
-          <p className="movie-detail">
-            <strong>Release: </strong>
-            {selectedMovie.release_date}
-          </p>
-          <p>
-            <strong>Rating:</strong> {rating}
-          </p>
+          <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
+          <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
+          <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>
+          <p><strong>Rating:</strong> {rating}</p>
           <div className="details-nav">
-            <button className="ratebtn">
-              <FontAwesomeIcon icon={faThumbsUp} />
-            </button>
-            <button className="ratebtn">
-              <FontAwesomeIcon icon={faThumbsDown} />
-            </button>
+            <button className="ratebtn"><FontAwesomeIcon icon={faThumbsUp} /></button>
+            <button className="ratebtn"><FontAwesomeIcon icon={faThumbsDown} /></button>
           </div>
+
+
         </div>
       </div>
 
       <div className="movieinfobuybtns">
+
        
         
         {isPurchased ? (
           <button onClick={handlePlayButtonClick} className="movieinfobtn">Play</button>
             ) : (
-          <button  onClick={handleBuyButtonClick} className="movieinfobtn">Buy</button>
+          <button  onClick={handleBuy} className="movieinfobtn">Buy</button>
             )}
-          <button className="movieinfobtn" onClick={() => handleAddtolist()}>+ Add to watch list</button>
+
+        <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
       </div>
 
       <div className="details-nav">
@@ -215,10 +286,10 @@ function MovieInfo() {
       </div>
 
       {showOverview && (
+
         <div className="info-overview">
-          <p className="overview">
-            <strong>Overview</strong> <br></br> {selectedMovie.overview}
-          </p>
+          <p className="overview"><strong>Overview</strong> <br></br> {selectedMovie.overview}</p>
+
         </div>
       )}
 
@@ -236,11 +307,12 @@ function MovieInfo() {
 
       {showComments && (
         <div>
-          <h1>HEJ detta är Comments</h1>
+          <Comments />
         </div>
       )}
     </div>
   );
+
 }
 
 export default MovieInfo;
