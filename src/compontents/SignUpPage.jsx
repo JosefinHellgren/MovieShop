@@ -8,40 +8,40 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 const SignUpPage = () => {
-    
+
     const auth = getAuth();
     const db = firebase.firestore();
     const navigate = useNavigate();
 
     const STATUS_USERNAME = {
-        NORMAL : ' _',
-        VALID : 'Username is available',
-        EXISTS : 'The username is already taken',
-        INVALID : 'Username must not contain spaces'
+        NORMAL: ' _',
+        VALID: 'Username is available',
+        EXISTS: 'The username is already taken',
+        INVALID: 'Username must not contain spaces'
     }
     const [validUsername, setValidUsername] = useState(STATUS_USERNAME.NORMAL);
     const [validEmail, setValidEmail] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
-    
+
 
     const handleEmailChange = (event) => {
         const { value } = event.target;
-      
+
         const isValid = validateEmail(value);
-      
+
         if (isValid) {
-          event.target.setCustomValidity('');
-          setValidEmail(true);
+            event.target.setCustomValidity('');
+            setValidEmail(true);
         } else {
-          event.target.setCustomValidity('Please enter a valid email address with a valid domain');
-          setValidEmail(false);
+            event.target.setCustomValidity('Please enter a valid email address with a valid domain');
+            setValidEmail(false);
         }
     }
 
     const handlePasswordChange = (event) => {
         const { value } = event.target;
         const isValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(value)
-        
+
         if (isValid) {
             event.target.setCustomValidity('');
             setValidPassword(true);
@@ -61,20 +61,20 @@ const SignUpPage = () => {
             const formattedUsername = username.charAt(0).toUpperCase() + username.slice(1);
 
             db.collection('users').where('username', "==", formattedUsername).get()
-            .then((doc) => {
-                if(!doc.empty) {
-                    setValidUsername(STATUS_USERNAME.EXISTS);
-                } else {
-                    setValidUsername(STATUS_USERNAME.VALID);
-                }
-            })
+                .then((doc) => {
+                    if (!doc.empty) {
+                        setValidUsername(STATUS_USERNAME.EXISTS);
+                    } else {
+                        setValidUsername(STATUS_USERNAME.VALID);
+                    }
+                })
         }
     }
 
     const checkSpaces = (str) => {
         const regex = /\s/;
         return regex.test(str);
-      }
+    }
 
     const validateEmail = (email) => {
 
@@ -85,11 +85,11 @@ const SignUpPage = () => {
         } else {
             console.log('inte tom')
         }
-          
+
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const domain = email.substring(email.lastIndexOf("@") + 1); 
+        const domain = email.substring(email.lastIndexOf("@") + 1);
         if (re.test(email) && domain === "gmail.com") {
-          return true;
+            return true;
         } else if (re.test(email) && domain === "hotmail.com") {
             return true
         } else if (re.test(email) && domain === "outlook.com") {
@@ -99,17 +99,17 @@ const SignUpPage = () => {
         } else if (re.test(email) && domain === "live.com") {
             return true
         } else {
-          return false;
+            return false;
         }
     }
-  
+
     const signUp = () => {
         const email = document.getElementById('email-input').value;
         const password = document.getElementById('password-input').value;
         const repeatPassword = document.getElementById('repeatpassword-input').value;
 
 
-         if(validUsername == STATUS_USERNAME.INVALID) {
+        if (validUsername == STATUS_USERNAME.INVALID) {
             console.log('status', STATUS_USERNAME)
             alert('Username must not contain spaces');
         } else if (validUsername == STATUS_USERNAME.EXISTS) {
@@ -124,32 +124,33 @@ const SignUpPage = () => {
     const createAccount = (email, password) => {
         const userName = document.getElementById('username-input').value;
         createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredentail) => {
-            console.log(userCredentail.user.email, 'lyckats logga in!')
-            saveDataToFirestore(userName, email);
-        })
-        .catch((error) => {
-            console.log(error)
-            return;
-        })
+            .then((userCredentail) => {
+                console.log(userCredentail.user.email, 'lyckats logga in!')
+                saveDataToFirestore(userName, email);
+            })
+            .catch((error) => {
+                console.log(error)
+                return;
+            })
     }
 
     const saveDataToFirestore = (username, email) => {
-        
+
         const formattedUsername = username.charAt(0).toUpperCase() + username.slice(1);
         const userUID = auth.currentUser.uid;
-        
+
         db.collection("users").doc(userUID).set({
             username: formattedUsername,
             email: email,
+            background: 'black'
         })
-        .then(() => {
-            console.log("Document successfully written!");
-            navigate(-2);
-        })
-        .catch((error) => {
-            console.error("Error writing document: ", error);
-        });
+            .then(() => {
+                console.log("Document successfully written!");
+                navigate(-2);
+            })
+            .catch((error) => {
+                console.error("Error writing document: ", error);
+            });
     }
 
     const handleIconClick = () => {
@@ -158,41 +159,41 @@ const SignUpPage = () => {
 
     const handleEnterPressed = (event) => {
         if (event.key === 'Enter') {
-          const nextInput = event.target.nextElementSibling;
-          if (nextInput) {
-            nextInput.focus();
-          }
+            const nextInput = event.target.nextElementSibling;
+            if (nextInput) {
+                nextInput.focus();
+            }
         }
-      }
+    }
 
-      const handleSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault()
         signUp();
-      }
-      
+    }
+
     return (
         <div className="sign-up-page">
             <div className='fa-icon-container' onClick={handleIconClick}>
-                <FontAwesomeIcon className='fa-times-icon' icon={faTimes}/>
-            </div> 
+                <FontAwesomeIcon className='fa-times-icon' icon={faTimes} />
+            </div>
             <section className='signup-title'>
                 <h1>Create an account</h1>
             </section>
             <form onSubmit={handleSubmit} className="sign-up-container">
-                <p className={validUsername === STATUS_USERNAME.EXISTS ? 'text-danger' : 
-                validUsername === STATUS_USERNAME.VALID ? 'text-success' : 
-                validUsername === STATUS_USERNAME.INVALID ? 'text-danger' : ''
-                
+                <p className={validUsername === STATUS_USERNAME.EXISTS ? 'text-danger' :
+                    validUsername === STATUS_USERNAME.VALID ? 'text-success' :
+                        validUsername === STATUS_USERNAME.INVALID ? 'text-danger' : ''
+
                 }>{validUsername}</p>
-                <input type="text" id='username-input' placeholder="Username" onBlur={checkIfUsernameExists} onKeyUp = {handleEnterPressed} required/>
-                <input type="text" id='email-input' placeholder="Email" onKeyUp = {handleEnterPressed} onChange = {handleEmailChange} required />
-                <input type="password" id='password-input' placeholder="Password" onKeyUp = {handleEnterPressed} onChange = {handlePasswordChange} required />
+                <input type="text" id='username-input' placeholder="Username" onBlur={checkIfUsernameExists} onKeyUp={handleEnterPressed} required />
+                <input type="text" id='email-input' placeholder="Email" onKeyUp={handleEnterPressed} onChange={handleEmailChange} required />
+                <input type="password" id='password-input' placeholder="Password" onKeyUp={handleEnterPressed} onChange={handlePasswordChange} required />
                 <input type="password" id='repeatpassword-input' placeholder="Repeat Password" required />
                 <section className='signup-button-container'>
                     <button type='submit' >Sign up</button>
                 </section>
             </form>
-            
+
         </div>
     )
 }
