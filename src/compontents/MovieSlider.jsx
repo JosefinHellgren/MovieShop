@@ -26,6 +26,9 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
         case STATUS.SUCCESS:
             content = moviesObject.movies[category];
             break;
+        case STATUS.FAILURE:
+            content = <p>No movies available for this category</p>;
+            break;
         default:
             content = null
     }
@@ -34,9 +37,16 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
         onCategoryClick(title, content);
     }
 
+    if (content !== null && content.length === 0) {
+        return  <h4>No movies found for {title}</h4>;
+        
+      }
+
+    
     return (
         <div className="movie_slider">
             <h4 onClick={handleCategoryClick} >{title} {'>'}  </h4>
+            
             <Slider key={moviesObject.status} className="slick-slider" slidesToShow={3} slidesToScroll={1} >
                 {content &&
                     content.map((movie, index) => (
