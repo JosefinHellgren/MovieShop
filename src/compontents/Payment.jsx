@@ -324,15 +324,10 @@ const Payment = () => {
 
     }
     return (
-
         <div className="payment-container">
-
-
             <button onClick={handleExitButtonClick} className='exit-button'>x</button>
             <div className='div-for-web'>
                 <div className='small-info'>
-
-
                     {isPaymentSuccessful ? (<div>
 
                         <h2>Purchased:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <button /*onClick för att spela film*/ id='playButton'>Play movie</button> </div>) : (<div> <h2>Checkout:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <h2>{movie.title}</h2> </div>)}
@@ -340,18 +335,13 @@ const Payment = () => {
                 {isPaymentSuccessful ? (
                     <div></div>
                 ) : (<div className='payment-form-wrapper'>
-
                     <input type="checkbox" value={"Visa"} name="cardType" checked={cardType === "Visa"} onChange={handleCheckboxChange}></input>
-
-
                     <img className={`creditcard ${cardType === "Visa" ? "selected" : ""}`} src={visa} alt="" />
-
-
                     <input type="checkbox" value={"Mastercard"} name="cardType" checked={cardType === "Mastercard"} onChange={handleCheckboxChange} ></input>
                     <img className={`creditcard ${cardType === "Mastercard" ? "selected" : ""}`} src={mastercard} alt="" />
                     <input type="checkbox" value={"American Express"} name="cardType" checked={cardType === "American Express"} onChange={handleCheckboxChange}></input>
                     <img className={`creditcard ${cardType === "American Express" ? "selected" : ""}`} src={americanexpress} alt="" />
-                   
+                
 
                     {cardType === "American Express" ? (<AmexForm setIsPaymentSuccessful={setIsPaymentSuccessful} saveMovieToFirebase={saveMovieToFirebase} setCardName={setCardName} setCVV={setCVV} setCardNumber={setCardNumber} setExpDate={setExpDate} cardName={cardName} cardNumber={cardNumber} cvv={cvv} expDate={expDate} />) : (
 

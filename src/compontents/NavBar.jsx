@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 
 import Movie_wheel from "../images/movie-wheel.png";
-import PlayButton from "../images/play.png";
 import "./navbar.css";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
@@ -14,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import SearchDropDown from "./SearchDropDown";
 import { useDispatch } from "react-redux";
 import { FiSettings } from "react-icons/fi";
+import {AiOutlinePlayCircle} from 'react-icons/ai'
 
 
 const Navbar = ({ onSearchClick }) => {
@@ -38,7 +38,6 @@ const Navbar = ({ onSearchClick }) => {
       if (user) {
         setSignedIn(true);
         setUserUID(user.uid);
-        console.log('useEffect onauth körs')
       } else {
         setSignedIn(false);
         setUserUID(null);
@@ -169,13 +168,88 @@ const Navbar = ({ onSearchClick }) => {
     navigate("/");
   }
 
-  const renderButton = () => {
-    return signedIn ? <img src={PlayButton}
-      onClick={handlePlayButtonPressed}
-      alt="Play Button" className="play_folder" /> :
-      <HiOutlineUserCircle className="user_icon"
-        onClick={handleUserCircleClick} />
+  const renderButton = (isMobile, signedIn) => {
+    if (isMobile) {
+      if (signedIn) {
+        console.log('mobil läge, signed in körs')
+        return (
+          <AiOutlinePlayCircle 
+          className="playbtn-mobile"/>
+        );
+      } else {
+        console.log('mobil läge, signed out körs')
+        return (
+          <HiOutlineUserCircle
+            className="user_icon"
+            onClick={handleUserCircleClick}
+          />
+        );
+      }
+    } else {
+      if (signedIn) {
+        console.log('dator läge, signed in körs')
+        return (
+          <div className="play-button-div" onClick={handlePlayButtonPressed}>
+          <AiOutlinePlayCircle 
+          className="play-icon-computer"/>
+          <h4>My movies</h4>
+          </div>
+          
+        );
+      } else {
+        console.log('dator läge, signed out körs');
+        return(
+        
+        <div className="user-icon-div" onClick={handleUserCircleClick}>
+         <HiOutlineUserCircle
+            className="user_icon_computer"
+          /> 
+          <h4> Log in</h4>
+        </div>
+        )
+      }
+    }
   };
+
+
+  const renderSettingsButton = (isMobile) => {
+    if (isMobile) {
+      return (
+        <summary role="button">
+          <FiSettings className="settings_icon" />
+        </summary>
+      )
+    } else {
+      return (
+       <summary role="button">
+        <section className="settingsbtn-container" >
+          <FiSettings className="settings-icon" />
+          <h4>Settings</h4>
+        </section>
+      </summary> 
+      )  
+    }
+  }
+  
+ 
+    const [isMobile, setIsMobile] = useState(false);
+  
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+  
+      window.addEventListener("resize", handleResize);
+      handleResize(); 
+  
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
+  
+  
+  
+  
 
   return (
     <nav className="navbar">
@@ -188,9 +262,7 @@ const Navbar = ({ onSearchClick }) => {
         <section className={signedIn ? 'navbar_section' : 'navbar_section hide'}>
 
           <details className="dropdown">
-            <summary role="button">
-              <FiSettings className="settings_icon" />
-            </summary>
+            {renderSettingsButton(isMobile)}
             <ul>
               <li className="dropdown-title"> <strong> Change background to:</strong></li>
               <li onClick={() => handleClick('black')}><a className="li-color"> <p className="black-circle"></p>Black</a></li>
@@ -201,14 +273,8 @@ const Navbar = ({ onSearchClick }) => {
             </ul>
           </details>
         </section>
-        {renderButton()}
+        {renderButton(isMobile, signedIn)}
       </section>
-      <section>
-        <div className={`search_dropdown ${showSearchDropdown ? "" : "hide"}`}>
-          <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
-        </div>
-      </section>
-
     </nav>
 
   );
