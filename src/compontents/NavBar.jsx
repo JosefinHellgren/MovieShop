@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 
 import Movie_wheel from "../images/movie-wheel.png";
-import PlayButton from "../images/play.png";
 import "./navbar.css";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
@@ -174,12 +173,8 @@ const Navbar = ({ onSearchClick }) => {
       if (signedIn) {
         console.log('mobil läge, signed in körs')
         return (
-          <img
-            src={PlayButton}
-            onClick={handlePlayButtonPressed}
-            alt="Play Button"
-            className="play_folder"
-          />
+          <AiOutlinePlayCircle 
+          className="playbtn-mobile"/>
         );
       } else {
         console.log('mobil läge, signed out körs')
@@ -195,12 +190,6 @@ const Navbar = ({ onSearchClick }) => {
         console.log('dator läge, signed in körs')
         return (
           <div className="play-button-div" onClick={handlePlayButtonPressed}>
-           {/* <img
-            src={PlayButton}
-            onClick={handlePlayButtonPressed}
-            alt="Play Button"
-            className="play_folder_computer"
-          />  */}
           <AiOutlinePlayCircle 
           className="play-icon-computer"/>
           <h4>My movies</h4>
@@ -221,6 +210,26 @@ const Navbar = ({ onSearchClick }) => {
       }
     }
   };
+
+
+  const renderSettingsButton = (isMobile) => {
+    if (isMobile) {
+      return (
+        <summary role="button">
+          <FiSettings className="settings_icon" />
+        </summary>
+      )
+    } else {
+      return (
+       <summary role="button">
+        <section className="settingsbtn-container" >
+          <FiSettings className="settings-icon" />
+          <h4>Settings</h4>
+        </section>
+      </summary> 
+      )  
+    }
+  }
   
  
     const [isMobile, setIsMobile] = useState(false);
@@ -231,7 +240,7 @@ const Navbar = ({ onSearchClick }) => {
       };
   
       window.addEventListener("resize", handleResize);
-      handleResize(); // Uppdatera enheten vid första renderingen
+      handleResize(); 
   
       return () => {
         window.removeEventListener("resize", handleResize);
@@ -250,12 +259,10 @@ const Navbar = ({ onSearchClick }) => {
           <input type="text" placeholder="Search movies..." onChange={handleSearchInputChange} />
           <ImSearch className="search_icon" onClick={handleSearchClick} />
         </div>
-        {/* <section className={signedIn ? 'navbar_section' : 'navbar_section hide'}>
+        <section className={signedIn ? 'navbar_section' : 'navbar_section hide'}>
 
           <details className="dropdown">
-            <summary role="button">
-              <FiSettings className="settings_icon" />
-            </summary>
+            {renderSettingsButton(isMobile)}
             <ul>
               <li className="dropdown-title"> <strong> Change background to:</strong></li>
               <li onClick={() => handleClick('black')}><a className="li-color"> <p className="black-circle"></p>Black</a></li>
@@ -265,16 +272,9 @@ const Navbar = ({ onSearchClick }) => {
               <li onClick={handleSignOutClick}><a >Sign out</a></li>
             </ul>
           </details>
-        </section> */}
-        {/* //{renderButton()} */}
+        </section>
         {renderButton(isMobile, signedIn)}
       </section>
-      <section>
-        <div className={`search_dropdown ${showSearchDropdown ? "" : "hide"}`}>
-          <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
-        </div>
-      </section>
-
     </nav>
 
   );
