@@ -58,41 +58,44 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
         </div>
     );
 
-    async function fetchMovies(movie_id, genre_id, category, dispatch, similar) {
+    async function fetchMovies(movie_id, genre_id, category, dispatch, similar, page = 1) {
         const apiKey = "305f99214975faee28a0f129881c6ec9";
-
-        let URL = `https://api.themoviedb.org/3/movie/${category}?api_key=${apiKey}&language=en-US&region=SE`;
-
+        let URL = `https://api.themoviedb.org/3/movie/${category}?api_key=${apiKey}&language=en-US&region=SE&page=${page}`;
+      
         if (genre_id !== "") {
-            URL = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&region=SE&with_genres=${genre_id}`;
+          URL = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&region=SE&with_genres=${genre_id}&page=${page}`;
+        } else if (similar === true) {
+          URL = `https://api.themoviedb.org/3/movie/${movie_id}/similar?api_key=${apiKey}&language=en-US&region=SE&page=${page}`;
+        } else if (movie_id !== "") {
+          URL = `https://api.themoviedb.org/3/movie/${movie_id}/recommendations?api_key=${apiKey}&language=en-US&region=SE&page=${page}`;
         }
-
-        else if (similar === true) {
-            URL = `https://api.themoviedb.org/3/movie/${movie_id}/similar?api_key=${apiKey}&language=en-US&region=SE`;
-        }
-        else if (movie_id !== "") {
-            URL = `https://api.themoviedb.org/3/movie/${movie_id}/recommendations?api_key=${apiKey}&language=en-US&region=SE`;
-        }
-
-
+      
         dispatch(actions.isFetching());
-
+      
         try {
-            let response = await fetch(URL);
-            let json = await response.json();
-            let movies = json.results;
-
-            const payload = {
-                category,
-                movies
-            };
-
-            dispatch(actions.success(payload));
-            
+          let response = await fetch(URL);
+          let json = await response.json();
+          let movies = json.results;
+      
+          // Check if there are more pages of results
+          if (3 > page) {
+            // If so, fetch the next page and add the results to the existing array of movies
+            let nextPageMovies = await fetchMovies(movie_id, genre_id, category, dispatch, similar, page + 1);
+            movies = movies.concat(nextPageMovies);
+          }
+      
+          const payload = {
+            category,
+            movies,
+          };
+      
+          dispatch(actions.success(payload));
+          return movies;
         } catch {
-            dispatch(actions.failure());
+          dispatch(actions.failure());
+          return [];
         }
-    }
+      }
 };
 
 export default MovieSlider;

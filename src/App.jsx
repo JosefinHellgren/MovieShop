@@ -18,7 +18,6 @@ import { actions as searchDropDownActions } from "./features/searchdropdown"
 
 function App() {
 
-
   const navigate = useNavigate();
 
   const navigatePayment = useSelector((state) => state.navigatePayment.payment);
@@ -77,7 +76,6 @@ function App() {
       dispatch(fromPayment())
       navigate("/login");
     }
-
     //if we dont have a user, navigate to login:
   };
 
@@ -92,7 +90,6 @@ function App() {
         <Route path= "/signup" element={<SignUpPage/>}/>
         <Route path="/payment" element={<Payment />}/>
         <Route path='/settings' element= {<Settings />} />
-
         <Route path='/searchresults' element= {<SearchResults 
         title={`Showing results for ${searchWord}`} searchResults={searchPageResults} 
         handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>} />
