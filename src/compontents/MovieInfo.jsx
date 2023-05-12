@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import './movieInfo.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp, faCartPlus, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
-import { Container } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import Comments from "./Comments";
 import { useNavigate } from "react-router-dom";
@@ -216,10 +215,6 @@ function MovieInfo() {
     setShowComments(true);
   };
 
-
-
-
- 
 
   const handlePlayButtonClick = () => {
     console.log('Play button clicked');
