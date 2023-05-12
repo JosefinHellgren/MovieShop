@@ -12,20 +12,16 @@ import { actions as searchDropDownActions } from "../features/searchdropdown"
 import MovieSlider from "./MovieSlider";
 
 
-function MovieInfo(props, { onCategoryClick, handleButtonClick, handleMovieClick }) {
+function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
   
-
   //CILIA REDUX SELECTEDMOVIE
  //how to get the selectedmovie from redux, must also import useSelector from react-redux
  const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
  // use the selectedMovie like this
  console.log("movieinfo: " + selectedMovie.id);
 
-
   const [genres, setGenres] = useState([]);
-  const { movie } = props;
   const rating = selectedMovie.vote_average; // ändring här!
-
 
  const [trailerKey, setTrailerKey] = useState(null);
  const [showOverview, setShowOverview] = useState(true);
@@ -72,8 +68,6 @@ function MovieInfo(props, { onCategoryClick, handleButtonClick, handleMovieClick
     return genre ? genre.name : "";
   });
 
-
-
 const handleBuy = () =>{
 
   dispatch(searchDropDownActions.hideSearchDropDown());
@@ -89,12 +83,7 @@ onAuthStateChanged(auth,(user) =>{
     console.log(navigatePayment)
     navigate("/login");
    
-    
-  
-   
 }
-
-
 
   const handleShowOverview = () => {
     dispatch(searchDropDownActions.hideSearchDropDown());
@@ -179,8 +168,8 @@ onAuthStateChanged(auth,(user) =>{
         </div>
       )}
       <section>
-      <MovieSlider similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
-      <MovieSlider similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      <MovieSlider onClick={window.scrollTo(0, 0)} similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      <MovieSlider onClick={window.scrollTo(0, 0)} similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
       </section>
     </div>
   );

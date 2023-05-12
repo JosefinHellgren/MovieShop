@@ -8,12 +8,13 @@
     position: relative;
 }
 
-
-
 .slick-prev,
 .slick-next {
     display: none !important;
-} 
+}
 
-
-
+.movie_slider h4 {
+    color: lightgray;
+    width: fit-content;
+    font-size: 20px;
+}

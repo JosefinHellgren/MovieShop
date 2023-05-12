@@ -55,7 +55,7 @@ function App() {
   const handleMovieClick = (movie) => {
     dispatch(searchDropDownActions.hideSearchDropDown());
     //this is what sets the selectedmovie to redux
-    console.log('handleMovieclick körs')
+    console.log('handleMovieclick körs: ' + movie.id)
     dispatch(selectActions.selectMovie(movie));
     navigate("/movieinfo/");
   };
