@@ -37,9 +37,10 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
         onCategoryClick(title, content);
     }
 
-    if (content !== null && content.length === 0) {
-        return  <h4>No movies found for {title}</h4>;
-        
+    if (content !== null) {
+        if (content && content.length === 0) {
+            return <h4>No movies found for {title}</h4>;
+          }
       }
 
     
@@ -48,8 +49,7 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
             <h4 onClick={handleCategoryClick} >{title} {'>'}  </h4>
             
             <Slider key={moviesObject.status} className="slick-slider" slidesToShow={3} slidesToScroll={1} >
-                {content &&
-                    content.map((movie, index) => (
+                {content && content.map((movie, index) => (
                         <div key={index} className="slider_container">
                             <MovieGridItem movie={movie} handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} />
                         </div>
@@ -88,6 +88,7 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
             };
 
             dispatch(actions.success(payload));
+            
         } catch {
             dispatch(actions.failure());
         }
