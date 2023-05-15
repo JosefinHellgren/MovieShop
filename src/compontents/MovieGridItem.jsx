@@ -16,15 +16,14 @@ const MovieGridItem = ({movie,  handleMovieClick,useBackDrop}) => {
      
 
     return (
-        <div className="movie_grid_item" 
+
+        <div className="movie_grid_item" onClick={() => handleMovieClick(movie)}
         > 
             <img
                 className="movie_poster"
                 src={imgUrlStart + imageSource}
-                onClick={() => handleMovieClick(movie)}
-                style={movieStyle}
                 
-                
+                style={movieStyle}  
             />
           
             <div className="movie_info"

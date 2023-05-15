@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Slider from "react-slick";
 import "./movieslider.css";
-import { useMediacategory } from 'react-responsive';
 import { useDispatch, useSelector } from "react-redux";
 import { STATUS, actions } from "../features/movies";
 import MovieGridItem from "./MovieGridItem";
-import { useNavigate } from "react-router-dom";
 
-const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick }) => {
-    
-    const [slidesToShow, setSlidesToShow] = useState(3);
+
+const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre_id, movie_id, similar }) => {
+
+
+  const [slidesToShow, setSlidesToShow] = useState(3);
     const moviesObject = useSelector(state => state.movies);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchMovies(category, dispatch)
-    }, []);
+        fetchMovies(movie_id, genre_id, category, dispatch, similar)
+    }, [title, movie_id, similar]);
 
     let content = null;
-    
+
     switch (moviesObject.status) {
         case STATUS.NORMAL:
             content = null;
@@ -29,13 +29,23 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick }) => 
         case STATUS.SUCCESS:
             content = moviesObject.movies[category];
             break;
+        case STATUS.FAILURE:
+            content = <p>No movies available for this category</p>;
+            break;
         default:
             content = null
     }
 
     const handleCategoryClick = () => {
         onCategoryClick(title, content);
+    }
+
+    if (content !== null) {
+        if (content && content.length === 0) {
+            return <h4>No movies found for {title}</h4>;
+          }
       }
+
 
 
       
@@ -70,7 +80,7 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick }) => 
         <div className="movie_slider">
             
             {title !== 'Big Movie' && (
-  <h4 onClick={handleCategoryClick}>{title} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'>'}</h4>
+  <h4 onClick={handleCategoryClick}>{title} {'>'}</h4>
 )}
         <Slider key={moviesObject.status} className="slick-slider" slidesToShow={slidesToShow} slidesToScroll={1} >
             {content &&
@@ -80,12 +90,21 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick }) => 
                     </div>
                 ))}
         </Slider>
+
         </div>
     );
 
-    async function fetchMovies(category, dispatch) {
+    async function fetchMovies(movie_id, genre_id, category, dispatch, similar, page = 1) {
         const apiKey = "305f99214975faee28a0f129881c6ec9";
-        const URL = `https://api.themoviedb.org/3/movie/${category}?api_key=${apiKey}&language=en-US&region=SE`;
+        let URL = `https://api.themoviedb.org/3/movie/${category}?api_key=${apiKey}&language=en-US&region=SE&page=${page}`;
+      
+        if (genre_id !== "") {
+          URL = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&region=SE&with_genres=${genre_id}&page=${page}`;
+        } else if (similar === true) {
+          URL = `https://api.themoviedb.org/3/movie/${movie_id}/similar?api_key=${apiKey}&language=en-US&region=SE&page=${page}`;
+        } else if (movie_id !== "") {
+          URL = `https://api.themoviedb.org/3/movie/${movie_id}/recommendations?api_key=${apiKey}&language=en-US&region=SE&page=${page}`;
+        }
       
         dispatch(actions.isFetching());
       
@@ -94,14 +113,21 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick }) => 
           let json = await response.json();
           let movies = json.results;
       
+          if (3 > page) {
+            let nextPageMovies = await fetchMovies(movie_id, genre_id, category, dispatch, similar, page + 1);
+            movies = movies.concat(nextPageMovies);
+          }
+      
           const payload = {
             category,
-            movies
+            movies,
           };
       
           dispatch(actions.success(payload));
+          return movies;
         } catch {
           dispatch(actions.failure());
+          return [];
         }
       }
 };

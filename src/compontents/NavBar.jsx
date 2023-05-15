@@ -1,20 +1,18 @@
-
 import React, { useState, useEffect } from "react";
-
 import Movie_wheel from "../images/movie-wheel.png";
-import PlayButton from "../images/play.png";
 import "./navbar.css";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { actions as selectActions } from "../features/selectedmovie"
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { actions as searchDropDownActions } from "../features/searchdropdown"
 import { ImSearch } from "react-icons/im"
-import { useNavigate } from "react-router-dom";
 import SearchDropDown from "./SearchDropDown";
-import { useDispatch } from "react-redux";
 import { FiSettings } from "react-icons/fi";
-
+import {AiOutlinePlayCircle} from 'react-icons/ai'
 
 const Navbar = ({ onSearchClick }) => {
   const pinkGradient = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
@@ -25,12 +23,18 @@ const Navbar = ({ onSearchClick }) => {
   const apiKey = "305f99214975faee28a0f129881c6ec9";
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+
   const auth = getAuth();
   const db = firebase.firestore();
   const [userUID, setUserUID] = useState(null);
   const [signedIn, setSignedIn] = useState(false);
   let unsubscribe = () => { };
 
+  const searchDropDown = useSelector(state => state.searchDropdown.searchDropDown);
+
+  const [searchResults, setSearchResults] = useState([]);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     
@@ -38,14 +42,12 @@ const Navbar = ({ onSearchClick }) => {
       if (user) {
         setSignedIn(true);
         setUserUID(user.uid);
-        console.log('useEffect onauth körs')
       } else {
         setSignedIn(false);
         setUserUID(null);
       }
     });
   }, [])
-
 
   useEffect(() => {
     if (userUID) {
@@ -87,10 +89,6 @@ const Navbar = ({ onSearchClick }) => {
     }
   }
 
-  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
-  const [query, setQuery] = useState('');
-
   const handleSearchInputChange = async (event) => {
     const newQuery = event.target.value;
     setQuery(newQuery);
@@ -98,35 +96,37 @@ const Navbar = ({ onSearchClick }) => {
     if (newQuery !== '') {
       const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${newQuery}`);
       const data = await response.json();
-      console.log(data.results);
       setSearchResults(data.results);
-      setShowSearchDropdown(true);
+      dispatch(searchDropDownActions.showSearchDropDown());
     } else {
-      setShowSearchDropdown(false);
+      dispatch(searchDropDownActions.hideSearchDropDown());
     }
   }
 
   const handleSearchClick = () => {
-    setShowSearchDropdown(false);
+    setQuery('');
+    dispatch(searchDropDownActions.hideSearchDropDown());
     onSearchClick(query, searchResults);
   }
 
+  useEffect(() => {
+    setQuery('');
+  }, [location.pathname]);
+
   const handleMovieClick = (movie) => {
-    setShowSearchDropdown(false);
+    dispatch(searchDropDownActions.hideSearchDropDown());
     //this is what sets the selectedmovie to redux
-    console.log('handleMovieclick körs')
     dispatch(selectActions.selectMovie(movie));
-    
     navigate("/movieinfo/");
   };
 
   const handleUserCircleClick = () => {
-    setShowSearchDropdown(false);
+    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate('/login');
   }
 
   const handlePlayButtonPressed = () => {
-    setShowSearchDropdown(false);
+    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate('/userpage')
   }
 
@@ -165,50 +165,122 @@ const Navbar = ({ onSearchClick }) => {
   }
 
   const handleMovWheelClick = () => {
-    setShowSearchDropdown(false);
+   dispatch(searchDropDownActions.hideSearchDropDown());
     navigate("/");
   }
 
-  const renderButton = () => {
-    return signedIn ? <img src={PlayButton}
-      onClick={handlePlayButtonPressed}
-      alt="Play Button" className="play_folder" /> :
-      <HiOutlineUserCircle className="user_icon"
-        onClick={handleUserCircleClick} />
+  const renderButton = (isMobile, signedIn) => {
+    if (isMobile) {
+      if (signedIn) {
+        console.log('mobil läge, signed in körs')
+        return (
+          <AiOutlinePlayCircle 
+          className="playbtn-mobile"/>
+        );
+      } else {
+        console.log('mobil läge, signed out körs')
+        return (
+          <HiOutlineUserCircle
+            className="user_icon"
+            onClick={handleUserCircleClick}
+          />
+        );
+      }
+    } else {
+      if (signedIn) {
+        console.log('dator läge, signed in körs')
+        return (
+          <div className="play-button-div" onClick={handlePlayButtonPressed}>
+          <AiOutlinePlayCircle 
+          className="play-icon-computer"/>
+          <h4>My movies</h4>
+          </div>
+          
+        );
+      } else {
+        console.log('dator läge, signed out körs');
+        return(
+        
+        <div className="user-icon-div" onClick={handleUserCircleClick}>
+         <HiOutlineUserCircle
+            className="user_icon_computer"
+          /> 
+          <h4> Log in</h4>
+        </div>
+        )
+      }
+    }
   };
+
+
+  const renderSettingsButton = (isMobile) => {
+    if (isMobile) {
+      return (
+        <summary role="button">
+          <FiSettings className="settings_icon" />
+        </summary>
+      )
+    } else {
+      return (
+       <summary role="button">
+        <section className="settingsbtn-container" >
+          <FiSettings className="settings-icon" />
+          <h4>Settings</h4>
+        </section>
+      </summary> 
+      )  
+    }
+  }
+  
+ 
+    const [isMobile, setIsMobile] = useState(false);
+  
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+  
+      window.addEventListener("resize", handleResize);
+      handleResize(); 
+  
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
+  
+  
+  
+  
 
   return (
     <nav className="navbar">
       <section className="navbar-container">
         <img src={Movie_wheel} alt="Movie Wheel Logo" className="movie_wheel" onClick={handleMovWheelClick} />
-        <div className="search_bar">
-          <input type="text" placeholder="Search movies..." onChange={handleSearchInputChange} />
-          <ImSearch className="search_icon" onClick={handleSearchClick} />
-        </div>
-        <section className={signedIn ? 'navbar_section' : 'navbar_section hide'}>
-
-          <details className="dropdown">
-            <summary role="button">
-              <FiSettings className="settings_icon" />
-            </summary>
-            <ul>
-              <li className="dropdown-title"> <strong> Change background to:</strong></li>
-              <li onClick={() => handleClick('black')}><a className="li-color"> <p className="black-circle"></p>Black</a></li>
-              <li onClick={() => handleClick('turquoise')}><a className="li-color"> <p className="white-circle"></p>Turquoise</a></li>
-              <li onClick={() => handleClick('pink')}><a className="li-color"> <p className="pink-circle"></p>Pink</a></li>
-              <li onClick={() => handleClick('orange')}><a className="li-color"> <p className="orange-circle"></p>Orange</a></li>
-              <li onClick={handleSignOutClick}><a >Sign out</a></li>
-            </ul>
-          </details>
-        </section>
-        {renderButton()}
+      <div className="search_bar">
+        <input type="text" value={query} placeholder="Search movies.." onChange={handleSearchInputChange} />
+        <ImSearch className="search_icon" onClick={handleSearchClick} />
+      </div>
+      <section className={signedIn ? 'navbar_section' : 'navbar_section hide'}>
+        
+        <details className="dropdown">
+          {renderSettingsButton(isMobile)}
+          <ul>
+            <li className="dropdown-title"> <strong> Change background to:</strong></li>
+            <li onClick= {() => handleClick('black')}><a className="li-color"> <p className= "black-circle"></p>Black</a></li>
+            <li onClick= {() => handleClick('turquoise')}><a className="li-color"> <p className="white-circle"></p>Turquoise</a></li>
+            <li onClick= {() => handleClick('pink')}><a className="li-color"> <p className="pink-circle"></p>Pink</a></li>
+            <li onClick= {() => handleClick('orange')}><a className="li-color"> <p className="orange-circle"></p>Orange</a></li>
+            <li onClick={handleSignOutClick}><a >Sign out</a></li>
+          </ul>
+        </details>
+      </section>
+      {renderButton(isMobile, signedIn)}
       </section>
       <section>
-        <div className={`search_dropdown ${showSearchDropdown ? "" : "hide"}`}>
+      <div className={`search_dropdown ${searchDropDown ? '' : 'hide'}`}>
           <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
         </div>
       </section>
-
     </nav>
 
   );

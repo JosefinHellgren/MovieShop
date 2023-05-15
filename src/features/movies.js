@@ -18,7 +18,10 @@ const initialState = {
   movies: {
     popularMovies: null,
     topRatedMovies: null,
-    upcomingMovies: null
+    upcomingMovies: null,
+    comedyMovies: null,
+    actionMovies: null,
+    romanceMovies: null
   }
 };
 

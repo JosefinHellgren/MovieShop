@@ -3,13 +3,7 @@
     position: relative;
   }
 
-.mainpage_container h4 {
-    color: lightgray;
-    width: fit-content;
-    font-size: 20px;
-    padding-top: 0%;
-    margin-top: 0%;
-}
+
 
 .mainpage_container .big_Movie_poster_section {
     margin-top: 10px;

@@ -79,9 +79,12 @@ const UserPage = () => {
         <img src={imgUrlStart + movie.poster_path}
           alt={movie.title}
           className='purchased-img'
-          onClick={() => handlePurchasedMovieClick(movie)}
         />
       </section>
+      <div className="more-info-container">
+          <button className="more-info-button"
+          onClick={() => handlePurchasedMovieClick(movie)}>More Info</button>
+        </div>
     </div>
   ));
 

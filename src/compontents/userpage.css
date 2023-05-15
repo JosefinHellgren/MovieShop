@@ -53,6 +53,12 @@
   width: 35vw;
 }
 
+.user-page .purchased-item > section,
+.user-page .watchlist-item {
+  transition: transform 0.3s ease;
+  transform: scale(1);
+}
+
 .user-page .watchlist-item>section {
   position: relative;
   width: 35vw;
@@ -68,11 +74,37 @@
   transform: translate(5%, -100%);
   padding: 1px;
   border-radius: 10%;
+  z-index: 2;
 }
 
 .user-page .purchased-img {
   width: 35vw;
   border-radius: 10px;
+}
+
+.user-page .more-info-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-page .more-info-button {
+  background-color: transparent;
+  border: none;
+  color: #FFF;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.user-page .more-info-button:hover {
+  color: #fff6f6;
+}
+
+.user-page .purchased-item > section:hover,
+.user-page .watchlist-item:hover {
+  transform: scale(1.1);
 }
 
 .user-page .watchlist-img {

@@ -9,12 +9,13 @@ import Comments from "./Comments";
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { fromPayment } from "../features/navigatePayment";
+import { actions as searchDropDownActions } from "../features/searchdropdown"
+import MovieSlider from "./MovieSlider";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
-
-function MovieInfo() {
- 
+function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
+  
   //CILIA REDUX SELECTEDMOVIE
   //how to get the selectedmovie from redux, must also import useSelector from react-redux
   const selectedMovie = useSelector(
@@ -23,23 +24,13 @@ function MovieInfo() {
   // use the selectedMovie like this
   //console.log("movieinfo: " + selectedMovie.title);
 
-
   const [isPurchased, setIsPurchased] = useState(false);
-
-  
-
   const [currentUser, setCurrentUser] = useState(null);
   const [purchasedMovies, setPurchasedMovies] = useState([]);
 
   //const [playing, setPlaying] = useState(false);
   const videoRef = useRef(null);
-
   
- 
-
-  
-
- 
   const [genres, setGenres] = useState([]);
   const rating = selectedMovie.vote_average;
   const [trailerKey, setTrailerKey] = useState(null);
@@ -160,7 +151,10 @@ function MovieInfo() {
 
 
 
+
   const handleBuy = () => {
+    
+    dispatch(searchDropDownActions.hideSearchDropDown());
 
     //if we have a user, then we want to navigate to payment and set the navigatetoPayment statet till true.
     onAuthStateChanged(auth, (user) => {
@@ -197,20 +191,22 @@ function MovieInfo() {
     }
   }
 
-
   const handleShowOverview = () => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(true);
     setShowTrailer(false);
     setShowComments(false);
   };
 
   const handleShowTrailer = () => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(false);
     setShowTrailer(true);
     setShowComments(false);
   };
 
   const handleShowComments = () => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(false);
     setShowTrailer(false);
     setShowComments(true);
@@ -310,6 +306,10 @@ function MovieInfo() {
           <Comments />
         </div>
       )}
+      <section>
+      <MovieSlider onClick={window.scrollTo(0, 0)} similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      <MovieSlider onClick={window.scrollTo(0, 0)} similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      </section>
     </div>
   );
 
