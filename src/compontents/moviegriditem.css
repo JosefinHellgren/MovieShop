@@ -5,51 +5,131 @@
     flex-direction: column;
     height: fit-content;
     position: relative;
-    padding-bottom: 40px;
+    overflow: hidden;
+    transition: transform 0.3s;
+   
+    
 }
+
+.movie_grid_item:hover {
+    transform: scale(1.05);
+  
+  }
+
+  .movie_grid_item .movie_rating{
+
+color: green;
+  }
+  .movie_grid_item .movie_release{
+    font-size: 10px;
+    color: white;
+  }
+
+  .movie_grid_item .movie_info {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+    position: absolute;
+    
+    bottom: 10%;
+    left: 10%;
+  
+    
+    background-color: rgba(4, 0, 0, 0.68);
+    padding: 5%;
+  }
+  
+  .movie_grid_item:hover .movie_info {
+    opacity: 1;
+    visibility: visible;
+    
+  }
+
+
+
+
+
 .movie_grid_item .movie_title {
-    font-size: 11px;
+    font-size: 14px;
     width: 24vw;
     max-width: 120px;
-    color: lightgrey;
+    color: rgb(247, 245, 245);
     margin-top: 5px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding-bottom: 0.3vh;
+   
 }
+
+
+
+
 
 .movie_grid_item .movie_poster {
-    width: 24vw;
-    max-width: 120px;
-    height: 0 auto;
-}
+    width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* or object-fit: cover; depending on your preference */
+    transition: transform 0.3s;
+  }
 
-.movie_grid_item .payment_button {
-    width: 18vw;
-    min-width: 20px;
-    max-width: 100px;
-    height: fit-content;
-    font-size: 10px;
-    background-color: lightgray; 
-    position: absolute;
-    top: 32vh;
-   
+.movie-grid-item:hover .movie_poster {
+    transform: scale(2); 
+    opacity: 0.5;
+  }
+  
+  .movie-grid-item:hover .movie_info {
+    opacity: 1;
+  }
 
-    
-}
+
+
 
 @media screen and (max-width: 767px) {
-    .movie_grid_item .payment_button {
-        top: 180px;
+
+
+    .movie_grid_item .movie_title {
+        font-size: 7px;
+        
+      max-width: 75%;
+        color: rgb(247, 245, 245);
+        margin-top: 5px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+       
     }
+  .movie_grid_item .movie_rating{
+font-size: 4px;
+    color: green;
+      }
+      .movie_grid_item .movie_release{
+        font-size: 4px;
+        color: white;
+      }
+    
+      .movie_grid_item .movie_info {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s;
+        position: absolute;
+       width:75%;
+    
+        background-color: rgba(4, 0, 0, 0.68);
+        padding: 5%;
+      }
+      
+      .movie_grid_item:hover .movie_info {
+        opacity: 1;
+        visibility: visible;
+        
+      }
 }
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
-    .movie_grid_item .payment_button {
-      top: 220px;
-    }
+  
   }
 

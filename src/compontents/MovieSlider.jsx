@@ -7,8 +7,9 @@ import { STATUS, actions } from "../features/movies";
 import MovieGridItem from "./MovieGridItem";
 import { useNavigate } from "react-router-dom";
 
-const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onCategoryClick }) => {
-   
+const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick }) => {
+    
+    const [slidesToShow, setSlidesToShow] = useState(3);
     const moviesObject = useSelector(state => state.movies);
     const dispatch = useDispatch();
 
@@ -36,14 +37,46 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
         onCategoryClick(title, content);
       }
 
+
+      
+
+      useEffect(() => {
+        const updateSlidesToShow = () => {
+          if (window.innerWidth <= 768  && title === "Big Movie" || window.innerWidth >= 768 && title === "Big Movie") {
+            setSlidesToShow(1); // Show only one slide for Slider A on wider screens
+          } else if (window.innerWidth >= 768) {
+            setSlidesToShow(4); // Show four slides for other sliders on wider screens
+          } else {
+            setSlidesToShow(3); // Show three slides on smaller screens
+          }
+        };
+      
+        window.addEventListener('resize', updateSlidesToShow);
+      
+        // Call the function initially to set the initial slidesToShow value
+        updateSlidesToShow();
+      
+        // Clean up the event listener on component unmount
+        return () => {
+          window.removeEventListener('resize', updateSlidesToShow);
+        };
+      }, []);
+
+     
+
+
+
     return (
         <div className="movie_slider">
-        <h4 onClick={handleCategoryClick} >{title} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'>'}  </h4>
-        <Slider key={moviesObject.status} className="slick-slider" slidesToShow={3} slidesToScroll={1} >
+            
+            {title !== 'Big Movie' && (
+  <h4 onClick={handleCategoryClick}>{title} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'>'}</h4>
+)}
+        <Slider key={moviesObject.status} className="slick-slider" slidesToShow={slidesToShow} slidesToScroll={1} >
             {content &&
                 content.map((movie, index) => (
-                    <div key={index} className="slider_container">
-                        <MovieGridItem movie={movie} handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} />
+                    <div key={index} className={`slider_container ${title === 'Big Movie' ? 'big-movie-slider' : ''}`}>
+                        <MovieGridItem movie={movie}  handleMovieClick={handleMovieClick} useBackDrop={title === "Big Movie"} />
                     </div>
                 ))}
         </Slider>

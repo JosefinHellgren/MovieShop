@@ -57,7 +57,7 @@ function App() {
     navigate("/movieinfo/");
   };
 
-  const handleButtonClick = (movie) => {
+  /*const handleButtonClick = (movie) => {
     //setShowSearchDropdown(false);
     //this is what sets the selectedmovie to redux
 
@@ -76,13 +76,16 @@ function App() {
     }
 
     //if we dont have a user, navigate to login:
-  };
+  };*/
+//handleButtonClick={handleButtonClick}
+
+
 
   return (
     <div className="App">
       <Navbar onSearchClick={handleSearchClick} />
       <Routes>
-        <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>}/>
+        <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} />}/>
         <Route path="/movieinfo" element={<MovieInfo />}/>
         <Route path='/login' element={<LoginPage/>} />
         <Route path='/userpage'element= {<UserPage/>} />
@@ -92,7 +95,7 @@ function App() {
         <Route path='/settings' element= {<Settings />} />
         <Route path='/searchresults' element= {<SearchResults 
         title={`Showing results for ${searchWord}`} searchResults={searchPageResults} 
-        handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>} />
+        handleMovieClick={handleMovieClick} />} />
       </Routes>
     </div>
   )
