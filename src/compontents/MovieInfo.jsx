@@ -303,7 +303,7 @@ function MovieInfo() {
 
       {showTrailer && (
         <div className="traileriframe">
-        <iframe 
+        <iframe className="trailer" 
           ref={videoRef}
           src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
           title="YouTube video player"
