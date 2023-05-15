@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import './movieInfo.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp, faCartPlus, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
-import { Container } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import Comments from "./Comments";
 import { useNavigate } from "react-router-dom";
@@ -242,22 +241,28 @@ function MovieInfo() {
  
   return (
     <div className="movieinfo">
+      <div className="movieinfocontainer">
       <h1>{selectedMovie.title}</h1>
+     
+     
+      
       <div className="poster-container">
-
+        
+       
         <img className = 'poster-img' src={imgUrlStart + selectedMovie.poster_path} alt={selectedMovie.title} />
         <div className="movie-details">
+          <div className="movieinfobackdrop">
+            <img className = 'backdrop-img' src={imgUrlStart + selectedMovie.backdrop_path}  />
+          </div>
           <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
           <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
           <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>
           <p><strong>Rating:</strong> {rating}</p>
-          <div className="details-nav">
-            <button className="ratebtn"><FontAwesomeIcon icon={faThumbsUp} /></button>
-            <button className="ratebtn"><FontAwesomeIcon icon={faThumbsDown} /></button>
-          </div>
 
 
+          
         </div>
+      </div>
       </div>
 
       <div className="movieinfobuybtns">
@@ -267,7 +272,7 @@ function MovieInfo() {
         {isPurchased ? (
           <button onClick={handlePlayButtonClick} className="movieinfobtn">Play</button>
             ) : (
-          <button  onClick={handleBuy} className="movieinfobtn">Buy</button>
+          <button  onClick={handleBuy} className="movieinfobtn"><FontAwesomeIcon icon={faCartPlus} /> Buy</button>
             )}
 
         <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
@@ -294,7 +299,8 @@ function MovieInfo() {
       )}
 
       {showTrailer && (
-        <iframe
+        <div className="traileriframe">
+        <iframe 
           ref={videoRef}
           src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
           title="YouTube video player"
@@ -303,6 +309,7 @@ function MovieInfo() {
           allowFullScreen={true}
           allow="autoplay; encrypted-media"
         ></iframe>
+        </div>
       )}
 
       {showComments && (
