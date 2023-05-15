@@ -35,10 +35,6 @@ function MovieInfo() {
 
   
  
-
-  
-
- 
   const [genres, setGenres] = useState([]);
   const rating = selectedMovie.vote_average;
   const [trailerKey, setTrailerKey] = useState(null);
@@ -254,10 +250,13 @@ function MovieInfo() {
           <div className="movieinfobackdrop">
             <img className = 'backdrop-img' src={imgUrlStart + selectedMovie.backdrop_path}  />
           </div>
-          <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
-          <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
-          <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>
-          <p><strong>Rating:</strong> {rating}</p>
+    
+            <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
+            <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
+            <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>
+            <p><strong>Rating:</strong> {rating}</p>
+       
+          
 
 
           
@@ -272,10 +271,14 @@ function MovieInfo() {
         {isPurchased ? (
           <button onClick={handlePlayButtonClick} className="movieinfobtn">Play</button>
             ) : (
-          <button  onClick={handleBuy} className="movieinfobtn"><FontAwesomeIcon icon={faCartPlus} /> Buy</button>
+              <>
+              <button  onClick={handleBuy} className="movieinfobtn"><FontAwesomeIcon icon={faCartPlus} /> Buy</button>
+              <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
+              </>
+          
             )}
 
-        <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
+       
       </div>
 
       <div className="details-nav">
