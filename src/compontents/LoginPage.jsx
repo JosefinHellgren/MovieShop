@@ -9,98 +9,99 @@ import { useSelector } from 'react-redux';
 
 
 const LoginPage = () => {
-    const auth = getAuth();
-    const navigate = useNavigate();
-    const [errorMessage, setErrorMessage] = useState('');
-    const [errorEmail, setErrorEmail] = useState(false);
-    const [errorPassword, setErrorPassword] = useState(false);
-    const navigatePayment = useSelector((state) => state.navigatePayment.payment);
+  const auth = getAuth();
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errorEmail, setErrorEmail] = useState(false);
+  const [errorPassword, setErrorPassword] = useState(false);
+  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
 
-    const ERROR  = {
-      EMAILMISSING : 'Please enter your email',
-      PASSWORDMISSING : 'Please enter your password',
-      INVALIDEMAIL : 'Invalid email',
-      WRONGPASSWORD : 'Wrong password',
-      USERNOTFOUND : 'User not found'
+  const ERROR = {
+    EMAILMISSING: 'Please enter your email',
+    PASSWORDMISSING: 'Please enter your password',
+    INVALIDEMAIL: 'Invalid email',
+    WRONGPASSWORD: 'Wrong password',
+    USERNOTFOUND: 'User not found'
+  }
+
+  const login = async () => {
+    const email = document.getElementById('userEmail-input').value;
+    const password = document.getElementById('userPassword-input').value;
+
+    if (email === '') {
+      setErrorMessage(ERROR.EMAILMISSING);
+      setErrorEmail(true);
+    } else if (password === '') {
+      setErrorMessage(ERROR.PASSWORDMISSING);
+      setErrorPassword(true);
+    } else {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user.uid);
+
+          //here we want to go to  payment if we try.
+          if (navigatePayment) {
+            navigate("/payment/")
+            //here we also want to change back to the state being false?
+
+          } else {
+            navigate(-1)
+            console.log("redux statet payment " + navigatePayment)
+          }
+
+
+        })
+        .catch((error) => {
+          if (error.code === 'auth/wrong-password') {
+            setErrorMessage(ERROR.WRONGPASSWORD);
+            setErrorPassword(true);
+          } else if (error.code === 'auth/invalid-email') {
+            setErrorMessage(ERROR.INVALIDEMAIL);
+            setErrorEmail(true);
+          } else if (error.code === 'auth/user-not-found') {
+            setErrorMessage(ERROR.USERNOTFOUND);
+          }
+        });
     }
+  }
 
-    const login = async () => {
-        const email = document.getElementById('userEmail-input').value;
-        const password = document.getElementById('userPassword-input').value;
+  const handleIconClick = () => {
+    navigate(-1);
+  }
 
-        if (email === '') {
-          setErrorMessage(ERROR.EMAILMISSING);
-          setErrorEmail(true);
-        } else if (password === '') {
-          setErrorMessage(ERROR.PASSWORDMISSING);
-          setErrorPassword(true);
-        } else {
-        const auth = getAuth();
-        signInWithEmailAndPassword(auth, email, password )
-        .then((userCredential) => { 
-            const user = userCredential.user;
-            console.log(user.uid);
+  const handleRegisterClick = () => {
+    navigate("/signup/");
+  }
 
-            //here we want to go to  payment if we try.
-            if(navigatePayment){
-              navigate("/payment/")
-              //here we also want to change back to the state being false?
+  return (
+    <div className='login-page'>
+      <div className='fa-icon-container' onClick={handleIconClick}>
+        <FontAwesomeIcon className='fa-times-icon' icon={faTimes} />
+      </div>
+      <section className='signup-title'>
+        <h1>Sign in</h1>
+      </section>
+      <section className="sign-up-container">
 
-            }else{navigate(-1)
-            console.log("redux statet payment "+navigatePayment)}
+        <p className='error-message'>{errorMessage}</p>
+        <input type="text" className={errorEmail ? "email-input red-border" : "email-input"} id='userEmail-input' placeholder="Enter you email" />
+        <PasswordInput
+          id="userPassword-input"
+          className={errorPassword ? "password-input red-border" : "password-input"}
+          name="password"
+          placeholder="Enter your password"
+        />
+      </section>
 
-            
-          })
-          .catch((error) => {
-            if(error.code === 'auth/wrong-password') {
-              setErrorMessage(ERROR.WRONGPASSWORD);
-              setErrorPassword(true);
-            } else if (error.code === 'auth/invalid-email') {
-              setErrorMessage(ERROR.INVALIDEMAIL);
-              setErrorEmail(true);
-            } else if (error.code === 'auth/user-not-found') {
-              setErrorMessage(ERROR.USERNOTFOUND);
-            }
-          });
-        }
-    }
 
-    const handleIconClick = ()  => {
-        navigate(-1);
-    }
+      <p className='register-member' onClick={handleRegisterClick}>Not registered yet? Register here!</p>
 
-    const handleRegisterClick = () => {
-        navigate("/signup/");
-    }
-
-    return (
-        <div className='login-page'>
-             <div className='fa-icon-container' onClick={handleIconClick}>
-                <FontAwesomeIcon className='fa-times-icon' icon={faTimes}/>
-            </div>
-            <section className='signup-title'>
-                <h1>Sign in</h1>
-            </section>
-            <section className="sign-up-container">
-
-              <p className='error-message'>{errorMessage}</p>
-                <input type="text" className={errorEmail ? "email-input red-border" : "email-input"} id='userEmail-input' placeholder="Enter you email" />
-                <PasswordInput
-                id="userPassword-input"
-                className = { errorPassword ? "password-input red-border" : "password-input" }
-                name="password"
-                placeholder="Enter your password"
-              /> 
-            </section>
-      
-            
-            <p className='register-member' onClick={handleRegisterClick}>Not registered yet? Register here!</p>
-            
-            <section className='signup-button-container'>
-                <button onClick={login}>Sign in</button>
-             </section> 
-        </div>
-    );
+      <section className='signup-button-container'>
+        <button onClick={login}>Sign in</button>
+      </section>
+    </div>
+  );
 }
 
 export default LoginPage;

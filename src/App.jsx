@@ -6,6 +6,7 @@ import SignUpPage from './compontents/SignUpPage';
 import LoginPage from './compontents/LoginPage';
 import Payment from './compontents/Payment';
 import UserPage from './compontents/UserPage';
+import Playmovie from './compontents/Playmovie';
 import Settings from './compontents/Settings';
 import Navbar from './compontents/NavBar.jsx';
 import SearchResults from './compontents/SearchResults';
@@ -16,15 +17,15 @@ import { fromPayment } from "./features/navigatePayment";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { actions as searchDropDownActions } from "./features/searchdropdown"
 
+
 function App() {
 
   const navigate = useNavigate();
 
-  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
 
+  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
   const dispatch = useDispatch();
   const [searchPageResults, setSearchPagResults] = useState([]);
-
   const [searchWord, setSearchWord] = useState('');
 
   const auth = getAuth();
@@ -63,6 +64,7 @@ function App() {
     dispatch(searchDropDownActions.hideSearchDropDown());
 
     //this is what sets the selectedmovie to redux
+
     dispatch(selectActions.selectMovie(movie));
 
     //if we have a user navigate to Payment:
@@ -81,13 +83,14 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar onSearchClick={handleSearchClick}/>
+      <Navbar onSearchClick={handleSearchClick} />
       <Routes>
         <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>}/>
         <Route path="/movieinfo" element={<MovieInfo onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>}/>
         <Route path='/login' element={<LoginPage/>} />
         <Route path='/userpage'element= {<UserPage/>} />
         <Route path= "/signup" element={<SignUpPage/>}/>
+        <Route path="/video" element={<Playmovie/>}/>
         <Route path="/payment" element={<Payment />}/>
         <Route path='/settings' element= {<Settings />} />
         <Route path='/searchresults' element= {<SearchResults 

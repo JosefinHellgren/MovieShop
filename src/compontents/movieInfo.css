@@ -8,28 +8,33 @@
     margin-top: 60px;
   }
   
-  .poster-container {
+  .movieinfo .poster-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
   }
+
+  .movieinfo .poster-img {
+    width: 40vw;
+    border-radius: 5%;
+  }
   
-  .poster-container img {
+  .movieinfo .poster-container img {
     margin-right: 20px;
   }
   
-  .movie-details {
+   .movieinfo .movie-details .movie-details {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
   }
   
-  .overview {
+  .info-overview .overview {
     margin-top: 20px;
   }
 
-  .movieinfobuybtns{
+  .movieinfo .movieinfobuybtns{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -38,18 +43,18 @@
 
   }
 
-  .movieinfobtn{
+  .movieinfo .movieinfobuybtns .movieinfobtn{
     background-color: rgb(100, 247, 59);
     margin-top: 15px;
   }
 
-  .details-nav {
+  .movieinfo .details-nav {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
   }
   
-  .details-btn {
+  .movieinfo .details-nav .details-btn {
     background-color: black;
     color: white;
     margin-top: 20px;
@@ -57,9 +62,15 @@
 
   }
 
-  .ratebtn{
+  .movieinfo .details-nav .ratebtn{
     margin: 10px;
     background-color: grey;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .movieinfo .poster-img {
+      width: 20vw;
+    }
   }
 
  

@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Movie_wheel from "../images/movie-wheel.png";
-import PlayButton from "../images/play.png";
 import "./navbar.css";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { HiOutlineUserCircle } from "react-icons/hi";
-import { BsSearch } from "react-icons/bs";
 import { actions as selectActions } from "../features/selectedmovie"
-import {ImSearch} from "react-icons/im"
 import { useLocation, useNavigate } from "react-router-dom";
-import SearchDropDown from "./SearchDropDown";
 import { useDispatch, useSelector } from "react-redux";
-import { FiSettings } from "react-icons/fi";
 import { actions as searchDropDownActions } from "../features/searchdropdown"
+import { ImSearch } from "react-icons/im"
+import SearchDropDown from "./SearchDropDown";
+import { FiSettings } from "react-icons/fi";
+import {AiOutlinePlayCircle} from 'react-icons/ai'
 
-const Navbar = ({onSearchClick}) => {
+const Navbar = ({ onSearchClick }) => {
   const pinkGradient = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
-  const blackGradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0% rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%';
+  const blackGradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%';
   const TurkqioseGradient = 'linear-gradient(to bottom, #06acb8 0%, #06acb8 80%, rgba(0, 0, 0, 0) 100%)';
-
+  const orangeGradient = 'linear-gradient(to bottom, #ff8400 0%, #ff8400 80%, rgba(0, 0, 0, 0) 100%)';
+  const dropdownUl = document.querySelector('.navbar .dropdown ul');
   const apiKey = "305f99214975faee28a0f129881c6ec9";
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,15 +28,16 @@ const Navbar = ({onSearchClick}) => {
   const auth = getAuth();
   const db = firebase.firestore();
   const [userUID, setUserUID] = useState(null);
-
   const [signedIn, setSignedIn] = useState(false);
+  let unsubscribe = () => { };
 
   const searchDropDown = useSelector(state => state.searchDropdown.searchDropDown);
 
   const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState('');
 
-  useEffect (() => {
+  useEffect(() => {
+    
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setSignedIn(true);
@@ -44,52 +45,54 @@ const Navbar = ({onSearchClick}) => {
       } else {
         setSignedIn(false);
         setUserUID(null);
-        document.body.style.backgroundColor = "black";
-        document.querySelector('#root').style.backgroundColor = 'black';
-        document.querySelector('.navbar').style.background = blackGradient;
       }
     });
   }, [])
-  
+
   useEffect(() => {
     if (userUID) {
       const docRef = db.collection('users').doc(userUID);
-      docRef.onSnapshot((doc) => {
+      unsubscribe = docRef.onSnapshot((doc) => {
         if (doc.exists) {
-          console.log('snapshot körs')
           const data = doc.data();
           changeBackground(data.background);
-        } else {
-          console.log('Dokumentet finns inte');
-        }
+        } 
       });
     }
+    return () => {
+      unsubscribe();
+    };
   }, [userUID]);
 
   const changeBackground = (background) => {
+    console.log('change background körs')
     if (background === 'black') {
       document.body.style.backgroundColor = "black";
       document.querySelector('#root').style.backgroundColor = 'black';
-      document.querySelector('.navbar').style.background = blackGradient;
+      dropdownUl.style.background = 'black';
+      document.querySelector('.navbar-container').style.background = blackGradient;
     } else if (background === 'turquoise') {
       document.body.style.backgroundColor = "#06acb8";
       document.querySelector('#root').style.backgroundColor = '#06acb8';
-      document.querySelector('.navbar').style.background = TurkqioseGradient;
+      dropdownUl.style.background = '#06acb8';
+      document.querySelector('.navbar-container').style.background = TurkqioseGradient;
     } else if (background === 'pink') {
       document.body.style.backgroundColor = "#d70dff";
       document.querySelector('#root').style.backgroundColor = '#d70dff';
-      document.querySelector('.navbar').style.background = pinkGradient;
-      document.querySelector('.navbar_section').style.backgroundColor = 'white !important';
+      dropdownUl.style.background = '#d70dff';
+      document.querySelector('.navbar-container').style.background = pinkGradient;
     } else if (background === 'orange') {
-      document.body.style.backgroundColor = "orange";
-      document.querySelector('#root').style.backgroundColor = 'orange';
+      document.body.style.backgroundColor = '#ff8400';
+      document.querySelector('#root').style.backgroundColor = '#ff8400';
+      dropdownUl.style.background = '#ff8400';
+      document.querySelector('.navbar-container').style.background = orangeGradient;
     }
   }
 
   const handleSearchInputChange = async (event) => {
     const newQuery = event.target.value;
     setQuery(newQuery);
-  
+
     if (newQuery !== '') {
       const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${newQuery}`);
       const data = await response.json();
@@ -116,7 +119,7 @@ const Navbar = ({onSearchClick}) => {
     dispatch(selectActions.selectMovie(movie));
     navigate("/movieinfo/");
   };
-  
+
   const handleUserCircleClick = () => {
     dispatch(searchDropDownActions.hideSearchDropDown());
     navigate('/login');
@@ -128,14 +131,37 @@ const Navbar = ({onSearchClick}) => {
   }
 
   const handleClick = (title) => {
-    document.querySelector('.navbar_section').style.background = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
+    saveBackgroundLocalStorage(title);
     saveBackcolorFirestore(title);
-      
   };
 
   const handleSignOutClick = () => {
+    document.body.style.backgroundColor = "black";
+    document.querySelector('#root').style.backgroundColor = 'black';
+    document.querySelector('.navbar-container').style.background = blackGradient;
+    const dropdown = document.querySelector('.dropdown');
+    dropdown.removeAttribute('open');
+    unsubscribe();
     navigate('/');
     auth.signOut();
+  }
+
+  const saveBackcolorFirestore = (background) => {
+    const userUID = auth.currentUser.uid;
+
+    db.collection("users").doc(userUID).set({
+      background: background
+    }, { merge: true })
+      .then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+      });
+  }
+
+  const saveBackgroundLocalStorage = (background) => {
+    localStorage.setItem('background', background);
   }
 
   const handleMovWheelClick = () => {
@@ -143,13 +169,88 @@ const Navbar = ({onSearchClick}) => {
     navigate("/");
   }
 
-  const renderButton = () => {
-    return signedIn ? <img src={PlayButton} 
-    onClick = {handlePlayButtonPressed} 
-    alt="Play Button" className="play_folder" /> :  
-    <HiOutlineUserCircle className="user_icon" 
-    onClick={handleUserCircleClick} />
+  const renderButton = (isMobile, signedIn) => {
+    if (isMobile) {
+      if (signedIn) {
+        console.log('mobil läge, signed in körs')
+        return (
+          <AiOutlinePlayCircle 
+          className="playbtn-mobile"/>
+        );
+      } else {
+        console.log('mobil läge, signed out körs')
+        return (
+          <HiOutlineUserCircle
+            className="user_icon"
+            onClick={handleUserCircleClick}
+          />
+        );
+      }
+    } else {
+      if (signedIn) {
+        console.log('dator läge, signed in körs')
+        return (
+          <div className="play-button-div" onClick={handlePlayButtonPressed}>
+          <AiOutlinePlayCircle 
+          className="play-icon-computer"/>
+          <h4>My movies</h4>
+          </div>
+          
+        );
+      } else {
+        console.log('dator läge, signed out körs');
+        return(
+        
+        <div className="user-icon-div" onClick={handleUserCircleClick}>
+         <HiOutlineUserCircle
+            className="user_icon_computer"
+          /> 
+          <h4> Log in</h4>
+        </div>
+        )
+      }
+    }
   };
+
+
+  const renderSettingsButton = (isMobile) => {
+    if (isMobile) {
+      return (
+        <summary role="button">
+          <FiSettings className="settings_icon" />
+        </summary>
+      )
+    } else {
+      return (
+       <summary role="button">
+        <section className="settingsbtn-container" >
+          <FiSettings className="settings-icon" />
+          <h4>Settings</h4>
+        </section>
+      </summary> 
+      )  
+    }
+  }
+  
+ 
+    const [isMobile, setIsMobile] = useState(false);
+  
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+  
+      window.addEventListener("resize", handleResize);
+      handleResize(); 
+  
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
+  
+  
+  
+  
 
   return (
     <nav className="navbar">
@@ -159,12 +260,10 @@ const Navbar = ({onSearchClick}) => {
         <input type="text" value={query} placeholder="Search movies.." onChange={handleSearchInputChange} />
         <ImSearch className="search_icon" onClick={handleSearchClick} />
       </div>
-      <section className="navbar_section">
+      <section className={signedIn ? 'navbar_section' : 'navbar_section hide'}>
         
         <details className="dropdown">
-          <summary role="button">
-            <FiSettings className="settings_icon"/>
-          </summary>
+          {renderSettingsButton(isMobile)}
           <ul>
             <li className="dropdown-title"> <strong> Change background to:</strong></li>
             <li onClick= {() => handleClick('black')}><a className="li-color"> <p className= "black-circle"></p>Black</a></li>
@@ -175,16 +274,15 @@ const Navbar = ({onSearchClick}) => {
           </ul>
         </details>
       </section>
-      {renderButton()}
+      {renderButton(isMobile, signedIn)}
       </section>
       <section>
       <div className={`search_dropdown ${searchDropDown ? '' : 'hide'}`}>
           <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
         </div>
       </section>
-      
     </nav>
-    
+
   );
 }
 
