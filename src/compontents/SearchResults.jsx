@@ -8,7 +8,7 @@ const SearchResults = ({ title, searchResults, handleMovieClick, handleButtonCli
       <div className="movie_grid">
         {searchResults && searchResults.map((movie, index) => (
             <div className="movie_item" key={index}>
-          <MovieGridItem key={movie.id} movie={movie} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>
+          <MovieGridItem key={movie.id} movie={movie} handleMovieClick={handleMovieClick} />
           </div>
         ))}
       </div>

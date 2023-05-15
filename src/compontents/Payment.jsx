@@ -10,6 +10,7 @@ import 'firebase/compat/firestore';
 
 import { getAuth } from "firebase/auth"
 import { useSelector } from 'react-redux';
+import PaymentSucsessfull from './PaymentSucsessfull';
 
 
 const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, setCVV, setCardNumber, setCardName, setExpDate, saveMovieToFirebase }) => {
@@ -43,20 +44,33 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
     }
     const handleExpDateChange = (event) => {
         const { value } = event.target;
-        const isValid = /^(0[1-9]|1[0-2])\/\d{2}$/.test(value)
+        const isValid = /^(0[1-9]|1[0-2])\/\d{2}$/.test(value);
+        const currentDate = new Date();
+        const [month, year] = value.split('/');
+        const cardExpiration = new Date(Number("20" + year), Number(month) - 1, 1); // Assuming the year is in the format YY, we add "20" to convert it to YYYY
+      
         setExpDate(value);
+      
         if (isValid) {
-            event.target.setCustomValidity('');
-            console.log("Valid Exp date")
+          
+      
+          if (cardExpiration < currentDate) {
+            event.target.setCustomValidity('Card has expired');
+            console.log('Card has expired');
+            // Handle the expired card scenario here
+          } else {
+            console.log('Card is still valid');
             setDateExpValid(true);
+            event.target.setCustomValidity('');
+            // Handle the valid card scenario here
+          }
+        } else {
+          event.target.setCustomValidity('Please submit a correct expiration date');
+          console.log('Invalid expiration date');
+          // Handle the invalid expiration date scenario here
         }
-
-        else {
-            event.target.setCustomValidity('Please submit a correct exp.Date')
-            console.log(" Exp date,is not valid")
-        }
-
-    }
+      };
+      
     const handleCVVChange = (event) => {
         const { value } = event.target;
 
@@ -161,7 +175,7 @@ const Payment = () => {
         //should we realy use the state to conditional navigate here?
         //cus we should allready had turn the state to false again. 
         if (navigatePayment === true) {
-            navigate("/")
+            navigate('/')
         } else {
             navigate(-1)
         }
@@ -195,22 +209,46 @@ const Payment = () => {
 
     }
 
+
     const handleExpDateChange = (event) => {
         const { value } = event.target;
-        const isValid = /^(0[1-9]|1[0-2])\/\d{2}$/.test(value)
+        const isValid = /^(0[1-9]|1[0-2])\/\d{2}$/.test(value);
+        const currentDate = new Date();
+        const [month, year] = value.split('/');
+        const cardExpiration = new Date(Number("20" + year), Number(month) - 1, 1); // Assuming the year is in the format YY, we add "20" to convert it to YYYY
+      
         setExpDate(value);
+      
         if (isValid) {
-            event.target.setCustomValidity('');
-            console.log("Valid Exp date")
+          
+      
+          if (cardExpiration < currentDate) {
+            event.target.setCustomValidity('Card has expired');
+            console.log('Card has expired');
+            // Handle the expired card scenario here
+          } else {
+            console.log('Card is still valid');
             setDateExpValid(true);
+            event.target.setCustomValidity('');
+            // Handle the valid card scenario here
+          }
+        } else {
+          event.target.setCustomValidity('Please submit a correct expiration date');
+          console.log('Invalid expiration date');
+          // Handle the invalid expiration date scenario here
         }
+      };
+      
+      
+      
+      
+      
+      
+      
+      
 
-        else {
-            event.target.setCustomValidity('Please submit a correct exp.Date')
-            console.log(" Exp date,is not valid")
-        }
 
-    }
+  
 
     const handleCVVChange = (event) => {
         const { value } = event.target;
@@ -323,17 +361,31 @@ const Payment = () => {
 
 
     }
-    return (
-        <div className="payment-container">
-            <button onClick={handleExitButtonClick} className='exit-button'>x</button>
-            <div className='div-for-web'>
-                <div className='small-info'>
-                    {isPaymentSuccessful ? (<div>
 
-                        <h2>Purchased:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <button /*onClick för att spela film*/ id='playButton'>Play movie</button> </div>) : (<div> <h2>Checkout:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <h2>{movie.title}</h2> </div>)}
+//If we want to use the background image.
+    const componentStyle = {
+        backgroundImage: `url(${imgUrlStart+movie.backdrop_path})`,
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 1.0)'
+        
+      };
+    return (
+
+
+        <div className="payment-container"  >
+         
+            <div className={isPaymentSuccessful ? 'div-for-web show' : 'div-for-web'}>
+                <div className='small-info'>
+
+                    
+                    {isPaymentSuccessful ? (<div className='loading_payment'>
+
+                        <img className='poster_purchased' src={imgUrlStart + movie.poster_path}></img> <br/><PaymentSucsessfull/> </div>) : (<div>  <h1 onClick={handleExitButtonClick} className='exit-button'>x</h1> <h2>Checkout:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <h2>{movie.title}</h2> </div>)}
+
                 </div>
                 {isPaymentSuccessful ? (
-                    <div></div>
+                    <></>
                 ) : (<div className='payment-form-wrapper'>
                     <input type="checkbox" value={"Visa"} name="cardType" checked={cardType === "Visa"} onChange={handleCheckboxChange}></input>
                     <img className={`creditcard ${cardType === "Visa" ? "selected" : ""}`} src={visa} alt="" />
@@ -356,7 +408,8 @@ const Payment = () => {
                                 Name on Card:
                                 <input type="text" onChange={handleNameChange} value={cardName} placeholder='Jamile Jonson'></input>
                             </div>
-                            <button type='submit' className='submitButton'> Buy 199kr</button>
+                            <button type='submit' className='submitButton'> Buy </button>
+                            <button onClick={handleExitButtonClick}>Cancel</button>
                         </form>)}
                 </div>
                 )}

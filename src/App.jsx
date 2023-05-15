@@ -60,33 +60,17 @@ function App() {
     navigate("/movieinfo/");
   };
 
-  const handleButtonClick = (movie) => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
 
-    //this is what sets the selectedmovie to redux
 
-    dispatch(selectActions.selectMovie(movie));
 
-    //if we have a user navigate to Payment:
-
-    if (user) {
-      navigate("/payment/");
-    }
-    else {
-      //set state to true
-      console.log("the state" + navigatePayment);
-      dispatch(fromPayment())
-      navigate("/login");
-    }
-    //if we dont have a user, navigate to login:
-  };
 
   return (
     <div className="App">
       <Navbar onSearchClick={handleSearchClick} />
       <Routes>
-        <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>}/>
-        <Route path="/movieinfo" element={<MovieInfo onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>}/>
+
+        <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick}/>}/>
+        <Route path="/movieinfo" element={<MovieInfo onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick}/>}/>
         <Route path='/login' element={<LoginPage/>} />
         <Route path='/userpage'element= {<UserPage/>} />
         <Route path= "/signup" element={<SignUpPage/>}/>
@@ -95,7 +79,7 @@ function App() {
         <Route path='/settings' element= {<Settings />} />
         <Route path='/searchresults' element= {<SearchResults 
         title={`Showing results for ${searchWord}`} searchResults={searchPageResults} 
-        handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>} />
+        handleMovieClick={handleMovieClick} />} />
       </Routes>
     </div>
   )

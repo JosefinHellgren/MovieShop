@@ -11,10 +11,21 @@
 .slick-prev,
 .slick-next {
     display: none !important;
-}
+
+} 
+
+.slider_container.big-movie-slider {
+    width: 90%;
+    margin: 0 auto;
+  }
+  
+
 
 .movie_slider h4 {
     color: lightgray;
     width: fit-content;
     font-size: 20px;
+   padding-top: 0%;
+    margin-top: 0%;
 }
+
