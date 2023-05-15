@@ -15,9 +15,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions as selectActions } from "./features/selectedmovie"
 import { fromPayment } from "./features/navigatePayment";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { actions as searchDropDownActions } from "./features/searchdropdown"
 
 
 function App() {
+
   const navigate = useNavigate();
 
 
@@ -44,21 +46,23 @@ function App() {
   }, []);
 
   const handleSearchClick = (newQuery, searchPageResults) => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
     setSearchWord(newQuery);
     setSearchPagResults(searchPageResults);
     navigate('/searchResults');
   }
 
   const handleMovieClick = (movie) => {
-    //setShowSearchDropdown(false);
+    dispatch(searchDropDownActions.hideSearchDropDown());
     //this is what sets the selectedmovie to redux
-    console.log('handleMovieclick körs')
+    console.log('handleMovieclick körs: ' + movie.id)
     dispatch(selectActions.selectMovie(movie));
     navigate("/movieinfo/");
   };
 
   const handleButtonClick = (movie) => {
-    //setShowSearchDropdown(false);
+    dispatch(searchDropDownActions.hideSearchDropDown());
+
     //this is what sets the selectedmovie to redux
 
     dispatch(selectActions.selectMovie(movie));
@@ -74,7 +78,6 @@ function App() {
       dispatch(fromPayment())
       navigate("/login");
     }
-
     //if we dont have a user, navigate to login:
   };
 
@@ -83,7 +86,7 @@ function App() {
       <Navbar onSearchClick={handleSearchClick} />
       <Routes>
         <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>}/>
-        <Route path="/movieinfo" element={<MovieInfo />}/>
+        <Route path="/movieinfo" element={<MovieInfo onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>}/>
         <Route path='/login' element={<LoginPage/>} />
         <Route path='/userpage'element= {<UserPage/>} />
         <Route path= "/signup" element={<SignUpPage/>}/>

@@ -2,18 +2,19 @@
 @import url('../../node_modules/slick-carousel/slick/slick-theme.css');
 
 .slick-slider {
-    height: 0 auto;
+    height: 12rem;
     width: 86vw;
     min-width: 200px;
     position: relative;
 }
 
-
-
 .slick-prev,
 .slick-next {
     display: none !important;
-} 
+}
 
-
-
+.movie_slider h4 {
+    color: lightgray;
+    width: fit-content;
+    font-size: 20px;
+}
