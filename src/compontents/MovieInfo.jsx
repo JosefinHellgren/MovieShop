@@ -231,6 +231,23 @@ function MovieInfo() {
     }
   };
 
+  window.addEventListener('beforeunload', function (event) {
+  
+    // Spara filmdata i localStorage
+    localStorage.setItem('movie', JSON.stringify(movie));
+  });
+
+  window.addEventListener('DOMContentLoaded', function () {
+    // Hämta filmdata från localStorage om det finns
+    var storedFilmData = localStorage.getItem('movie');
+  
+    if (storedFilmData) {
+      var filmData = JSON.parse(storedFilmData);
+      console.log(filmData);
+      // Använd filmdata för att återställa tillstånd i Redux eller annat lämpligt sätt
+    }
+  });
+
 
 
 

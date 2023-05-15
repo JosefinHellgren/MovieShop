@@ -9,8 +9,6 @@
   color: white;
 }
 
-
-
 .user-page .watchList-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -24,6 +22,21 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 1em;
   color: white;
+}
+
+.user-page .purchased-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.watchlist-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .user-page .purchased-item>section {

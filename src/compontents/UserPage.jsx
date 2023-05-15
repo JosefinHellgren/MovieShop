@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaPlay } from 'react-icons/fa';
 import { actions } from "../features/selectedmovie";
-
 import './userpage.css'
 
 
@@ -80,14 +79,14 @@ const UserPage = () => {
           alt={movie.title}
           className='purchased-img'
         />
-         <div className="play-icon">
-      <FaPlay size={40} />
-    </div>
+        <div className="play-icon">
+          <FaPlay size={40} />
+        </div>
       </section>
       <div className="more-info-container">
-          <button className="more-info-button"
+        <button className="more-info-button"
           onClick={() => handlePurchasedMovieClick(movie)}>More Info</button>
-        </div>
+      </div>
     </div>
   ));
 
@@ -106,15 +105,15 @@ const UserPage = () => {
   return (
     <div className="user-page">
       <h3><br />My movies</h3>
-      <section className="purchased-container">
+      <section className={purchasedIsEmpty ? "" : "purchased-container" }>
         {renderPurchasedMovies}
-        <p>{purchasedIsEmpty ? "You haven't bought any movies yet" : ""}</p>
+       
+          <p>{purchasedIsEmpty ? "You haven't bought any movies yet" : ""}</p>
       </section>
       <h3>My watchlist</h3>
-      <section className="watchList-container">
+      <section className={watchListIsEmpty ? "" : "watchList-container"}>
       {renderWatchlistMovies}
-      <p>{watchListIsEmpty ? "You haven't added any movies to your watchlist yet" : ""}</p>
-        
+        <p>{watchListIsEmpty ? "You haven't added any movies to your watchlist yet" : ""}</p>
       </section>
     </div>
   )

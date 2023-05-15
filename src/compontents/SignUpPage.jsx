@@ -7,7 +7,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-const SignUpPage = () => {
+const SignUpPage = ({onCreatingAccountClick}) => {
 
     const auth = getAuth();
     const db = firebase.firestore();
@@ -80,11 +80,8 @@ const SignUpPage = () => {
 
         const isEmpty = /^\s*$/.test(email);
         if (isEmpty) {
-            console.log(' tom')
             return false;
-        } else {
-            console.log('inte tom')
-        }
+        } 
 
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const domain = email.substring(email.lastIndexOf("@") + 1);
@@ -110,13 +107,13 @@ const SignUpPage = () => {
 
 
         if (validUsername == STATUS_USERNAME.INVALID) {
-            console.log('status', STATUS_USERNAME)
             alert('Username must not contain spaces');
         } else if (validUsername == STATUS_USERNAME.EXISTS) {
             alert('The username is already taken, please enter a new username');
         } else if (password != repeatPassword) {
             alert('The passwords you entered are not identical. Please try again');
         } else {
+            onCreatingAccountClick('creating');
             createAccount(email, password);
         }
     }
@@ -125,7 +122,7 @@ const SignUpPage = () => {
         const userName = document.getElementById('username-input').value;
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredentail) => {
-                console.log(userCredentail.user.email, 'lyckats logga in!')
+                console.log(userCredentail.user.uid, 'lyckats skapa konto!')
                 saveDataToFirestore(userName, email);
             })
             .catch((error) => {
@@ -135,7 +132,6 @@ const SignUpPage = () => {
     }
 
     const saveDataToFirestore = (username, email) => {
-
         const formattedUsername = username.charAt(0).toUpperCase() + username.slice(1);
         const userUID = auth.currentUser.uid;
 
@@ -145,6 +141,7 @@ const SignUpPage = () => {
             background: 'black'
         })
             .then(() => {
+                onCreatingAccountClick('success')
                 console.log("Document successfully written!");
                 navigate(-2);
             })

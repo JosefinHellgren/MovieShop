@@ -16,7 +16,7 @@ import { FiSettings } from "react-icons/fi";
 import {AiOutlinePlayCircle} from 'react-icons/ai'
 
 
-const Navbar = ({ onSearchClick }) => {
+const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   const pinkGradient = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
   const blackGradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%';
   const TurkqioseGradient = 'linear-gradient(to bottom, #06acb8 0%, #06acb8 80%, rgba(0, 0, 0, 0) 100%)';
@@ -33,27 +33,55 @@ const Navbar = ({ onSearchClick }) => {
 
 
   useEffect(() => {
-    
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setSignedIn(true);
         setUserUID(user.uid);
+        console.log('currentuser inloggad')
       } else {
         setSignedIn(false);
         setUserUID(null);
+        console.log('inte inloggad')
       }
     });
   }, [])
 
-
   useEffect(() => {
-    if (userUID) {
+    
+   if (createAccount === 'success') {
+      console.log('userUID,', userUID)
       const docRef = db.collection('users').doc(userUID);
       unsubscribe = docRef.onSnapshot((doc) => {
         if (doc.exists) {
+          console.log('snapshot körs, datan finns')
           const data = doc.data();
           changeBackground(data.background);
+          if (createAccount != 'normal') {
+            handleAccountStatus('normal');
+          }
         } 
+     });
+    } 
+    return () => {
+      if (!signedIn) {
+       unsubscribe(); 
+      }
+    };
+  }, [createAccount])
+
+
+  useEffect(() => {
+    if (userUID && createAccount === 'normal') {
+      console.log('userUID,', userUID)
+      const docRef = db.collection('users').doc(userUID);
+      unsubscribe = docRef.onSnapshot((doc) => {
+        if (doc.exists) {
+          console.log('snapshot körs, datan finns')
+          const data = doc.data();
+          changeBackground(data.background);
+        } else {
+          console.log('snapshot körs, datan finns inte')
+        }
       });
     }
     return () => {
@@ -64,6 +92,7 @@ const Navbar = ({ onSearchClick }) => {
   const changeBackground = (background) => {
     console.log('change background körs')
     if (background === 'black') {
+      console.log('change background to black körs')
       document.body.style.backgroundColor = "black";
       document.querySelector('#root').style.backgroundColor = 'black';
       dropdownUl.style.background = 'black';
@@ -97,7 +126,6 @@ const Navbar = ({ onSearchClick }) => {
     if (newQuery !== '') {
       const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${newQuery}`);
       const data = await response.json();
-      console.log(data.results);
       setSearchResults(data.results);
       setShowSearchDropdown(true);
     } else {
@@ -113,7 +141,6 @@ const Navbar = ({ onSearchClick }) => {
   const handleMovieClick = (movie) => {
     setShowSearchDropdown(false);
     //this is what sets the selectedmovie to redux
-    console.log('handleMovieclick körs')
     dispatch(selectActions.selectMovie(movie));
     
     navigate("/movieinfo/");
@@ -171,13 +198,12 @@ const Navbar = ({ onSearchClick }) => {
   const renderButton = (isMobile, signedIn) => {
     if (isMobile) {
       if (signedIn) {
-        console.log('mobil läge, signed in körs')
         return (
           <AiOutlinePlayCircle 
-          className="playbtn-mobile"/>
+          className="playbtn-mobile"
+          onClick={handlePlayButtonPressed}/>
         );
       } else {
-        console.log('mobil läge, signed out körs')
         return (
           <HiOutlineUserCircle
             className="user_icon"
@@ -187,7 +213,6 @@ const Navbar = ({ onSearchClick }) => {
       }
     } else {
       if (signedIn) {
-        console.log('dator läge, signed in körs')
         return (
           <div className="play-button-div" onClick={handlePlayButtonPressed}>
           <AiOutlinePlayCircle 
@@ -197,7 +222,6 @@ const Navbar = ({ onSearchClick }) => {
           
         );
       } else {
-        console.log('dator läge, signed out körs');
         return(
         
         <div className="user-icon-div" onClick={handleUserCircleClick}>
@@ -274,6 +298,11 @@ const Navbar = ({ onSearchClick }) => {
           </details>
         </section>
         {renderButton(isMobile, signedIn)}
+      </section>
+      <section>
+        <div className={`search_dropdown ${showSearchDropdown ? "" : "hide"}`}>
+          <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
+        </div>
       </section>
     </nav>
 
