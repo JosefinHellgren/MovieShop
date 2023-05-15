@@ -77,9 +77,7 @@ const MovieSlider = ({ title, category, handleButtonClick, handleMovieClick, onC
           let json = await response.json();
           let movies = json.results;
       
-          // Check if there are more pages of results
           if (3 > page) {
-            // If so, fetch the next page and add the results to the existing array of movies
             let nextPageMovies = await fetchMovies(movie_id, genre_id, category, dispatch, similar, page + 1);
             movies = movies.concat(nextPageMovies);
           }

@@ -93,7 +93,6 @@ const Navbar = ({onSearchClick}) => {
     if (newQuery !== '') {
       const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${newQuery}`);
       const data = await response.json();
-      console.log(data.results);
       setSearchResults(data.results);
       dispatch(searchDropDownActions.showSearchDropDown());
     } else {

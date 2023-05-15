@@ -35,10 +35,7 @@
     font-size: 10px;
     background-color: lightgray; 
     position: absolute;
-    top: 32vh;
-   
-
-    
+    top: 32vh; 
 }
 
 @media screen and (max-width: 767px) {

@@ -11,8 +11,6 @@ const MainPage = ({ onCategoryClick, handleButtonClick, handleMovieClick }) => {
 
   const apiKey = "305f99214975faee28a0f129881c6ec9";
 
-  let navigate = useNavigate();
-
   //this line of code and the import of useDispatch is
   // needed to save and clear selectedmovie to redux
   let dispatch = useDispatch();
