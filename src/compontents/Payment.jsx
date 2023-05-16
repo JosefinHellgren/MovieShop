@@ -134,7 +134,9 @@ const Payment = () => {
 
     //CILIA REDUX SELECTEDMOVIE
     //how to get the selectedmovie from redux, must also import useSelector from react-redux
-    const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
+    //const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
+    const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
+    const selectedMovie = JSON.parse(lastSelectedMovie);
     // use the selectedMovie like this
     console.log("payment: " + selectedMovie.title);
 
@@ -162,8 +164,10 @@ const Payment = () => {
         //cus we should allready had turn the state to false again. 
         if (navigatePayment === true) {
             navigate("/")
+            console.log('to main')
         } else {
             navigate(-1)
+            console.log('navigate -1')
         }
     }
 

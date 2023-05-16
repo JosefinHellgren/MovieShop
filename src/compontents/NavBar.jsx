@@ -7,7 +7,6 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { HiOutlineUserCircle } from "react-icons/hi";
-import { actions as selectActions } from "../features/selectedmovie"
 import { ImSearch } from "react-icons/im"
 import { useNavigate } from "react-router-dom";
 import SearchDropDown from "./SearchDropDown";
@@ -71,6 +70,7 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
 
 
   useEffect(() => {
+    let unsubscribe = () => {}; 
     if (userUID && createAccount === 'normal') {
       console.log('userUID,', userUID)
       const docRef = db.collection('users').doc(userUID);
@@ -84,7 +84,9 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
         }
       });
     }
+  
     return () => {
+      console.log('unsubscripe körs')
       unsubscribe();
     };
   }, [userUID]);
@@ -141,7 +143,7 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   const handleMovieClick = (movie) => {
     setShowSearchDropdown(false);
     //this is what sets the selectedmovie to redux
-    dispatch(selectActions.selectMovie(movie));
+    localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
     
     navigate("/movieinfo/");
   };

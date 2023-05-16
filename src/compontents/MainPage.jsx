@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import MovieSlider from "./MovieSlider";
 import "./mainpage.css";
 import { useDispatch } from "react-redux";
-import { actions as selectActions } from "../features/selectedmovie"
+//import { actions as selectActions } from "../features/selectedmovie"
 import { useEffect, useState } from "react";
 
 
@@ -27,7 +27,7 @@ const MainPage = ({ onCategoryClick, handleButtonClick, handleMovieClick }) => {
   // meaning when the user clicks the "back-button"
   useEffect(() => {
     if (location.pathname !== "/movieinfo/" || location.pathname !== "/payment/") {
-      dispatch(selectActions.clearMovie());
+      
     }
   }, [location.pathname, dispatch]);
 

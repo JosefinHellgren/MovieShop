@@ -13,12 +13,17 @@ import 'firebase/compat/firestore';
 
 
 function MovieInfo() {
+  const [documentID, setDocumentID] = useState('');
+  const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
+  
+  const selectedMovie = JSON.parse(lastSelectedMovie);
+  
  
   //CILIA REDUX SELECTEDMOVIE
   //how to get the selectedmovie from redux, must also import useSelector from react-redux
-  const selectedMovie = useSelector(
-    (state) => state.selectedMovie.selectedMovie
-  );
+  // const selectedMovie = useSelector(
+  //   (state) => state.selectedMovie.selectedMovie
+  // );
   // use the selectedMovie like this
   //console.log("movieinfo: " + selectedMovie.title);
 
@@ -54,6 +59,7 @@ function MovieInfo() {
   let dispatch = useDispatch();
   let navigate = useNavigate();
   let documentId = '';
+  
 
   const user = auth.currentUser;
 
@@ -64,28 +70,42 @@ function MovieInfo() {
 
 
   const checkMovieWatchList = () => {
+    
     if (user) {
-      db.collection('users').doc(user.uid).collection('watchlist')
+       db.collection('users')
+        .doc(user.uid)
+        .collection('watchlist')
         .where('id', '==', selectedMovie.id)
         .onSnapshot((querySnapshot) => {
           if (!querySnapshot.empty) {
             const doc = querySnapshot.docs[0];
             documentId = doc.id;
+            setDocumentID(documentId);
+            
             setWatchList(WATCHLIST_STATUS.EXISTS);
           } else {
             setWatchList(WATCHLIST_STATUS.EMPTY);
-            documentId = '';
+            setDocumentID('');
           }
         });
     }
   };
+  
 
 
-  if (user) {
-    checkMovieWatchList();
-  } else {
-    console.log('user null')
-  }
+  useEffect(() => {
+    let unsubscribe;
+
+    if (user) {
+      unsubscribe = checkMovieWatchList();
+    } 
+  
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [user]);
 
   useEffect(() => {
     // fetch movie genres from API
@@ -121,6 +141,8 @@ function MovieInfo() {
       if (user) {
         console.log('user hämtats')
         setCurrentUser(user);
+      } else {
+        setCurrentUser(null);
       }
     });
   }, [])
@@ -130,6 +152,7 @@ function MovieInfo() {
     console.log('before async')
     async function fetchData() {
       if (currentUser != null) {
+        console.log('aysync funktion user sant')
         console.log("user: " ,currentUser)
         const purchasedRef = db.collection('users').doc(currentUser.uid).collection('purchased');
         const querySnapshot = await purchasedRef.get();
@@ -165,11 +188,13 @@ function MovieInfo() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         navigate('/payment/');
+      } else {
+        dispatch(fromPayment())
+        console.log(navigatePayment)
+        navigate("/login");
       }
     })
-    dispatch(fromPayment())
-    console.log(navigatePayment)
-    navigate("/login");
+    
   }
 
   const handleWatchlistClick = () => {
@@ -184,7 +209,7 @@ function MovieInfo() {
             console.error("error saving: ", error);
           });
       } else if (watchList === WATCHLIST_STATUS.EXISTS) {
-        db.collection("users").doc(user.uid).collection('watchlist').doc(documentId).delete()
+        db.collection("users").doc(user.uid).collection('watchlist').doc(documentID).delete()
           .then(() => {
             console.log("Document successfully deleted!");
           }).catch((error) => {
@@ -231,27 +256,6 @@ function MovieInfo() {
     }
   };
 
-  window.addEventListener('beforeunload', function (event) {
-  
-    // Spara filmdata i localStorage
-    localStorage.setItem('movie', JSON.stringify(movie));
-  });
-
-  window.addEventListener('DOMContentLoaded', function () {
-    // Hämta filmdata från localStorage om det finns
-    var storedFilmData = localStorage.getItem('movie');
-  
-    if (storedFilmData) {
-      var filmData = JSON.parse(storedFilmData);
-      console.log(filmData);
-      // Använd filmdata för att återställa tillstånd i Redux eller annat lämpligt sätt
-    }
-  });
-
-
-
-
- 
   return (
     <div className="movieinfo">
       <h1>{selectedMovie.title}</h1>

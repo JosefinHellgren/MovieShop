@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaPlay } from 'react-icons/fa';
-import { actions } from "../features/selectedmovie";
 import './userpage.css'
 
 
@@ -66,7 +65,8 @@ const UserPage = () => {
   }, [currentUser]);
 
   const handlePurchasedMovieClick = (movie) => {
-    dispatch(actions.selectMovie(movie))
+    //dispatch(actions.selectMovie(movie))
+    localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
 
     navigate("/movieinfo/");
   }

@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import '../compontents/comments.css'
-import { useSelector } from "react-redux";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
@@ -18,8 +17,10 @@ const Comments = () => {
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState('');
 
-  const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
-  const movie = selectedMovie;
+  //const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
+  const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
+  const movie = JSON.parse(lastSelectedMovie);
+  //const movie = selectedMovie;
 
   useEffect(() => {
     const commentsRef = db.collection("comments");

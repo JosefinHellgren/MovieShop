@@ -11,7 +11,6 @@ import Navbar from './compontents/NavBar.jsx';
 import SearchResults from './compontents/SearchResults';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions as selectActions } from "./features/selectedmovie"
 import { fromPayment } from "./features/navigatePayment";
 
 
@@ -45,12 +44,13 @@ function App() {
   }
 
   const handleMovieClick = (movie) => {
-    dispatch(selectActions.selectMovie(movie));
+    localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
+   
     navigate("/movieinfo/");
   };
 
   const handleButtonClick = (movie) => {
-    dispatch(selectActions.selectMovie(movie));
+    localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
 
     if (user) {
       navigate("/payment/");
