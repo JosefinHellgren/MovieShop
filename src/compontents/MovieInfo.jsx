@@ -53,6 +53,8 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   }
 
 
+ 
+
   const checkMovieWatchList = () => {
     
     if (user) {
@@ -113,12 +115,15 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
         );
         if (trailer) {
           setTrailerKey(trailer.key);
+        }else{
+          setTrailerKey(null)
+          
         }
       })
       .catch((error) => console.log(error));
   }, [selectedMovie.id]);
 
-
+console.log('movieid:', selectedMovie)
   
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -177,7 +182,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
         navigate('/payment/');
       } else {
         dispatch(fromPayment())
-        console.log(navigatePayment)
+        console.log("NUUUUUU!!!",navigatePayment)
         navigate("/login");
       }
     })
@@ -245,6 +250,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     }
   };
 
+ 
   return (
     <div className="movieinfo">
       <div className="movieinfocontainer">
@@ -292,10 +298,10 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       </div>
 
       <div className="details-nav">
-        <button className="details-btn" onClick={handleShowOverview}>
+        <button className="details-btn" id="About-btn" onClick={handleShowOverview}>
           About
         </button>
-        <button className="details-btn" onClick={handleShowTrailer}>
+        <button className="details-btn" id="" onClick={handleShowTrailer}>
           Trailer
         </button>
         <button className="details-btn" onClick={handleShowComments}>

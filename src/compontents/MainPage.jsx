@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 
 
 
-
 const MainPage = ({ onCategoryClick,  handleMovieClick }) => {
 
   const apiKey = "305f99214975faee28a0f129881c6ec9";
@@ -19,11 +18,11 @@ const MainPage = ({ onCategoryClick,  handleMovieClick }) => {
   //this useeffect clears the movie from redux 
   //when the pathname no longer is movieinfo or payment
   // meaning when the user clicks the "back-button"
-  useEffect(() => {
-    if (location.pathname !== "/movieinfo/" || location.pathname !== "/payment/") {
-      
-    }
-  }, [location.pathname, dispatch]);
+  // useEffect(() => {
+  //   if (location.pathname !== "/movieinfo/" || location.pathname !== "/payment/") {
+  //     dispatch(selectActions.clearMovie());
+  //   }
+  // }, [location.pathname, dispatch]);
 
   return (
     <div className="mainpage_container">

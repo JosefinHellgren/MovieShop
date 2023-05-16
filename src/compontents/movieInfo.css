@@ -132,6 +132,11 @@
     margin-top: 40px;
 
   }
+
+  .button.active{
+    font-weight: bold;
+  }
+  
  
 
  
