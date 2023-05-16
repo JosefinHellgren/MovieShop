@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import './movieInfo.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp, faCartPlus, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
-import { Container } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import Comments from "./Comments";
 import { useNavigate } from "react-router-dom";
@@ -31,6 +30,7 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
   //const [playing, setPlaying] = useState(false);
   const videoRef = useRef(null);
   
+
   const [genres, setGenres] = useState([]);
   const rating = selectedMovie.vote_average;
   const [trailerKey, setTrailerKey] = useState(null);
@@ -238,22 +238,31 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
  
   return (
     <div className="movieinfo">
+      <div className="movieinfocontainer">
       <h1>{selectedMovie.title}</h1>
+     
+     
+      
       <div className="poster-container">
-
+        
+       
         <img className = 'poster-img' src={imgUrlStart + selectedMovie.poster_path} alt={selectedMovie.title} />
         <div className="movie-details">
-          <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
-          <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
-          <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>
-          <p><strong>Rating:</strong> {rating}</p>
-          <div className="details-nav">
-            <button className="ratebtn"><FontAwesomeIcon icon={faThumbsUp} /></button>
-            <button className="ratebtn"><FontAwesomeIcon icon={faThumbsDown} /></button>
+          <div className="movieinfobackdrop">
+            <img className = 'backdrop-img' src={imgUrlStart + selectedMovie.backdrop_path}  />
           </div>
+    
+            <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
+            <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
+            <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>
+            <p><strong>Rating:</strong> {rating}</p>
+       
+          
 
 
+          
         </div>
+      </div>
       </div>
 
       <div className="movieinfobuybtns">
@@ -263,10 +272,14 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
         {isPurchased ? (
           <button onClick={handlePlayButtonClick} className="movieinfobtn">Play</button>
             ) : (
-          <button  onClick={handleBuy} className="movieinfobtn">Buy</button>
+              <>
+              <button  onClick={handleBuy} className="movieinfobtn"><FontAwesomeIcon icon={faCartPlus} /> Buy</button>
+              <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
+              </>
+          
             )}
 
-        <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
+       
       </div>
 
       <div className="details-nav">
@@ -290,7 +303,8 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
       )}
 
       {showTrailer && (
-        <iframe
+        <div className="traileriframe">
+        <iframe className="trailer" 
           ref={videoRef}
           src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
           title="YouTube video player"
@@ -299,6 +313,7 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
           allowFullScreen={true}
           allow="autoplay; encrypted-media"
         ></iframe>
+        </div>
       )}
 
       {showComments && (
