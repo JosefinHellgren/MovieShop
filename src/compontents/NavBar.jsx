@@ -316,11 +316,7 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
           <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
         </div>
       </section>
-      <section>
-        <div className={`search_dropdown ${showSearchDropdown ? "" : "hide"}`}>
-          <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
-        </div>
-      </section>
+      
     </nav>
 
   );

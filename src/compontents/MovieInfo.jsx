@@ -15,6 +15,9 @@ import 'firebase/compat/firestore';
 
 
 function MovieInfo({ onCategoryClick, handleMovieClick }) {
+  const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
+  
+  const selectedMovie = JSON.parse(lastSelectedMovie);
 
   const [isPurchased, setIsPurchased] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -39,9 +42,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   let dispatch = useDispatch();
   let navigate = useNavigate();
   const [documentID, setDocumentID] = useState('');
-  const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
   
-  const selectedMovie = JSON.parse(lastSelectedMovie);
   
 
   const user = auth.currentUser;
@@ -62,7 +63,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
         .onSnapshot((querySnapshot) => {
           if (!querySnapshot.empty) {
             const doc = querySnapshot.docs[0];
-            documentId = doc.id;
+            const documentId = doc.id;
             setDocumentID(documentId);
             
             setWatchList(WATCHLIST_STATUS.EXISTS);
