@@ -173,6 +173,19 @@ const Payment = () => {
     const movie = selectedMovie;
     let navigate = useNavigate();
 
+    useEffect(() => {
+        const user = auth.currentUser;
+
+        db.collection('users').doc(user.uid).collection('purchased').where('id', "==", movie.id).get()
+            .then((doc) => {
+                if (!doc.empty) {
+                    navigate('/movieinfo')
+                } else {
+                    console.log('användaren har ej filmen')
+                }
+            })
+    }, [])
+
     const handleExitButtonClick = () => {
         //should we realy use the state to conditional navigate here?
         //cus we should allready had turn the state to false again. 

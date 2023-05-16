@@ -10,20 +10,6 @@ import { useEffect, useState } from "react";
 
 const MainPage = ({ onCategoryClick,  handleMovieClick }) => {
 
-  const apiKey = "305f99214975faee28a0f129881c6ec9";
-
-  //this line of code and the import of useDispatch is
-  // needed to save and clear selectedmovie to redux
-  let dispatch = useDispatch();
-
-  //this useeffect clears the movie from redux 
-  //when the pathname no longer is movieinfo or payment
-  // meaning when the user clicks the "back-button"
-  useEffect(() => {
-    if (location.pathname !== "/movieinfo/" || location.pathname !== "/payment/") {
-      
-    }
-  }, [location.pathname, dispatch]);
 
   return (
     <div className="mainpage_container">

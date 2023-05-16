@@ -169,12 +169,13 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
 
   const handleBuy = () => {
     
-    dispatch(searchDropDownActions.hideSearchDropDown());
+    // dispatch(searchDropDownActions.hideSearchDropDown());
 
     //if we have a user, then we want to navigate to payment and set the navigatetoPayment statet till true.
     onAuthStateChanged(auth, (user) => {
       if (user) {
         navigate('/payment/');
+        console.log('navigering till payment')
       } else {
         dispatch(fromPayment())
         console.log(navigatePayment)
@@ -205,6 +206,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       }
     } else {
       navigate('/login');
+      console.log('navigering till login handle watch')
     }
   }
 
