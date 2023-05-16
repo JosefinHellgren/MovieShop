@@ -3,14 +3,10 @@
     position: relative;
   }
 
-.mainpage_container h4 {
-    color: lightgray;
-    width: fit-content;
-    font-size: 20px;
-}
 
-.mainpage_container .popular_movies_section {
-    margin-top: 100px;
+
+.mainpage_container .big_Movie_poster_section {
+    margin-top: 10px;
 }
 
 .mainpage_container .hide {

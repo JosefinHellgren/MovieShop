@@ -8,6 +8,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit'
 import { rootReducer } from './features/rootreducer.js';
 import { Provider } from 'react-redux';
+import PaymentSucsessfull from './compontents/PaymentSucsessfull';
 
 
 
