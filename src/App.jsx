@@ -7,12 +7,10 @@ import LoginPage from './compontents/LoginPage';
 import Payment from './compontents/Payment';
 import UserPage from './compontents/UserPage';
 import Playmovie from './compontents/Playmovie';
-import Settings from './compontents/Settings';
 import Navbar from './compontents/NavBar.jsx';
 import SearchResults from './compontents/SearchResults';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions as selectActions } from "./features/selectedmovie"
 import { fromPayment } from "./features/navigatePayment";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { actions as searchDropDownActions } from "./features/searchdropdown"
@@ -28,23 +26,14 @@ function App() {
   const [searchPageResults, setSearchPagResults] = useState([]);
   const [searchWord, setSearchWord] = useState('');
 
-  const auth = getAuth();
+  const CREATEACCOUNT_STATUS = {
+    NORMAL : 'normal',
+    CREATING: 'creating',
+    SUCCESS: 'success'
+  }
 
-  const [user, setUser] = useState(false);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(true);
-        console.log('we have a logged in user')
-        //auth.signOut();
-      } else {
-        setUser(false);
-        console.log('No logged in user')
-      }
-    });
-  }, []);
-
+  const [createAccount, setCreateAccount] = useState(CREATEACCOUNT_STATUS.NORMAL);
+ 
   const handleSearchClick = (newQuery, searchPageResults) => {
     dispatch(searchDropDownActions.hideSearchDropDown());
     setSearchWord(newQuery);
@@ -52,31 +41,28 @@ function App() {
     navigate('/searchResults');
   }
 
+  const handleCreateAccountStatus = (NEW_STATUS) => {
+    console.log('handleCreateAccountStatus körs, datan:', NEW_STATUS);
+    setCreateAccount(NEW_STATUS);
+  }
+
   const handleMovieClick = (movie) => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
-    //this is what sets the selectedmovie to redux
-    console.log('handleMovieclick körs: ' + movie.id)
-    dispatch(selectActions.selectMovie(movie));
+    localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
     navigate("/movieinfo/");
   };
 
-
-
-
-
   return (
     <div className="App">
-      <Navbar onSearchClick={handleSearchClick} />
+      <Navbar onSearchClick={handleSearchClick} handleAccountStatus = {handleCreateAccountStatus} createAccount = {createAccount}/>
       <Routes>
 
         <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick}/>}/>
         <Route path="/movieinfo" element={<MovieInfo onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick}/>}/>
         <Route path='/login' element={<LoginPage/>} />
         <Route path='/userpage'element= {<UserPage/>} />
-        <Route path= "/signup" element={<SignUpPage/>}/>
+        <Route path= "/signup" element={<SignUpPage onCreatingAccountClick = {handleCreateAccountStatus}/>}/>
         <Route path="/video" element={<Playmovie/>}/>
         <Route path="/payment" element={<Payment />}/>
-        <Route path='/settings' element= {<Settings />} />
         <Route path='/searchresults' element= {<SearchResults 
         title={`Showing results for ${searchWord}`} searchResults={searchPageResults} 
         handleMovieClick={handleMovieClick} />} />

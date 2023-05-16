@@ -13,15 +13,8 @@ import MovieSlider from "./MovieSlider";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
-function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
-  
-  //CILIA REDUX SELECTEDMOVIE
-  //how to get the selectedmovie from redux, must also import useSelector from react-redux
-  const selectedMovie = useSelector(
-    (state) => state.selectedMovie.selectedMovie
-  );
-  // use the selectedMovie like this
-  //console.log("movieinfo: " + selectedMovie.title);
+
+function MovieInfo({ onCategoryClick, handleMovieClick }) {
 
   const [isPurchased, setIsPurchased] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -45,7 +38,11 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
   const db = firebase.firestore();
   let dispatch = useDispatch();
   let navigate = useNavigate();
-  let documentId = '';
+  const [documentID, setDocumentID] = useState('');
+  const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
+  
+  const selectedMovie = JSON.parse(lastSelectedMovie);
+  
 
   const user = auth.currentUser;
 
@@ -56,28 +53,42 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
 
 
   const checkMovieWatchList = () => {
+    
     if (user) {
-      db.collection('users').doc(user.uid).collection('watchlist')
+       db.collection('users')
+        .doc(user.uid)
+        .collection('watchlist')
         .where('id', '==', selectedMovie.id)
         .onSnapshot((querySnapshot) => {
           if (!querySnapshot.empty) {
             const doc = querySnapshot.docs[0];
             documentId = doc.id;
+            setDocumentID(documentId);
+            
             setWatchList(WATCHLIST_STATUS.EXISTS);
           } else {
             setWatchList(WATCHLIST_STATUS.EMPTY);
-            documentId = '';
+            setDocumentID('');
           }
         });
     }
   };
+  
 
 
-  if (user) {
-    checkMovieWatchList();
-  } else {
-    console.log('user null')
-  }
+  useEffect(() => {
+    let unsubscribe;
+
+    if (user) {
+      unsubscribe = checkMovieWatchList();
+    } 
+  
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [user]);
 
   useEffect(() => {
     // fetch movie genres from API
@@ -113,6 +124,8 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
       if (user) {
         console.log('user hämtats')
         setCurrentUser(user);
+      } else {
+        setCurrentUser(null);
       }
     });
   }, [])
@@ -122,6 +135,7 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
     console.log('before async')
     async function fetchData() {
       if (currentUser != null) {
+        console.log('aysync funktion user sant')
         console.log("user: " ,currentUser)
         const purchasedRef = db.collection('users').doc(currentUser.uid).collection('purchased');
         const querySnapshot = await purchasedRef.get();
@@ -160,11 +174,13 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         navigate('/payment/');
+      } else {
+        dispatch(fromPayment())
+        console.log(navigatePayment)
+        navigate("/login");
       }
     })
-    dispatch(fromPayment())
-    console.log(navigatePayment)
-    navigate("/login");
+    
   }
 
   const handleWatchlistClick = () => {
@@ -179,7 +195,7 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
             console.error("error saving: ", error);
           });
       } else if (watchList === WATCHLIST_STATUS.EXISTS) {
-        db.collection("users").doc(user.uid).collection('watchlist').doc(documentId).delete()
+        db.collection("users").doc(user.uid).collection('watchlist').doc(documentID).delete()
           .then(() => {
             console.log("Document successfully deleted!");
           }).catch((error) => {
@@ -213,10 +229,6 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
   };
 
 
-
-
- 
-
   const handlePlayButtonClick = () => {
     console.log('Play button clicked');
     if (currentUser) {
@@ -232,10 +244,6 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
     }
   };
 
-
-
-
- 
   return (
     <div className="movieinfo">
       <div className="movieinfocontainer">
@@ -322,8 +330,8 @@ function MovieInfo({ onCategoryClick, handleButtonClick, handleMovieClick }) {
         </div>
       )}
       <section>
-      <MovieSlider onClick={window.scrollTo(0, 0)} similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
-      <MovieSlider onClick={window.scrollTo(0, 0)} similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleButtonClick={handleButtonClick} handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      <MovieSlider onClick={window.scrollTo(0, 0)} similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      <MovieSlider onClick={window.scrollTo(0, 0)} similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
       </section>
     </div>
   );

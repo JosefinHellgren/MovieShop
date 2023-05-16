@@ -6,30 +6,6 @@
   left: 0;
   align-items: center;
   text-align: center;
-}
-
-.user-page .navbar_section {
-  display: flex;
-  justify-self: space-between;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 6px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%);
-  z-index: 1;
-  height: 60px;
-}
-
-.user-page .navbar_section .mov-wheel {
-  width: 75px;
-  height: 75px;
-  -webkit-clip-path: circle(40px at center);
-  clip-path: circle(40px at center);
-}
-
-.user-page>h3 {
   color: white;
 }
 
@@ -48,9 +24,37 @@
   color: white;
 }
 
+.user-page .purchased-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.watchlist-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .user-page .purchased-item>section {
   position: relative;
   width: 35vw;
+}
+
+.user-page .play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  display: none;
+}
+
+.user-page .purchased-item > section:hover .play-icon {
+  display: block;
 }
 
 .user-page .purchased-item > section,
@@ -91,7 +95,7 @@
 .user-page .more-info-button {
   background-color: transparent;
   border: none;
-  color: #FFF;
+  color: #ece9e9;
   text-decoration: underline;
   cursor: pointer;
   font-size: 14px;
@@ -99,12 +103,12 @@
 }
 
 .user-page .more-info-button:hover {
-  color: #fff6f6;
+  color: #ffffff;
 }
 
 .user-page .purchased-item > section:hover,
 .user-page .watchlist-item:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .user-page .watchlist-img {
