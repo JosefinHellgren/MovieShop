@@ -3,9 +3,11 @@
     align-items: center;
     display: flex;
     flex-direction: column;
+    width: 100%;
     height: fit-content;
     position: relative;
     overflow: hidden;
+    overflow-x: scroll;
     transition: transform 0.3s;
    
     

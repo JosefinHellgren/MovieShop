@@ -1,11 +1,15 @@
 @import url('../../node_modules/slick-carousel/slick/slick.css');
 @import url('../../node_modules/slick-carousel/slick/slick-theme.css');
 
+
+
 .slick-slider {
     height: 12rem;
     width: 86vw;
     min-width: 200px;
     position: relative;
+    
+   
 }
 
 .slick-prev,
@@ -19,6 +23,7 @@
     margin: 0 auto;
   }
   
+
 
 
 .movie_slider h4 {
