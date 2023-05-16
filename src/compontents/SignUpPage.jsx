@@ -126,7 +126,10 @@ const SignUpPage = ({onCreatingAccountClick}) => {
                 saveDataToFirestore(userName, email);
             })
             .catch((error) => {
-                console.log(error)
+                const errorCode = error.code
+                if (errorCode === 'auth/email-already-in-use') {
+                    alert('Email is already in use. Please enter a different email.');
+                }
                 return;
             })
     }
@@ -154,15 +157,6 @@ const SignUpPage = ({onCreatingAccountClick}) => {
         navigate(-1);
     }
 
-    const handleEnterPressed = (event) => {
-        if (event.key === 'Enter') {
-            const nextInput = event.target.nextElementSibling;
-            if (nextInput) {
-                nextInput.focus();
-            }
-        }
-    }
-
     const handleSubmit = (event) => {
         event.preventDefault()
         signUp();
@@ -182,9 +176,9 @@ const SignUpPage = ({onCreatingAccountClick}) => {
                         validUsername === STATUS_USERNAME.INVALID ? 'text-danger' : ''
 
                 }>{validUsername}</p>
-                <input type="text" id='username-input' placeholder="Username" onBlur={checkIfUsernameExists} onKeyUp={handleEnterPressed} required />
-                <input type="text" id='email-input' placeholder="Email" onKeyUp={handleEnterPressed} onChange={handleEmailChange} required />
-                <input type="password" id='password-input' placeholder="Password" onKeyUp={handleEnterPressed} onChange={handlePasswordChange} required />
+                <input type="text" id='username-input' placeholder="Username" onChange={checkIfUsernameExists} required />
+                <input type="text" id='email-input' placeholder="Email" onChange={handleEmailChange} required />
+                <input type="password" id='password-input' placeholder="Password" onChange={handlePasswordChange} required />
                 <input type="password" id='repeatpassword-input' placeholder="Repeat Password" required />
                 <section className='signup-button-container'>
                     <button type='submit' >Sign up</button>

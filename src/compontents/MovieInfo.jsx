@@ -175,9 +175,10 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         navigate('/payment/');
+        console.log('navigering till payment')
       } else {
         dispatch(fromPayment())
-        console.log(navigatePayment)
+        console.log('navigering till login')
         navigate("/login");
       }
     })
