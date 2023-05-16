@@ -9,7 +9,6 @@ import "./mainpage.css";
 
 const MainPage = ({ onCategoryClick,  handleMovieClick }) => {
 
-  
   return (
     <div className="mainpage_container">
      <section className="big_Movie_poster_section">
