@@ -8,42 +8,22 @@ import Comments from "./Comments";
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { fromPayment } from "../features/navigatePayment";
+import { actions as searchDropDownActions } from "../features/searchdropdown"
+import MovieSlider from "./MovieSlider";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 
-function MovieInfo() {
-  const [documentID, setDocumentID] = useState('');
-  const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
-  
-  const selectedMovie = JSON.parse(lastSelectedMovie);
-  
- 
-  //CILIA REDUX SELECTEDMOVIE
-  //how to get the selectedmovie from redux, must also import useSelector from react-redux
-  // const selectedMovie = useSelector(
-  //   (state) => state.selectedMovie.selectedMovie
-  // );
-  // use the selectedMovie like this
-  //console.log("movieinfo: " + selectedMovie.title);
-
+function MovieInfo({ onCategoryClick, handleMovieClick }) {
 
   const [isPurchased, setIsPurchased] = useState(false);
-
-  
-
   const [currentUser, setCurrentUser] = useState(null);
   const [purchasedMovies, setPurchasedMovies] = useState([]);
 
   //const [playing, setPlaying] = useState(false);
   const videoRef = useRef(null);
-
-  
- 
-
   
 
- 
   const [genres, setGenres] = useState([]);
   const rating = selectedMovie.vote_average;
   const [trailerKey, setTrailerKey] = useState(null);
@@ -58,7 +38,10 @@ function MovieInfo() {
   const db = firebase.firestore();
   let dispatch = useDispatch();
   let navigate = useNavigate();
-  let documentId = '';
+  const [documentID, setDocumentID] = useState('');
+  const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
+  
+  const selectedMovie = JSON.parse(lastSelectedMovie);
   
 
   const user = auth.currentUser;
@@ -182,7 +165,10 @@ function MovieInfo() {
 
 
 
+
   const handleBuy = () => {
+    
+    dispatch(searchDropDownActions.hideSearchDropDown());
 
     //if we have a user, then we want to navigate to payment and set the navigatetoPayment statet till true.
     onAuthStateChanged(auth, (user) => {
@@ -221,20 +207,22 @@ function MovieInfo() {
     }
   }
 
-
   const handleShowOverview = () => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(true);
     setShowTrailer(false);
     setShowComments(false);
   };
 
   const handleShowTrailer = () => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(false);
     setShowTrailer(true);
     setShowComments(false);
   };
 
   const handleShowComments = () => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(false);
     setShowTrailer(false);
     setShowComments(true);
@@ -258,22 +246,31 @@ function MovieInfo() {
 
   return (
     <div className="movieinfo">
+      <div className="movieinfocontainer">
       <h1>{selectedMovie.title}</h1>
+     
+     
+      
       <div className="poster-container">
-
+        
+       
         <img className = 'poster-img' src={imgUrlStart + selectedMovie.poster_path} alt={selectedMovie.title} />
         <div className="movie-details">
-          <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
-          <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
-          <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>
-          <p><strong>Rating:</strong> {rating}</p>
-          <div className="details-nav">
-            <button className="ratebtn"><FontAwesomeIcon icon={faThumbsUp} /></button>
-            <button className="ratebtn"><FontAwesomeIcon icon={faThumbsDown} /></button>
+          <div className="movieinfobackdrop">
+            <img className = 'backdrop-img' src={imgUrlStart + selectedMovie.backdrop_path}  />
           </div>
+    
+            <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
+            <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
+            <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>
+            <p><strong>Rating:</strong> {rating}</p>
+       
+          
 
 
+          
         </div>
+      </div>
       </div>
 
       <div className="movieinfobuybtns">
@@ -283,10 +280,14 @@ function MovieInfo() {
         {isPurchased ? (
           <button onClick={handlePlayButtonClick} className="movieinfobtn">Play</button>
             ) : (
-          <button  onClick={handleBuy} className="movieinfobtn">Buy</button>
+              <>
+              <button  onClick={handleBuy} className="movieinfobtn"><FontAwesomeIcon icon={faCartPlus} /> Buy</button>
+              <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
+              </>
+          
             )}
 
-        <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
+       
       </div>
 
       <div className="details-nav">
@@ -310,7 +311,8 @@ function MovieInfo() {
       )}
 
       {showTrailer && (
-        <iframe
+        <div className="traileriframe">
+        <iframe className="trailer" 
           ref={videoRef}
           src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
           title="YouTube video player"
@@ -319,6 +321,7 @@ function MovieInfo() {
           allowFullScreen={true}
           allow="autoplay; encrypted-media"
         ></iframe>
+        </div>
       )}
 
       {showComments && (
@@ -326,6 +329,10 @@ function MovieInfo() {
           <Comments />
         </div>
       )}
+      <section>
+      <MovieSlider onClick={window.scrollTo(0, 0)} similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      <MovieSlider onClick={window.scrollTo(0, 0)} similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      </section>
     </div>
   );
 

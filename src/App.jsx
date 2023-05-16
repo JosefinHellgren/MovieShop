@@ -12,10 +12,12 @@ import SearchResults from './compontents/SearchResults';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fromPayment } from "./features/navigatePayment";
-
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { actions as searchDropDownActions } from "./features/searchdropdown"
 
 
 function App() {
+
   const navigate = useNavigate();
 
 
@@ -33,6 +35,7 @@ function App() {
   const [createAccount, setCreateAccount] = useState(CREATEACCOUNT_STATUS.NORMAL);
  
   const handleSearchClick = (newQuery, searchPageResults) => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
     setSearchWord(newQuery);
     setSearchPagResults(searchPageResults);
     navigate('/searchResults');
@@ -45,27 +48,16 @@ function App() {
 
   const handleMovieClick = (movie) => {
     localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
-   
     navigate("/movieinfo/");
-  };
-
-  const handleButtonClick = (movie) => {
-    localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
-
-    if (user) {
-      navigate("/payment/");
-    } else {
-      dispatch(fromPayment())
-      navigate("/login");
-    }
   };
 
   return (
     <div className="App">
       <Navbar onSearchClick={handleSearchClick} handleAccountStatus = {handleCreateAccountStatus} createAccount = {createAccount}/>
       <Routes>
-        <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>}/>
-        <Route path="/movieinfo" element={<MovieInfo />}/>
+
+        <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick}/>}/>
+        <Route path="/movieinfo" element={<MovieInfo onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick}/>}/>
         <Route path='/login' element={<LoginPage/>} />
         <Route path='/userpage'element= {<UserPage/>} />
         <Route path= "/signup" element={<SignUpPage onCreatingAccountClick = {handleCreateAccountStatus}/>}/>
@@ -73,7 +65,7 @@ function App() {
         <Route path="/payment" element={<Payment />}/>
         <Route path='/searchresults' element= {<SearchResults 
         title={`Showing results for ${searchWord}`} searchResults={searchPageResults} 
-        handleMovieClick={handleMovieClick} handleButtonClick={handleButtonClick}/>} />
+        handleMovieClick={handleMovieClick} />} />
       </Routes>
     </div>
   )
