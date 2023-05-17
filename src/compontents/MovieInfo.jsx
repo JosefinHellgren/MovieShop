@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import './movieInfo.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -13,20 +12,15 @@ import MovieSlider from "./MovieSlider";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
-
 function MovieInfo({ onCategoryClick, handleMovieClick }) {
   const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
-  
   const selectedMovie = JSON.parse(lastSelectedMovie);
-
   const [isPurchased, setIsPurchased] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [purchasedMovies, setPurchasedMovies] = useState([]);
 
   //const [playing, setPlaying] = useState(false);
   const videoRef = useRef(null);
-  
-
   const [genres, setGenres] = useState([]);
   const rating = selectedMovie.vote_average;
   const [trailerKey, setTrailerKey] = useState(null);
@@ -34,7 +28,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   const [showTrailer, setShowTrailer] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [watchList, setWatchList] = useState('Add to watchlist');
-
   const imgUrlStart = "https://image.tmdb.org/t/p/original";
   const navigatePayment = useSelector((state) => state.navigatePayment.payment);
   const auth = getAuth();
@@ -42,9 +35,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   let dispatch = useDispatch();
   let navigate = useNavigate();
   const [documentID, setDocumentID] = useState('');
-  
-  
-
   const user = auth.currentUser;
 
   const WATCHLIST_STATUS = {
@@ -52,11 +42,10 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     EMPTY: 'Add to watchlist'
   }
 
-
   const checkMovieWatchList = () => {
-    
+
     if (user) {
-       db.collection('users')
+      db.collection('users')
         .doc(user.uid)
         .collection('watchlist')
         .where('id', '==', selectedMovie.id)
@@ -65,7 +54,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
             const doc = querySnapshot.docs[0];
             const documentId = doc.id;
             setDocumentID(documentId);
-            
             setWatchList(WATCHLIST_STATUS.EXISTS);
           } else {
             setWatchList(WATCHLIST_STATUS.EMPTY);
@@ -74,16 +62,14 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
         });
     }
   };
-  
-
 
   useEffect(() => {
     let unsubscribe;
 
     if (user) {
       unsubscribe = checkMovieWatchList();
-    } 
-  
+    }
+
     return () => {
       if (unsubscribe) {
         unsubscribe();
@@ -118,8 +104,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       .catch((error) => console.log(error));
   }, [selectedMovie.id]);
 
-
-  
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -131,13 +115,12 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     });
   }, [])
 
-
   useEffect(() => {
     console.log('before async')
     async function fetchData() {
       if (currentUser != null) {
         console.log('aysync funktion user sant')
-        console.log("user: " ,currentUser)
+        console.log("user: ", currentUser)
         const purchasedRef = db.collection('users').doc(currentUser.uid).collection('purchased');
         const querySnapshot = await purchasedRef.get();
         const purchasedMovies = querySnapshot.docs.map(doc => doc.data());
@@ -147,16 +130,9 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     fetchData();
   }, [currentUser]);
 
-
   useEffect(() => {
     setIsPurchased(!!purchasedMovies.find(movie => movie.id === selectedMovie.id));
   }, [purchasedMovies, selectedMovie.id]);
-
-
-
-
-
-
 
   // find genre names for each genre ID in the movie's genre_ids array
   const genreNames = selectedMovie.genre_ids.map(id => {
@@ -164,11 +140,8 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     return genre ? genre.name : "";
   });
 
-
-
-
   const handleBuy = () => {
-    
+
     dispatch(searchDropDownActions.hideSearchDropDown());
 
     //if we have a user, then we want to navigate to payment and set the navigatetoPayment statet till true.
@@ -181,7 +154,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
         navigate("/login");
       }
     })
-    
+
   }
 
   const handleWatchlistClick = () => {
@@ -229,7 +202,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     setShowComments(true);
   };
 
-
   const handlePlayButtonClick = () => {
     console.log('Play button clicked');
     if (currentUser) {
@@ -248,49 +220,31 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   return (
     <div className="movieinfo">
       <div className="movieinfocontainer">
-      <h1>{selectedMovie.title}</h1>
-     
-     
-      
-      <div className="poster-container">
-        
-       
-        <img className = 'poster-img' src={imgUrlStart + selectedMovie.poster_path} alt={selectedMovie.title} />
-        <div className="movie-details">
-          <div className="movieinfobackdrop">
-            <img className = 'backdrop-img' src={imgUrlStart + selectedMovie.backdrop_path}  />
-          </div>
-    
+        <h1>{selectedMovie.title}</h1>
+        <div className="poster-container">
+          <img className='poster-img' src={imgUrlStart + selectedMovie.poster_path} alt={selectedMovie.title} />
+          <div className="movie-details">
+            <div className="movieinfobackdrop">
+              <img className='backdrop-img' src={imgUrlStart + selectedMovie.backdrop_path} />
+            </div>
             <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
             <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
             <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>
             <p><strong>Rating:</strong> {rating}</p>
-       
-          
-
-
-          
+          </div>
         </div>
-      </div>
       </div>
 
       <div className="movieinfobuybtns">
-
-       
-        
         {isPurchased ? (
           <button onClick={handlePlayButtonClick} className="movieinfobtn">Play</button>
-            ) : (
-              <>
-              <button  onClick={handleBuy} className="movieinfobtn"><FontAwesomeIcon icon={faCartPlus} /> Buy</button>
-              <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
-              </>
-          
-            )}
-
-       
+        ) : (
+          <>
+            <button onClick={handleBuy} className="movieinfobtn"><FontAwesomeIcon icon={faCartPlus} /> Buy</button>
+            <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
+          </>
+        )}
       </div>
-
       <div className="details-nav">
         <button className="details-btn" onClick={handleShowOverview}>
           About
@@ -302,37 +256,32 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
           Comments
         </button>
       </div>
-
       {showOverview && (
-
         <div className="info-overview">
           <p className="overview"><strong>Overview</strong> <br></br> {selectedMovie.overview}</p>
-
         </div>
       )}
-
       {showTrailer && (
         <div className="traileriframe">
-        <iframe className="trailer" 
-          ref={videoRef}
-          src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
-          title="YouTube video player"
-          display="initial"
-          webkitallowfullscreen="true"
-          allowFullScreen={true}
-          allow="autoplay; encrypted-media"
-        ></iframe>
+          <iframe className="trailer"
+            ref={videoRef}
+            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
+            title="YouTube video player"
+            display="initial"
+            webkitallowfullscreen="true"
+            allowFullScreen={true}
+            allow="autoplay; encrypted-media"
+          ></iframe>
         </div>
       )}
-
       {showComments && (
         <div>
           <Comments />
         </div>
       )}
       <section>
-      <MovieSlider onClick={window.scrollTo(0, 0)} similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
-      <MovieSlider onClick={window.scrollTo(0, 0)} similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+        <MovieSlider onClick={window.scrollTo(0, 0)} similar={false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick} />
+        <MovieSlider onClick={window.scrollTo(0, 0)} similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick} />
       </section>
     </div>
   );

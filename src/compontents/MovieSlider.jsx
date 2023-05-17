@@ -38,12 +38,6 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
         onCategoryClick(title, content, category);
     }
 
-    /*  if (content !== null) {
-        if (content && content.length === 0) {
-            return <h4>No movies found for {title}</h4>;
-        }
-    }  */
-
     useEffect(() => {
         const updateSlidesToShow = () => {
             if (window.innerWidth <= 768 && title === "Big Movie" || window.innerWidth >= 768 && title === "Big Movie") {
@@ -68,20 +62,22 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
 
     return (
         <div className="movie_slider">
-
-            {title !== 'Big Movie' && (
-                <h4 onClick={handleCategoryClick}>{title} {'>'}</h4>
-            )}
+          {title !== 'Big Movie' && (
+            <h4 onClick={handleCategoryClick}>{title} {'>'}</h4>
+          )}
+          {content && content.length > 0 ? (
             <Slider key={moviesObject.status} className="slick-slider" slidesToShow={slidesToShow} slidesToScroll={1} >
-                {content &&
-                    content.map((movie, index) => (
-                        <div key={index} className={`slider_container ${title === 'Big Movie' ? 'big-movie-slider' : ''}`}>
-                            <MovieGridItem movie={movie} handleMovieClick={handleMovieClick} useBackDrop={title === "Big Movie"} />
-                        </div>
-                    ))}
+              {content.map((movie, index) => (
+                <div key={index} className={`slider_container ${title === 'Big Movie' ? 'big-movie-slider' : ''}`}>
+                  <MovieGridItem movie={movie} handleMovieClick={handleMovieClick} useBackDrop={title === "Big Movie"} />
+                </div>
+              ))}
             </Slider>
+          ) : (
+            <h5>Could not load movies</h5>
+          )}
         </div>
-    );
+      );
 
     async function fetchMovies(movie_id, genre_id, category, dispatch, similar, page = 1) {
         const apiKey = "305f99214975faee28a0f129881c6ec9";
