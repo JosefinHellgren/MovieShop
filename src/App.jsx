@@ -19,8 +19,6 @@ import { actions as searchDropDownActions } from "./features/searchdropdown"
 function App() {
 
   const navigate = useNavigate();
-
-
   const navigatePayment = useSelector((state) => state.navigatePayment.payment);
   const dispatch = useDispatch();
   const [searchPageResults, setSearchPagResults] = useState([]);
@@ -36,7 +34,6 @@ function App() {
   const [createAccount, setCreateAccount] = useState(CREATEACCOUNT_STATUS.NORMAL);
 
   const handleSearchClick = (newQuery, searchPageResults, category) => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     setCategory(category);
     setSearchWord(newQuery);
     setSearchPagResults(searchPageResults);
@@ -53,8 +50,12 @@ function App() {
     navigate("/movieinfo/");
   };
 
+  const handleCloseSearchbar = () => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
+  }
+
   return (
-    <div className="App">
+    <div className="App" onClick={handleCloseSearchbar}>
       <Navbar onSearchClick={handleSearchClick} handleAccountStatus={handleCreateAccountStatus} createAccount={createAccount} />
       <Routes>
         <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} />} />
