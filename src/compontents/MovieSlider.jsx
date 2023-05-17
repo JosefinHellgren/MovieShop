@@ -66,7 +66,7 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
             <h4 onClick={handleCategoryClick}>{title} {'>'}</h4>
           )}
           {content && content.length > 0 ? (
-            <Slider key={moviesObject.status} className="slick-slider" slidesToShow={slidesToShow} slidesToScroll={1} >
+            <Slider key={moviesObject.status} className="slick-slider" slidesToShow={slidesToShow} slidesToScroll={slidesToShow} >
               {content.map((movie, index) => (
                 <div key={index} className={`slider_container ${title === 'Big Movie' ? 'big-movie-slider' : ''}`}>
                   <MovieGridItem movie={movie} handleMovieClick={handleMovieClick} useBackDrop={title === "Big Movie"} />
