@@ -1,4 +1,5 @@
 
+import { useEffect } from "react";
 import "./searchdropdown.css"
 
 
@@ -7,6 +8,11 @@ const SearchDropDown = ({ searchResults, handleSearchClick, handleMovieClick }) 
     const imgUrlStart = "https://image.tmdb.org/t/p/w185";
     const MAX_RESULTS = 6;
     const displayResults = searchResults.slice(0, MAX_RESULTS);
+    
+    useEffect(() => {
+     window.scrollTo(0, 0);
+    }, [])
+       
 
     return (
         <div className="search_dropdown">

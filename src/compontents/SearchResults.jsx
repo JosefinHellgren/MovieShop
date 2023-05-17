@@ -1,7 +1,7 @@
 import MovieGridItem from "./MovieGridItem";
 import './searchresults.css'
 
-const SearchResults = ({ title, searchResults, handleMovieClick, handleButtonClick }) => {
+const SearchResults = ({ title, searchResults, handleMovieClick }) => {  
   return (
     <div className="search_results">
       <h2>{title}</h2>
