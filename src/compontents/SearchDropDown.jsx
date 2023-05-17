@@ -11,7 +11,6 @@ const SearchDropDown = ({ query, searchResults, handleSearchClick, handleMovieCl
 
     const handleCategoryClick = () => {
         handleSearchClick(query, searchResults, category);
-        console.log("searchdropdown")
     }
 
     return (

@@ -14,26 +14,31 @@ const SearchResults = ({ query, title, category, handleMovieClick, searchResults
     useEffect(() => {
         if (category === "search" ){
             fetchSearchResults(query, dispatch, category);
-
-            switch (moviesObject.status) {
-                case STATUS.NORMAL:
-                    setContent(null);
-                    break;
-                case STATUS.FETCHING:
-                    setContent(null);
-                    break;
-                case STATUS.SUCCESS:
-                    setContent(moviesObject.movies[category]);
-                    break;
-                case STATUS.FAILURE:
-                    break;
-                default:
-                    setContent(null);
-            }
+            console.log("search")
+           
         } else {
+            console.log("ej search")
             setContent(searchResults);
         }   
-    }, []);
+    }, [category, query]);
+
+    useEffect(() => {
+        switch (moviesObject.status) {
+          case STATUS.NORMAL:
+            setContent(null);
+            break;
+          case STATUS.FETCHING:
+            setContent(null);
+            break;
+          case STATUS.SUCCESS:
+            setContent(moviesObject.movies[category]);
+            break;
+          case STATUS.FAILURE:
+            break;
+          default:
+            setContent(null);
+        }
+      }, [moviesObject, category, query]);
 
     async function fetchSearchResults(query, dispatch, category, page = 1) {
         console.log("fetchsearch")
