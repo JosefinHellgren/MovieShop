@@ -1,7 +1,7 @@
 
 .payment-container .poster{
-width: 60%;
-height: 60%;
+width: 30vh;
+height: 40vh;
 top: 10%;
 border-radius: 15px;
 
@@ -9,7 +9,7 @@ border-radius: 15px;
 
 .payment-container {
     top: 0%;
-    width: 100%;
+    
     height: 100%;
     min-height:100vh;
     margin: 0 auto;
@@ -41,7 +41,7 @@ border-radius: 15px;
 
 
 .payment-container .small-info{
-   width: 500px;
+   width: 40vh;
 }
 
 .payment-container .paymentform {
@@ -75,7 +75,7 @@ border-radius: 15px;
 
 .payment-container .payment-form-wrapper {
     margin: 10px;
-    width: 500px;
+    width: 40vh;
 }
 
 
@@ -87,6 +87,7 @@ border-radius: 15px;
 .payment-container .submitButton {
     margin-top: 30px;
     margin-right: 15px;
+    color: black;
 }
 
 .payment-container .selected {
@@ -111,14 +112,15 @@ border-radius: 15px;
         grid-gap: 0;
     }
     .payment-container .poster {
-        width: 70%;
-        height: 70%;
+        margin-top: 8vh;
+        width: 40vh;
+        height: 50vh;
       }
 
 
     .payment-container .payment-form-wrapper {
-        margin-top: 1%;
-
+        margin-top: 50%;
+        width: 50vh;
     }
 
     .payment-container .paymentform {

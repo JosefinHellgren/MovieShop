@@ -8,7 +8,7 @@ import mastercard from '../images/Mastercard.png'
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
-import { getAuth } from "firebase/auth"
+import { getAuth,onAuthStateChanged } from "firebase/auth"
 import { useSelector } from 'react-redux';
 import PaymentSucsessfull from './PaymentSucsessfull';
 
@@ -145,6 +145,8 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
 
 const Payment = () => {
 
+ 
+
 
     //CILIA REDUX SELECTEDMOVIE
     //how to get the selectedmovie from redux, must also import useSelector from react-redux
@@ -172,6 +174,8 @@ const Payment = () => {
     const db = firebase.firestore();
     const movie = selectedMovie;
     let navigate = useNavigate();
+
+   
 
     const handleExitButtonClick = () => {
         //should we realy use the state to conditional navigate here?
@@ -411,7 +415,7 @@ const Payment = () => {
                                 Name on Card:
                                 <input type="text" onChange={handleNameChange} value={cardName} placeholder='Jamile Jonson'></input>
                             </div>
-                            <button type='submit' className='submitButton'> Buy </button>
+                            <button type='submit' className='submitButton'> 99kr Buy </button>
                             <button onClick={handleExitButtonClick}>Cancel</button>
                         </form>)}
                 </div>

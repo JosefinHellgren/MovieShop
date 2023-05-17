@@ -1,5 +1,6 @@
 import React from 'react';
-import video from '../videos/cat.mp4';
+import video from '../videos/walle.mp4';
+
 import './playmovie.css'
 
 function Playmovie() {

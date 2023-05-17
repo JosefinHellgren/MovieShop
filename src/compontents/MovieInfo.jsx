@@ -330,8 +330,12 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
           <Comments />
         </div>
       )}
-      <section>
+      <section className="recomendedmovies">
+       
       <MovieSlider onClick={window.scrollTo(0, 0)} similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      </section>
+      
+      <section>
       <MovieSlider onClick={window.scrollTo(0, 0)} similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
       </section>
     </div>

@@ -10,6 +10,19 @@
    
     
 }
+.movie_grid_item .mobile_movie_title{
+ 
+  color: rgb(224, 234, 247);
+  font-weight: bold;
+
+ 
+  background-color: rgba(6, 1, 1, 0.19);
+  border-radius: 5px;
+  margin-bottom: 20vh;
+  
+}
+
+
 
 .movie_grid_item:hover {
     transform: scale(1.05);
@@ -70,7 +83,7 @@ color: green;
 .movie_grid_item .movie_poster {
     width: 100%;
     max-height: 100%;
-    object-fit: contain; /* or object-fit: cover; depending on your preference */
+    object-fit: contain;
     transition: transform 0.3s;
   }
 

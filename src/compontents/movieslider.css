@@ -10,9 +10,44 @@
 
 .slick-prev,
 .slick-next {
-    display: none !important;
+    display: true !important;
+    z-index: 1;
+    position: absolute;
 
+   
+    
+   
 } 
+
+.slick-prev:before, .slick-next:before {
+
+    font-family: 'slick';
+    font-size: 45px;
+    line-height: 1;
+    opacity: .75;
+    color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: fixed;
+    
+}
+
+.slick-prev:before:hover, .slick-next:before:hover {
+    transform: scale(1.2);
+    
+   
+}
+
+.slider .slick-prev {
+ position: fixed;
+    
+  }
+  
+  .slider .slick-next {
+   position: fixed;
+   right: 20px;
+  }
+  
 
 .slider_container.big-movie-slider {
     width: 90%;
@@ -25,7 +60,35 @@
     color: lightgray;
     width: fit-content;
     font-size: 20px;
-   padding-top: 0%;
+   padding-top: 2%;
     margin-top: 0%;
+}
+
+@media (max-width: 768px) {
+
+    .slick-prev:before, .slick-next:before {
+
+        font-family: 'slick';
+        font-size: 25px;
+        line-height: 1;
+        opacity: .75;
+        color: white;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        position: fixed;
+        
+    }
+    
+    .slick-prev:before:hover, .slick-next:before:hover {
+        transform: scale(1.2);
+        
+       
+    }
+
+    .movie_slider h4{
+        padding-top: 10vh;
+    }
+
+
 }
 

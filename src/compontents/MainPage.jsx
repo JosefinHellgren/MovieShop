@@ -28,7 +28,7 @@ const MainPage = ({ onCategoryClick,  handleMovieClick }) => {
   return (
     <div className="mainpage_container">
      <section className="big_Movie_poster_section">
-      <MovieSlider similar={false} movie_id="" genre_id="" title="Big Movie" category="popular" handleMovieClick={handleMovieClick}></MovieSlider>
+      <MovieSlider similar={false} movie_id="" genre_id="" title="Big Movie" category="" handleMovieClick={handleMovieClick}></MovieSlider>
      </section>
       <section className="popular_movies_section">
         <MovieSlider similar={false} movie_id="" genre_id="" title="Popular Movies" category="popular"  handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick} />

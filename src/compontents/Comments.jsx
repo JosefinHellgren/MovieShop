@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import '../compontents/comments.css'
-
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
 const Comments = () => {
@@ -16,7 +16,7 @@ const Comments = () => {
   const db = firebase.firestore();
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState('');
-
+  let navigate = useNavigate();
   //const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
   const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
   const movie = JSON.parse(lastSelectedMovie);
@@ -237,6 +237,12 @@ const Comments = () => {
 
   }
 
+  const handleLoginButtonClick = () => {
+    // Navigate to the login page
+    console.log("navigate?")
+    navigate('/login');
+  }
+
 
   return (
     <div className="comments-wrapper">
@@ -245,6 +251,19 @@ const Comments = () => {
       {user && <div>
         <textarea className="comment-input" value={commentText} onChange={handleTextAreaChange} name="text" type="text" placeholder="your comment..."></textarea>
         <button onClick={saveToFirebase}>comment</button></div>}
+
+        {!user && (
+      <div>
+        <textarea
+          className="comment-input"
+          value={commentText}
+          onChange={handleTextAreaChange}
+          placeholder="You have to be signed in to comment"
+          readOnly // Make the textarea read-only
+        ></textarea>
+        <button onClick={handleLoginButtonClick}>Login</button>
+      </div>
+    )}
 
 
       <div className="comments-list">

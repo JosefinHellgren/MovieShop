@@ -1,11 +1,25 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import "./moviegriditem.css"
 
 const MovieGridItem = ({ movie, handleMovieClick, useBackDrop }) => {
-
+    const [isMobile,setIsMobile] = useState(false);
     const imgUrlStart = "https://image.tmdb.org/t/p/original";
     const imageSource = useBackDrop ? movie.backdrop_path : movie.poster_path;
-    const movieStyle = useBackDrop ? { width: '100%', paddingTop: "80px" } : {};
+    const movieStyle = useBackDrop ? { width: '90%', paddingTop: "80px" } : {};
+
+    useEffect(() => {
+        const handleResize = () => {
+          setIsMobile(window.innerWidth <= 767);
+        };
+    
+        window.addEventListener("resize", handleResize);
+        handleResize(); // Set the initial state
+    
+        return () => {
+          window.removeEventListener("resize", handleResize);
+        };
+      }, []);
+    //conditional show the title on mpbile.
 
     return (
 
@@ -14,9 +28,9 @@ const MovieGridItem = ({ movie, handleMovieClick, useBackDrop }) => {
             <img
                 className="movie_poster"
                 src={imgUrlStart + imageSource}
-
                 style={movieStyle}
             />
+            {isMobile && <p className="mobile_movie_title" > {movie.title}</p>}
 
             <div className="movie_info"
                 onClick={() => handleMovieClick(movie)}>
@@ -30,3 +44,4 @@ const MovieGridItem = ({ movie, handleMovieClick, useBackDrop }) => {
 }
 
 export default MovieGridItem
+
