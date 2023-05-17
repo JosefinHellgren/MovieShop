@@ -138,7 +138,6 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   }
 
   const handleSearchClick = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     onSearchClick(query, searchResults, category);
     setQuery('');
   }
@@ -148,18 +147,15 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   }, [location.pathname]);
 
   const handleMovieClick = (movie) => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
     navigate("/movieinfo/");
   };
 
   const handleUserCircleClick = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate('/login');
   }
 
   const handlePlayButtonPressed = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate('/userpage')
   }
 
@@ -197,7 +193,6 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   }
 
   const handleMovWheelClick = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate("/");
   }
 

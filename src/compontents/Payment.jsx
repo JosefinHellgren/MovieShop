@@ -1,26 +1,21 @@
 import '../compontents/payment.css'
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-
 import visa from '../images/visa.png'
 import americanexpress from '../images/AmericanExpress.png'
 import mastercard from '../images/Mastercard.png'
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
-
 import { getAuth } from "firebase/auth"
 import { useSelector } from 'react-redux';
 import PaymentSucsessfull from './PaymentSucsessfull';
 
-
 const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, setCVV, setCardNumber, setCardName, setExpDate, saveMovieToFirebase }) => {
-
 
     const [cardNumberValid, setCardNumberValid] = useState(false);
     const [nameOnCardValid, setNameOnCardValid] = useState(false);
     const [cvvNumberValid, setCVVNumberValid] = useState(false);
     const [dateExpValid, setDateExpValid] = useState(false);
-
 
     const handleCardNumberChange = (event) => {
         const { value } = event.target;
@@ -28,12 +23,9 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
         const isValid = /^\d{15}$/.test(value);
         setCardNumber(value)
 
-
         if (isValid) {
             event.target.setCustomValidity('');
             setCardNumberValid(true);
-
-
             console.log("its valid")
         } else {
             event.target.setCustomValidity('Please enter a valid 15-digit card number');
@@ -90,9 +82,6 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
 
     const handleNameChange = (event) => {
         const { value } = event.target;
-
-
-
         const isValid = /^[a-zA-Z\u00C0-\u00ff]+\s?[a-zA-Z\u00C0-\u00ff]+$/.test(value)
 
         setCardName(value);
@@ -119,10 +108,7 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
 
             console.log(cardNumberValid, nameOnCardValid, cvvNumberValid, dateExpValid)
         }
-
-
     }
-
 
     return (
         <div>
@@ -145,10 +131,7 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
 
 const Payment = () => {
 
-
-    //CILIA REDUX SELECTEDMOVIE
-    //how to get the selectedmovie from redux, must also import useSelector from react-redux
-    //const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
+    
     const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
     const selectedMovie = JSON.parse(lastSelectedMovie);
     // use the selectedMovie like this

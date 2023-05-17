@@ -15,7 +15,6 @@ import { fromPayment } from "./features/navigatePayment";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { actions as searchDropDownActions } from "./features/searchdropdown"
 
-
 function App() {
 
   const navigate = useNavigate();
