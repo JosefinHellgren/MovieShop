@@ -29,14 +29,13 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
             content = moviesObject.movies[category];
             break;
         case STATUS.FAILURE:
-            content = <p>No movies available for this category</p>;
             break;
         default:
             content = null
     }
 
     const handleCategoryClick = () => {
-        onCategoryClick(title, content);
+        onCategoryClick(title, content, category);
     }
 
     /*  if (content !== null) {
@@ -45,7 +44,7 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
         }
     }  */
 
-     useEffect(() => {
+    useEffect(() => {
         const updateSlidesToShow = () => {
             if (window.innerWidth <= 768 && title === "Big Movie" || window.innerWidth >= 768 && title === "Big Movie") {
                 setSlidesToShow(1); // Show only one slide for Slider A on wider screens
@@ -65,7 +64,7 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
         return () => {
             window.removeEventListener('resize', updateSlidesToShow);
         };
-    }, []); 
+    }, []);
 
     return (
         <div className="movie_slider">
@@ -103,7 +102,7 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
             let json = await response.json();
             let movies = json.results;
 
-            if (3 > page) {
+            if (4 > page) {
                 let nextPageMovies = await fetchMovies(movie_id, genre_id, category, dispatch, similar, page + 1);
                 movies = movies.concat(nextPageMovies);
             }

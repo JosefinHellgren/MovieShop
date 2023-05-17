@@ -8,12 +8,6 @@
     position: relative;
 }
 
-.slick-prev,
-.slick-next {
-    display: none !important;
-
-} 
-
 .slider_container.big-movie-slider {
     width: 90%;
     margin: 0 auto;

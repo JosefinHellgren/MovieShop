@@ -5,15 +5,13 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { HiOutlineUserCircle } from "react-icons/hi";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { actions as searchDropDownActions } from "../features/searchdropdown"
-
 import { ImSearch } from "react-icons/im"
 import SearchDropDown from "./SearchDropDown";
 import { FiSettings } from "react-icons/fi";
-import {AiOutlinePlayCircle} from 'react-icons/ai'
+import { AiOutlinePlayCircle } from 'react-icons/ai'
 
 const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
 
@@ -26,6 +24,7 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  let category = "search";
 
   const auth = getAuth();
   const db = firebase.firestore();
@@ -53,8 +52,8 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   }, [])
 
   useEffect(() => {
-    
-   if (createAccount === 'success') {
+
+    if (createAccount === 'success') {
       console.log('userUID,', userUID)
       const docRef = db.collection('users').doc(userUID);
       unsubscribe = docRef.onSnapshot((doc) => {
@@ -65,19 +64,19 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
           if (createAccount != 'normal') {
             handleAccountStatus('normal');
           }
-        } 
-     });
-    } 
+        }
+      });
+    }
     return () => {
       if (!signedIn) {
-       unsubscribe(); 
+        unsubscribe();
       }
     };
   }, [createAccount])
 
 
   useEffect(() => {
-    let unsubscribe = () => {}; 
+    let unsubscribe = () => { };
     if (userUID && createAccount === 'normal') {
       console.log('userUID,', userUID)
       const docRef = db.collection('users').doc(userUID);
@@ -91,7 +90,7 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
         }
       });
     }
-  
+
     return () => {
       console.log('unsubscripe körs')
       unsubscribe();
@@ -139,9 +138,9 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   }
 
   const handleSearchClick = () => {
-    setQuery('');
     dispatch(searchDropDownActions.hideSearchDropDown());
-    onSearchClick(query, searchResults);
+    onSearchClick(query, searchResults, category);
+    setQuery('');
   }
 
   useEffect(() => {
@@ -150,11 +149,7 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
 
   const handleMovieClick = (movie) => {
     dispatch(searchDropDownActions.hideSearchDropDown());
-   
-
     localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
-    
-
     navigate("/movieinfo/");
   };
 
@@ -186,7 +181,6 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
 
   const saveBackcolorFirestore = (background) => {
     const userUID = auth.currentUser.uid;
-
     db.collection("users").doc(userUID).set({
       background: background
     }, { merge: true })
@@ -203,7 +197,7 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   }
 
   const handleMovWheelClick = () => {
-   dispatch(searchDropDownActions.hideSearchDropDown());
+    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate("/");
   }
 
@@ -211,9 +205,9 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
     if (isMobile) {
       if (signedIn) {
         return (
-          <AiOutlinePlayCircle 
-          className="playbtn-mobile"
-          onClick={handlePlayButtonPressed}/>
+          <AiOutlinePlayCircle
+            className="playbtn-mobile"
+            onClick={handlePlayButtonPressed} />
         );
       } else {
         return (
@@ -227,26 +221,24 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
       if (signedIn) {
         return (
           <div className="play-button-div" onClick={handlePlayButtonPressed}>
-          <AiOutlinePlayCircle 
-          className="play-icon-computer"/>
-          <h4>My movies</h4>
+            <AiOutlinePlayCircle
+              className="play-icon-computer" />
+            <h4>My movies</h4>
           </div>
-          
+
         );
       } else {
-        return(
-        
-        <div className="user-icon-div" onClick={handleUserCircleClick}>
-         <HiOutlineUserCircle
-            className="user_icon_computer"
-          /> 
-          <h4> Log in</h4>
-        </div>
+        return (
+          <div className="user-icon-div" onClick={handleUserCircleClick}>
+            <HiOutlineUserCircle
+              className="user_icon_computer"
+            />
+            <h4> Log in</h4>
+          </div>
         )
       }
     }
   };
-
 
   const renderSettingsButton = (isMobile) => {
     if (isMobile) {
@@ -257,68 +249,60 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
       )
     } else {
       return (
-       <summary role="button">
-        <section className="settingsbtn-container" >
-          <FiSettings className="settings-icon" />
-          <h4>Settings</h4>
-        </section>
-      </summary> 
-      )  
+        <summary role="button">
+          <section className="settingsbtn-container" >
+            <FiSettings className="settings-icon" />
+            <h4>Settings</h4>
+          </section>
+        </summary>
+      )
     }
   }
-  
- 
-    const [isMobile, setIsMobile] = useState(false);
-  
-    useEffect(() => {
-      const handleResize = () => {
-        setIsMobile(window.innerWidth < 768);
-      };
-  
-      window.addEventListener("resize", handleResize);
-      handleResize(); 
-  
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-    }, []);
-  
-  
-  
-  
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <nav className="navbar">
       <section className="navbar-container">
         <img src={Movie_wheel} alt="Movie Wheel Logo" className="movie_wheel" onClick={handleMovWheelClick} />
-      <div className="search_bar">
-        <input type="text" value={query} placeholder="Search movies.." onChange={handleSearchInputChange} />
-        <ImSearch className="search_icon" onClick={handleSearchClick} />
-      </div>
-      <section className={signedIn ? 'navbar_section' : 'navbar_section hide'}>
-        
-        <details className="dropdown">
-          {renderSettingsButton(isMobile)}
-          <ul>
-            <li className="dropdown-title"> <strong> Change background to:</strong></li>
-            <li onClick= {() => handleClick('black')}><a className="li-color"> <p className= "black-circle"></p>Black</a></li>
-            <li onClick= {() => handleClick('turquoise')}><a className="li-color"> <p className="white-circle"></p>Turquoise</a></li>
-            <li onClick= {() => handleClick('pink')}><a className="li-color"> <p className="pink-circle"></p>Pink</a></li>
-            <li onClick= {() => handleClick('orange')}><a className="li-color"> <p className="orange-circle"></p>Orange</a></li>
-            <li onClick={handleSignOutClick}><a >Sign out</a></li>
-          </ul>
-        </details>
-      </section>
-      {renderButton(isMobile, signedIn)}
+        <div className="search_bar">
+          <input type="text" value={query} placeholder="Search movies.." onChange={handleSearchInputChange} />
+          <ImSearch className="search_icon" onClick={handleSearchClick} />
+        </div>
+        <section className={signedIn ? 'navbar_section' : 'navbar_section hide'}>
+          <details className="dropdown">
+            {renderSettingsButton(isMobile)}
+            <ul>
+              <li className="dropdown-title"> <strong> Change background to:</strong></li>
+              <li onClick={() => handleClick('black')}><a className="li-color"> <p className="black-circle"></p>Black</a></li>
+              <li onClick={() => handleClick('turquoise')}><a className="li-color"> <p className="white-circle"></p>Turquoise</a></li>
+              <li onClick={() => handleClick('pink')}><a className="li-color"> <p className="pink-circle"></p>Pink</a></li>
+              <li onClick={() => handleClick('orange')}><a className="li-color"> <p className="orange-circle"></p>Orange</a></li>
+              <li onClick={handleSignOutClick}><a >Sign out</a></li>
+            </ul>
+          </details>
+        </section>
+        {renderButton(isMobile, signedIn)}
       </section>
       <section>
-      <div className={`search_dropdown ${searchDropDown ? '' : 'hide'}`}>
-          <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
+        <div className={`search_dropdown ${searchDropDown ? '' : 'hide'}`}>
+          <SearchDropDown query={query} searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
         </div>
       </section>
-      
     </nav>
-
   );
 }
 

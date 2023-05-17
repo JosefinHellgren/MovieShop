@@ -2,11 +2,17 @@
 import "./searchdropdown.css"
 
 
-const SearchDropDown = ({ searchResults, handleSearchClick, handleMovieClick }) => {
+const SearchDropDown = ({ query, searchResults, handleSearchClick, handleMovieClick }) => {
 
     const imgUrlStart = "https://image.tmdb.org/t/p/w185";
     const MAX_RESULTS = 6;
     const displayResults = searchResults.slice(0, MAX_RESULTS);
+    const category = "search"
+
+    const handleCategoryClick = () => {
+        handleSearchClick(query, searchResults, category);
+        console.log("searchdropdown")
+    }
 
     return (
         <div className="search_dropdown">
@@ -16,7 +22,7 @@ const SearchDropDown = ({ searchResults, handleSearchClick, handleMovieClick }) 
                     <p>{movie.title}</p>
                 </div>
             ))}
-            <button onClick={handleSearchClick} >Show all results...</button>
+            <button onClick={handleCategoryClick} >Show all results...</button>
         </div>
     )
 }

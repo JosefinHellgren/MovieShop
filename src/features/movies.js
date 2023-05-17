@@ -21,7 +21,8 @@ const initialState = {
     upcomingMovies: null,
     comedyMovies: null,
     actionMovies: null,
-    romanceMovies: null
+    romanceMovies: null,
+    searchResults: null
   }
 };
 
