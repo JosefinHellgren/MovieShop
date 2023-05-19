@@ -225,6 +225,10 @@ const Payment = () => {
         const cardExpiration = new Date(Number("20" + year), Number(month) - 1, 1); // Assuming the year is in the format YY, we add "20" to convert it to YYYY
       
         setExpDate(value);
+
+        
+       
+      
       
         if (isValid) {
           
@@ -284,8 +288,7 @@ const Payment = () => {
     const handleNameChange = (event) => {
         const { value } = event.target;
 
-        const isValid = /^[a-zA-Z\u00C0-\u00ff]+\s?[a-zA-Z\u00C0-\u00ff]+$/.test(value)
-
+        const isValid = /^[a-zA-Z\u00C0-\u00ff]+(\s+[a-zA-Z\u00C0-\u00ff]+)*\s*$/.test(value);
 
         setCardName(value);
 

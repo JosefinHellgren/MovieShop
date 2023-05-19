@@ -6,7 +6,7 @@ const MovieGridItem = ({ movie, handleMovieClick, useBackDrop }) => {
     const imgUrlStart = "https://image.tmdb.org/t/p/original";
     const imageSource = useBackDrop ? movie.backdrop_path : movie.poster_path;
     const movieStyle = useBackDrop ? { width: '90%', paddingTop: "80px" } : {};
-
+    const formattedYear = new Date(movie.release_date).getFullYear();
     useEffect(() => {
         const handleResize = () => {
           setIsMobile(window.innerWidth <= 767);
@@ -31,14 +31,14 @@ const MovieGridItem = ({ movie, handleMovieClick, useBackDrop }) => {
                 style={movieStyle}
             />
             {isMobile && <p className="mobile_movie_title" > {movie.title}</p>}
-
+{!isMobile &&
             <div className="movie_info"
                 onClick={() => handleMovieClick(movie)}>
                 <h6 className="movie_title">{movie.title}</h6>
-                <p className="movie_release">{movie.release_date}</p>
+                <p className="movie_release">{formattedYear}</p>
                 <p className="movie_rating">{movie.vote_average}</p>
             </div>
-
+}
         </div>
     )
 }

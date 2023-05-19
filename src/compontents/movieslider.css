@@ -2,10 +2,10 @@
 @import url('../../node_modules/slick-carousel/slick/slick-theme.css');
 
 .slick-slider {
-    height: 12rem;
+    height: auto;
     width: 86vw;
     min-width: 200px;
-    position: relative;
+   
 }
 
 .slick-prev,
@@ -13,11 +13,14 @@
     display: true !important;
     z-index: 1;
     position: absolute;
+   margin-top: 10%;
+   margin-right: 20px;
+margin-left: 10px;
+   
 
-   
-    
-   
 } 
+
+
 
 .slick-prev:before, .slick-next:before {
 
@@ -28,40 +31,24 @@
     color: white;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    position: fixed;
     
+ 
 }
 
-.slick-prev:before:hover, .slick-next:before:hover {
-    transform: scale(1.2);
-    
-   
-}
-
-.slider .slick-prev {
- position: fixed;
-    
-  }
-  
-  .slider .slick-next {
-   position: fixed;
-   right: 20px;
-  }
-  
-
-.slider_container.big-movie-slider {
+.slider_container.big-movie-slider{
     width: 90%;
     margin: 0 auto;
+
   }
-  
 
-
+ 
 .movie_slider h4 {
-    color: lightgray;
+    color: rgb(190, 36, 36);
     width: fit-content;
     font-size: 20px;
-   padding-top: 2%;
+  
     margin-top: 0%;
+ 
 }
 
 @media (max-width: 768px) {
@@ -75,15 +62,21 @@
         color: white;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        position: fixed;
+     
         
     }
     
-    .slick-prev:before:hover, .slick-next:before:hover {
-        transform: scale(1.2);
-        
+    .slick-prev,
+    .slick-next {
+        display: true !important;
+        z-index: 1;
+        position: absolute;
+       margin-top: 1%;
+       margin-right: 20px;
+    margin-left: 10px;
        
-    }
+    
+    } 
 
     .movie_slider h4{
         padding-top: 10vh;

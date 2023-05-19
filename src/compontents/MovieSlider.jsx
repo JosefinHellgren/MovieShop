@@ -10,6 +10,8 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
 
     const [slidesToShow, setSlidesToShow] = useState(3);
     const [slidesToScroll,setSlidesToScroll] = useState(3);
+    const [autoplay,setAutoplay] = useState(false);
+    const [isMobile, setIsMobile] = useState(false)
     const moviesObject = useSelector(state => state.movies);
     const dispatch = useDispatch();
 
@@ -51,13 +53,16 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
             if (window.innerWidth <= 768 && title === "Big Movie" || window.innerWidth >= 768 && title === "Big Movie") {
                 setSlidesToShow(1); 
                 setSlidesToScroll(1);
+                setAutoplay(true)
                 // Show only one slide for Slider A on wider screens
             } else if (window.innerWidth >= 768) {
                 setSlidesToShow(4); // Show four slides for other sliders on wider screens
                 setSlidesToScroll(4);
             } else {
                 setSlidesToShow(3); 
-                setSlidesToScroll(3)// Show three slides on smaller screens
+                setSlidesToScroll(3)
+                setIsMobile(true)// Show three slides on smaller screens
+                console.log("isMobile should slide to scroll")
             }
         };
 
@@ -78,7 +83,11 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
             {title !== 'Big Movie' && (
                 <h4 onClick={handleCategoryClick}>{title} {'>'}</h4>
             )}
-            <Slider key={moviesObject.status} className="slick-slider" slidesToShow={slidesToShow} slidesToScroll={slidesToScroll} >
+            <Slider key={moviesObject.status} className="slick-slider" 
+           autoplay={autoplay}
+            slidesToShow={slidesToShow} slidesToScroll={slidesToScroll}
+            slideToSwipe={isMobile}
+            touchThreshold={10} >
                 {content &&
                     content.map((movie, index) => (
                         <div key={index} className={`slider_container ${title === 'Big Movie' ? 'big-movie-slider' : ''}`}>
