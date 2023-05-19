@@ -48,29 +48,29 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
         const currentDate = new Date();
         const [month, year] = value.split('/');
         const cardExpiration = new Date(Number("20" + year), Number(month) - 1, 1); // Assuming the year is in the format YY, we add "20" to convert it to YYYY
-      
+
         setExpDate(value);
-      
+
         if (isValid) {
-          
-      
-          if (cardExpiration < currentDate) {
-            event.target.setCustomValidity('Card has expired');
-            console.log('Card has expired');
-            // Handle the expired card scenario here
-          } else {
-            console.log('Card is still valid');
-            setDateExpValid(true);
-            event.target.setCustomValidity('');
-            // Handle the valid card scenario here
-          }
+
+
+            if (cardExpiration < currentDate) {
+                event.target.setCustomValidity('Card has expired');
+                console.log('Card has expired');
+                // Handle the expired card scenario here
+            } else {
+                console.log('Card is still valid');
+                setDateExpValid(true);
+                event.target.setCustomValidity('');
+                // Handle the valid card scenario here
+            }
         } else {
-          event.target.setCustomValidity('Please submit a correct expiration date');
-          console.log('Invalid expiration date');
-          // Handle the invalid expiration date scenario here
+            event.target.setCustomValidity('Please submit a correct expiration date');
+            console.log('Invalid expiration date');
+            // Handle the invalid expiration date scenario here
         }
-      };
-      
+    };
+
     const handleCVVChange = (event) => {
         const { value } = event.target;
 
@@ -145,15 +145,8 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
 
 const Payment = () => {
 
-
-    //CILIA REDUX SELECTEDMOVIE
-    //how to get the selectedmovie from redux, must also import useSelector from react-redux
-    //const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
     const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
     const selectedMovie = JSON.parse(lastSelectedMovie);
-    // use the selectedMovie like this
-    console.log("payment: " + selectedMovie.title);
-
     const imgUrlStart = "https://image.tmdb.org/t/p/original";
     const [cardNumber, setCardNumber] = useState('');
     const [expDate, setExpDate] = useState('');
@@ -172,6 +165,17 @@ const Payment = () => {
     const db = firebase.firestore();
     const movie = selectedMovie;
     let navigate = useNavigate();
+
+    useEffect(() => {
+        const user = auth.currentUser;
+
+        db.collection('users').doc(user.uid).collection('purchased').where('id', "==", movie.id).get()
+            .then((doc) => {
+                if (!doc.empty) {
+                    navigate('/movieinfo')
+                }
+            })
+    }, [])
 
     const handleExitButtonClick = () => {
         //should we realy use the state to conditional navigate here?
@@ -219,39 +223,28 @@ const Payment = () => {
         const currentDate = new Date();
         const [month, year] = value.split('/');
         const cardExpiration = new Date(Number("20" + year), Number(month) - 1, 1); // Assuming the year is in the format YY, we add "20" to convert it to YYYY
-      
+
         setExpDate(value);
-      
+
         if (isValid) {
-          
-      
-          if (cardExpiration < currentDate) {
-            event.target.setCustomValidity('Card has expired');
-            console.log('Card has expired');
-            // Handle the expired card scenario here
-          } else {
-            console.log('Card is still valid');
-            setDateExpValid(true);
-            event.target.setCustomValidity('');
-            // Handle the valid card scenario here
-          }
+
+
+            if (cardExpiration < currentDate) {
+                event.target.setCustomValidity('Card has expired');
+                console.log('Card has expired');
+                // Handle the expired card scenario here
+            } else {
+                console.log('Card is still valid');
+                setDateExpValid(true);
+                event.target.setCustomValidity('');
+                // Handle the valid card scenario here
+            }
         } else {
-          event.target.setCustomValidity('Please submit a correct expiration date');
-          console.log('Invalid expiration date');
-          // Handle the invalid expiration date scenario here
+            event.target.setCustomValidity('Please submit a correct expiration date');
+            console.log('Invalid expiration date');
+            // Handle the invalid expiration date scenario here
         }
-      };
-      
-      
-      
-      
-      
-      
-      
-      
-
-
-  
+    };
 
     const handleCVVChange = (event) => {
         const { value } = event.target;
@@ -365,51 +358,101 @@ const Payment = () => {
 
     }
 
-//If we want to use the background image.
+    //If we want to use the background image.
     const componentStyle = {
-        backgroundImage: `url(${imgUrlStart+movie.backdrop_path})`,
-        backgroundSize: 'cover', 
+        backgroundImage: `url(${imgUrlStart + movie.backdrop_path})`,
+        backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundColor: 'rgba(0, 0, 0, 1.0)'
-        
-      };
+
+    };
     return (
 
 
         <div className="payment-container"  >
-         
+
             <div className={isPaymentSuccessful ? 'div-for-web show' : 'div-for-web'}>
                 <div className='small-info'>
 
-                    
+
                     {isPaymentSuccessful ? (<div className='loading_payment'>
 
-                        <img className='poster_purchased' src={imgUrlStart + movie.poster_path}></img> <br/><PaymentSucsessfull/> </div>) : (<div>  <h1 onClick={handleExitButtonClick} className='exit-button'>x</h1> <h2>Checkout:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <h2>{movie.title}</h2> </div>)}
+                        <img className='poster_purchased' src={imgUrlStart + movie.poster_path}></img> <br /><PaymentSucsessfull /> </div>) : (<div>  <h1 onClick={handleExitButtonClick} className='exit-button'>x</h1> <h2>Checkout:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <h2>{movie.title}</h2> </div>)}
 
                 </div>
                 {isPaymentSuccessful ? (
                     <></>
                 ) : (<div className='payment-form-wrapper'>
-                    <input type="checkbox" value={"Visa"} name="cardType" checked={cardType === "Visa"} onChange={handleCheckboxChange}></input>
-                    <img className={`creditcard ${cardType === "Visa" ? "selected" : ""}`} src={visa} alt="" />
-                    <input type="checkbox" value={"Mastercard"} name="cardType" checked={cardType === "Mastercard"} onChange={handleCheckboxChange} ></input>
-                    <img className={`creditcard ${cardType === "Mastercard" ? "selected" : ""}`} src={mastercard} alt="" />
-                    <input type="checkbox" value={"American Express"} name="cardType" checked={cardType === "American Express"} onChange={handleCheckboxChange}></input>
-                    <img className={`creditcard ${cardType === "American Express" ? "selected" : ""}`} src={americanexpress} alt="" />
-                
-
+                    <label>
+                        <input
+                            type="checkbox"
+                            value={"Visa"}
+                            name="cardType"
+                            checked={cardType === "Visa"}
+                            onChange={handleCheckboxChange}
+                        />
+                        <img
+                            className={`creditcard ${cardType === "Visa" ? "selected" : ""}`}
+                            src={visa}
+                            alt=""
+                            onClick={() => {
+                                if (cardType !== "Visa") {
+                                    handleCheckboxChange({ target: { value: "Visa" } });
+                                }
+                            }}
+                        />
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            value={"Mastercard"}
+                            name="cardType"
+                            checked={cardType === "Mastercard"}
+                            onChange={handleCheckboxChange}
+                        />
+                        <img
+                            className={`creditcard ${cardType === "Mastercard" ? "selected" : ""}`}
+                            src={mastercard}
+                            alt=""
+                            onClick={() => {
+                                if (cardType !== "Mastercard") {
+                                    handleCheckboxChange({ target: { value: "Mastercard" } });
+                                }
+                            }}
+                        />
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            value={"American Express"}
+                            name="cardType"
+                            checked={cardType === "American Express"}
+                            onChange={handleCheckboxChange}
+                        />
+                        <img
+                            className={`creditcard ${cardType === "American Express" ? "selected" : ""}`}
+                            src={americanexpress}
+                            alt=""
+                            onClick={() => {
+                                if (cardType !== "American Express") {
+                                    handleCheckboxChange({ target: { value: "American Express" } });
+                                }
+                            }}
+                        />
+                    </label>
+                    
                     {cardType === "American Express" ? (<AmexForm setIsPaymentSuccessful={setIsPaymentSuccessful} saveMovieToFirebase={saveMovieToFirebase} setCardName={setCardName} setCVV={setCVV} setCardNumber={setCardNumber} setExpDate={setExpDate} cardName={cardName} cardNumber={cardNumber} cvv={cvv} expDate={expDate} />) : (
 
                         <form onSubmit={handleSubmit}>
                             <div className='paymentform'>
                                 Card Number:
-                                <input type="text" onChange={handleCardNumberChange} value={cardNumber} placeholder='Valid Card Number'></input>
+                                <input type="text" onChange={handleCardNumberChange} value={cardNumber} placeholder='Valid Card Number' required></input>
                                 Exp. Date:
-                                <input type="text" onChange={handleExpDateChange} value={expDate} placeholder='MM/YY'></input>
+                                <input type="text" onChange={handleExpDateChange} value={expDate} placeholder='MM/YY' required></input>
                                 cvv/CVC:
-                                <input type="text" onChange={handleCVVChange} value={cvv} placeholder='123'></input>
+                                <input type="text" onChange={handleCVVChange} value={cvv} placeholder='123' required></input>
                                 Name on Card:
-                                <input type="text" onChange={handleNameChange} value={cardName} placeholder='Jamile Jonson'></input>
+                                <input type="text" onChange={handleNameChange} value={cardName} placeholder='Jamile Jonson' required></input>
                             </div>
                             <button type='submit' className='submitButton'> Buy </button>
                             <button onClick={handleExitButtonClick}>Cancel</button>

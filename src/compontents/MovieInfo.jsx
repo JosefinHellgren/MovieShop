@@ -22,6 +22,14 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   const [isPurchased, setIsPurchased] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [purchasedMovies, setPurchasedMovies] = useState([]);
+  
+  const SELECTED_BUTTON = {
+    OVERVIEW : 'overview',
+    TRAILER : 'trailer',
+    COMMENTS : 'comments'
+  }
+
+  const [selectedBtnState, setselectedBtnState] = useState(SELECTED_BUTTON.OVERVIEW);
 
   //const [playing, setPlaying] = useState(false);
   const videoRef = useRef(null);
@@ -75,8 +83,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     }
   };
   
-
-
   useEffect(() => {
     let unsubscribe;
 
@@ -152,10 +158,14 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     setIsPurchased(!!purchasedMovies.find(movie => movie.id === selectedMovie.id));
   }, [purchasedMovies, selectedMovie.id]);
 
+  const scrollToTop =() => {
+    console.log('scrolla uppåt')
+    window.scrollTo(0, 0);
+  }
 
-
-
-
+  useEffect(() => {
+    scrollToTop();
+  },[])
 
 
   // find genre names for each genre ID in the movie's genre_ids array
@@ -167,6 +177,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
 
 
   const handleBuy = () => {
+
     dispatch(searchDropDownActions.hideSearchDropDown());
 
     const auth = getAuth();
@@ -181,6 +192,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       console.log(navigatePayment);
       navigate('/login');
     }
+
   }
 
   const handleWatchlistClick = () => {
@@ -204,6 +216,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       }
     } else {
       navigate('/login');
+      console.log('navigering till login handle watch')
     }
   }
 
@@ -212,6 +225,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     setShowOverview(true);
     setShowTrailer(false);
     setShowComments(false);
+    setselectedBtnState(SELECTED_BUTTON.OVERVIEW)
   };
 
   const handleShowTrailer = () => {
@@ -219,6 +233,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     setShowOverview(false);
     setShowTrailer(true);
     setShowComments(false);
+    setselectedBtnState(SELECTED_BUTTON.TRAILER)
   };
 
   const handleShowComments = () => {
@@ -226,6 +241,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     setShowOverview(false);
     setShowTrailer(false);
     setShowComments(true);
+    setselectedBtnState(SELECTED_BUTTON.COMMENTS)
   };
 
 
@@ -243,6 +259,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       }
     }
   };
+
 
   return (
     <div className="movieinfo">
@@ -292,13 +309,13 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
 
       <div className="details-nav">
         <button className="details-btn" onClick={handleShowOverview}>
-          About
+         {selectedBtnState === 'overview' ? <strong className="extra-bold">About</strong> : "About"}
         </button>
         <button className="details-btn" onClick={handleShowTrailer}>
-          Trailer
+        {selectedBtnState == 'trailer' ? <strong className="extra-bold">Trailer</strong> : "Trailer"}
         </button>
         <button className="details-btn" onClick={handleShowComments}>
-          Comments
+        {selectedBtnState == 'comments' ? <strong className="extra-bold">Comments</strong> : "Comments"}
         </button>
       </div>
 
@@ -329,9 +346,9 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
           <Comments />
         </div>
       )}
-      <section>
-      <MovieSlider onClick={window.scrollTo(0, 0)} similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
-      <MovieSlider onClick={window.scrollTo(0, 0)} similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      <section onClick={scrollToTop}>
+      <MovieSlider similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      <MovieSlider similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
       </section>
     </div>
   );

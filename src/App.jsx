@@ -49,6 +49,7 @@ function App() {
   const handleMovieClick = (movie) => {
     localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
     navigate("/movieinfo/");
+    console.log('handle movie click på app.jsx körs')
   };
 
   return (

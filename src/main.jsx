@@ -37,7 +37,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <App />
       </Router>
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
+  ,
 )
 
 
