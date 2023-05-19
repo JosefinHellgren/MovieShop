@@ -42,6 +42,8 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   let dispatch = useDispatch();
   let navigate = useNavigate();
   const [documentID, setDocumentID] = useState('');
+
+  const [isClicked, setIsClicked] = useState(false);
   
   
 
@@ -218,6 +220,7 @@ console.log('movieid:', selectedMovie)
     setShowOverview(true);
     setShowTrailer(false);
     setShowComments(false);
+    
   };
 
   const handleShowTrailer = () => {
@@ -301,10 +304,10 @@ console.log('movieid:', selectedMovie)
         <button className="details-btn" id="About-btn" onClick={handleShowOverview}>
           About
         </button>
-        <button className="details-btn" id="" onClick={handleShowTrailer}>
+        <button className="details-btn" id="Trailer-btn" onClick={handleShowTrailer}>
           Trailer
         </button>
-        <button className="details-btn" onClick={handleShowComments}>
+        <button className="details-btn" id="Comments-btn" onClick={handleShowComments}>
           Comments
         </button>
       </div>
