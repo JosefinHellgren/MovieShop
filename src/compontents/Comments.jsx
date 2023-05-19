@@ -19,10 +19,11 @@ const Comments = () => {
   const [user, setUser] = useState('');
 
   const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
+  const movie = JSON.parse(lastSelectedMovie);
 
   useEffect(() => {
 
-    const movie = JSON.parse(lastSelectedMovie);
+    
 
     const commentsRef = db.collection("comments");
     const filteredCommentsRef = commentsRef.where("movieid", "==", movie.id.toString());
