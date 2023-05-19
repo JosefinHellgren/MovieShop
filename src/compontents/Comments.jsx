@@ -22,9 +22,6 @@ const Comments = () => {
   const movie = JSON.parse(lastSelectedMovie);
 
   useEffect(() => {
-
-    
-
     const commentsRef = db.collection("comments");
     const filteredCommentsRef = commentsRef.where("movieid", "==", movie.id.toString());
     filteredCommentsRef.onSnapshot((querySnapshot) => {
@@ -40,8 +37,7 @@ const Comments = () => {
       console.log("Error getting comments:", error);
       setComments('');
     });
-  }, [lastSelectedMovie]);
-
+  }, [movie]);
 
   const saveToFirebase = () => {
 
@@ -81,7 +77,6 @@ const Comments = () => {
           console.log(uid)
           setUser(user);
 
-
           const userRef = db.collection("users").doc(uid);
 
           userRef.get().then((doc) => {
@@ -109,7 +104,6 @@ const Comments = () => {
     const { value } = event.target;
     setCommentText(value)
   }
-
 
   const thumbsUp = (id) => {
     if (user) {
@@ -231,7 +225,6 @@ const Comments = () => {
       return
     }
   }
-
 
   return (
     <div className="comments-wrapper">

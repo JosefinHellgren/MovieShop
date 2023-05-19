@@ -36,6 +36,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   let navigate = useNavigate();
   const [documentID, setDocumentID] = useState('');
   const user = auth.currentUser;
+  const [language, setLanguage] = useState(['']);
 
   const WATCHLIST_STATUS = {
     EXISTS: 'Remove from watchlist',
@@ -212,6 +213,30 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     }
   };
 
+  useEffect(() => {
+
+    switch (selectedMovie.original_language) {
+      case "en": setLanguage("English"); break;
+      case "es": setLanguage("Spanish"); break;
+      case "fr": setLanguage("French"); break;
+      case "de": setLanguage("German"); break;
+      case "it": setLanguage("Italian"); break;
+      case "ja": setLanguage("Japanese"); break;
+      case "ko": setLanguage("Korean"); break;
+      case "pt": setLanguage("Portuguese"); break;
+      case "ru": setLanguage("Russian"); break;
+      case "zh": setLanguage("Chinese"); break;
+      case "nl": setLanguage("Dutch"); break;
+      case "sv": setLanguage("Swedish"); break;
+      case "da": setLanguage("Danish"); break;
+      case "no": setLanguage("Norwegian"); break;
+      case "fi": setLanguage("Finnish"); break;
+      case "pl": setLanguage("Polish"); break;
+      case "tr": setLanguage("Turkish"); break;
+      default: setLanguage(""); break;
+    }
+  }, [selectedMovie])
+
   return (
     <div className="movieinfo">
       <div className="movieinfocontainer">
@@ -223,7 +248,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
               <img className='backdrop-img' src={imgUrlStart + selectedMovie.backdrop_path} />
             </div>
             <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
-            <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
+            <p className="movie-detail"><strong>Language: </strong>{language}</p>
             <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>
             <p><strong>Rating:</strong> {rating}</p>
           </div>
