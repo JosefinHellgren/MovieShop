@@ -142,8 +142,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
 
   const handleBuy = () => {
 
-    dispatch(searchDropDownActions.hideSearchDropDown());
-
     //if we have a user, then we want to navigate to payment and set the navigatetoPayment statet till true.
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -182,21 +180,18 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   }
 
   const handleShowOverview = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(true);
     setShowTrailer(false);
     setShowComments(false);
   };
 
   const handleShowTrailer = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(false);
     setShowTrailer(true);
     setShowComments(false);
   };
 
   const handleShowComments = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(false);
     setShowTrailer(false);
     setShowComments(true);

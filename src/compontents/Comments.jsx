@@ -4,10 +4,11 @@ import { useEffect } from "react";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import '../compontents/comments.css'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
+
 const Comments = () => {
+
   const [commentText, setCommentText] = useState('');
   const [userName, setUserName] = useState('');
   const timeStamp = new Date();
@@ -17,12 +18,12 @@ const Comments = () => {
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState('');
 
-  //const selectedMovie = useSelector(state => state.selectedMovie.selectedMovie);
   const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
-  const movie = JSON.parse(lastSelectedMovie);
-  //const movie = selectedMovie;
 
   useEffect(() => {
+
+    const movie = JSON.parse(lastSelectedMovie);
+
     const commentsRef = db.collection("comments");
     const filteredCommentsRef = commentsRef.where("movieid", "==", movie.id.toString());
     filteredCommentsRef.onSnapshot((querySnapshot) => {
@@ -32,11 +33,13 @@ const Comments = () => {
         setComments(commentsData);
       } else {
         console.log("No comments found for movie", movie.id);
+        setComments('');
       }
     }, (error) => {
       console.log("Error getting comments:", error);
+      setComments('');
     });
-  }, []);
+  }, [lastSelectedMovie]);
 
 
   const saveToFirebase = () => {
@@ -157,8 +160,6 @@ const Comments = () => {
     }
   };
 
-
-
   const thumbsDown = (id) => {
     if (user) {
       const userUID = auth.currentUser.uid;
@@ -217,8 +218,6 @@ const Comments = () => {
       db.collection("users").doc(userUID).collection("rates").doc(timeStamp).set({
         rate: thumb,
         id: timeStamp
-
-
       })
         .then(() => {
           console.log("saved.");
@@ -228,13 +227,8 @@ const Comments = () => {
         });
 
     } else {
-
       return
-
     }
-
-
-
   }
 
 
