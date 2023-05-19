@@ -176,23 +176,23 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
 
 
 
-
   const handleBuy = () => {
-    
-    // dispatch(searchDropDownActions.hideSearchDropDown());
 
-    //if we have a user, then we want to navigate to payment and set the navigatetoPayment statet till true.
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        navigate('/payment/');
-        console.log('navigering till payment')
-      } else {
-        dispatch(fromPayment())
-        console.log('navigering till login')
-        navigate("/login");
-      }
-    })
-    
+    dispatch(searchDropDownActions.hideSearchDropDown());
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      console.log('User is authenticated');
+      navigate('/payment/');
+    } else {
+      console.log('User is not authenticated');
+      dispatch(fromPayment());
+      console.log(navigatePayment);
+      navigate('/login');
+    }
+
   }
 
   const handleWatchlistClick = () => {
