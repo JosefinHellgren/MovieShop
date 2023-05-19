@@ -4,10 +4,8 @@ import MovieSlider from "./MovieSlider";
 import "./mainpage.css";
 
 
-
-
-
 const MainPage = ({ onCategoryClick,  handleMovieClick }) => {
+
 
   return (
     <div className="mainpage_container">

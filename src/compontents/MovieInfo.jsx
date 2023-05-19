@@ -50,6 +50,8 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   let dispatch = useDispatch();
   let navigate = useNavigate();
   const [documentID, setDocumentID] = useState('');
+
+  const [isClicked, setIsClicked] = useState(false);
   
   
 
@@ -60,6 +62,8 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     EMPTY: 'Add to watchlist'
   }
 
+
+ 
 
   const checkMovieWatchList = () => {
     
@@ -119,12 +123,15 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
         );
         if (trailer) {
           setTrailerKey(trailer.key);
+        }else{
+          setTrailerKey(null)
+          
         }
       })
       .catch((error) => console.log(error));
   }, [selectedMovie.id]);
 
-
+console.log('movieid:', selectedMovie)
   
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -180,6 +187,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
 
     dispatch(searchDropDownActions.hideSearchDropDown());
 
+
     const auth = getAuth();
     const user = auth.currentUser;
 
@@ -192,7 +200,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       console.log(navigatePayment);
       navigate('/login');
     }
-
   }
 
   const handleWatchlistClick = () => {
@@ -225,7 +232,9 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     setShowOverview(true);
     setShowTrailer(false);
     setShowComments(false);
+
     setselectedBtnState(SELECTED_BUTTON.OVERVIEW)
+
   };
 
   const handleShowTrailer = () => {
@@ -308,6 +317,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       </div>
 
       <div className="details-nav">
+
         <button className="details-btn" onClick={handleShowOverview}>
          {selectedBtnState === 'overview' ? <strong className="extra-bold">About</strong> : "About"}
         </button>
