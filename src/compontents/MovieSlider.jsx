@@ -12,6 +12,13 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
     const moviesObject = useSelector(state => state.movies);
     const dispatch = useDispatch();
 
+
+    const settings = {
+        dots : true,
+        infinite : true,
+        sped: 500
+    }
+    
     useEffect(() => {
         fetchMovies(movie_id, genre_id, category, dispatch, similar)
     }, [title, movie_id, similar]);
@@ -73,7 +80,12 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
             {title !== 'Big Movie' && (
                 <h4 onClick={handleCategoryClick}>{title} {'>'}</h4>
             )}
-            <Slider key={moviesObject.status} className="slick-slider" slidesToShow={slidesToShow} slidesToScroll={1} >
+            <Slider {...settings} key={moviesObject.status} 
+            className="slick-slider" swipeToSlide={true}
+             slidesToShow={slidesToShow} slidesToScroll={1}
+             
+             
+     >
                 {content &&
                     content.map((movie, index) => (
                         <div key={index} className={`slider_container ${title === 'Big Movie' ? 'big-movie-slider' : ''}`}>

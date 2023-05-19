@@ -22,6 +22,14 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   const [isPurchased, setIsPurchased] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [purchasedMovies, setPurchasedMovies] = useState([]);
+  
+  const SELECTED_BUTTON = {
+    OVERVIEW : 'overview',
+    TRAILER : 'trailer',
+    COMMENTS : 'comments'
+  }
+
+  const [selectedBtnState, setselectedBtnState] = useState(SELECTED_BUTTON.OVERVIEW);
 
   //const [playing, setPlaying] = useState(false);
   const videoRef = useRef(null);
@@ -79,8 +87,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     }
   };
   
-
-
   useEffect(() => {
     let unsubscribe;
 
@@ -159,10 +165,14 @@ console.log('movieid:', selectedMovie)
     setIsPurchased(!!purchasedMovies.find(movie => movie.id === selectedMovie.id));
   }, [purchasedMovies, selectedMovie.id]);
 
+  const scrollToTop =() => {
+    console.log('scrolla uppåt')
+    window.scrollTo(0, 0);
+  }
 
-
-
-
+  useEffect(() => {
+    scrollToTop();
+  },[])
 
 
   // find genre names for each genre ID in the movie's genre_ids array
@@ -173,22 +183,23 @@ console.log('movieid:', selectedMovie)
 
 
 
-
   const handleBuy = () => {
-    
+
     dispatch(searchDropDownActions.hideSearchDropDown());
 
-    //if we have a user, then we want to navigate to payment and set the navigatetoPayment statet till true.
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        navigate('/payment/');
-      } else {
-        dispatch(fromPayment())
-        console.log("NUUUUUU!!!",navigatePayment)
-        navigate("/login");
-      }
-    })
-    
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      console.log('User is authenticated');
+      navigate('/payment/');
+    } else {
+      console.log('User is not authenticated');
+      dispatch(fromPayment());
+      console.log(navigatePayment);
+      navigate('/login');
+    }
   }
 
   const handleWatchlistClick = () => {
@@ -212,6 +223,7 @@ console.log('movieid:', selectedMovie)
       }
     } else {
       navigate('/login');
+      console.log('navigering till login handle watch')
     }
   }
 
@@ -220,7 +232,9 @@ console.log('movieid:', selectedMovie)
     setShowOverview(true);
     setShowTrailer(false);
     setShowComments(false);
-    
+
+    setselectedBtnState(SELECTED_BUTTON.OVERVIEW)
+
   };
 
   const handleShowTrailer = () => {
@@ -228,6 +242,7 @@ console.log('movieid:', selectedMovie)
     setShowOverview(false);
     setShowTrailer(true);
     setShowComments(false);
+    setselectedBtnState(SELECTED_BUTTON.TRAILER)
   };
 
   const handleShowComments = () => {
@@ -235,6 +250,7 @@ console.log('movieid:', selectedMovie)
     setShowOverview(false);
     setShowTrailer(false);
     setShowComments(true);
+    setselectedBtnState(SELECTED_BUTTON.COMMENTS)
   };
 
 
@@ -253,7 +269,7 @@ console.log('movieid:', selectedMovie)
     }
   };
 
- 
+
   return (
     <div className="movieinfo">
       <div className="movieinfocontainer">
@@ -301,14 +317,15 @@ console.log('movieid:', selectedMovie)
       </div>
 
       <div className="details-nav">
-        <button className="details-btn" id="About-btn" onClick={handleShowOverview}>
-          About
+
+        <button className="details-btn" onClick={handleShowOverview}>
+         {selectedBtnState === 'overview' ? <strong className="extra-bold">About</strong> : "About"}
         </button>
-        <button className="details-btn" id="Trailer-btn" onClick={handleShowTrailer}>
-          Trailer
+        <button className="details-btn" onClick={handleShowTrailer}>
+        {selectedBtnState == 'trailer' ? <strong className="extra-bold">Trailer</strong> : "Trailer"}
         </button>
-        <button className="details-btn" id="Comments-btn" onClick={handleShowComments}>
-          Comments
+        <button className="details-btn" onClick={handleShowComments}>
+        {selectedBtnState == 'comments' ? <strong className="extra-bold">Comments</strong> : "Comments"}
         </button>
       </div>
 
@@ -339,9 +356,9 @@ console.log('movieid:', selectedMovie)
           <Comments />
         </div>
       )}
-      <section>
-      <MovieSlider onClick={window.scrollTo(0, 0)} similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
-      <MovieSlider onClick={window.scrollTo(0, 0)} similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      <section onClick={scrollToTop}>
+      <MovieSlider similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      <MovieSlider similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
       </section>
     </div>
   );
