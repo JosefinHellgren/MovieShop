@@ -11,7 +11,8 @@ function Playmovie() {
 
 
   let navigate = useNavigate();
-  
+  const videoRef = useRef(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   
 
@@ -28,13 +29,22 @@ function Playmovie() {
     setIsFullscreen((prevState) => !prevState);
   };
 
+  //To go fullscreen when double-clicking on the video
+  const handleVideoClick = () => {
+    const videoElement = videoRef.current;
+    if (videoElement && videoElement.paused) {
+      videoElement.play();
+    } else if (videoElement) {
+      videoElement.pause();
+    }
+  };
 
 
 
     return (
       <div className="video-container">
         
-        <video className="video" controls autoPlay fullscreen playsInline onDoubleClick={handleFullscreenChange}>
+        <video className="video" controls autoPlay fullscreen="true" playsInline onDoubleClick={handleFullscreenChange} onClick={handleVideoClick}>
           <source src={video} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
