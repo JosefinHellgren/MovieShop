@@ -182,6 +182,11 @@ console.log('movieid:', selectedMovie)
   });
 
 
+    //Går till fullscreen när man dubbelklickar på video
+    const handleFullscreenChange = () => {
+      setIsFullscreen((prevState) => !prevState);
+    };
+
 
   const handleBuy = () => {
 
@@ -321,7 +326,7 @@ console.log('movieid:', selectedMovie)
         <button className="details-btn" onClick={handleShowOverview}>
          {selectedBtnState === 'overview' ? <strong className="extra-bold">About</strong> : "About"}
         </button>
-        <button className="details-btn" onClick={handleShowTrailer}>
+        <button className="details-btn" onClick={handleShowTrailer} onDoubleClick={handleFullscreenChange} >
         {selectedBtnState == 'trailer' ? <strong className="extra-bold">Trailer</strong> : "Trailer"}
         </button>
         <button className="details-btn" onClick={handleShowComments}>
