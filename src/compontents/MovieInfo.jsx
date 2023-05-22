@@ -1,41 +1,41 @@
 import React, { useEffect, useRef, useState } from "react";
 import './movieInfo.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsUp, faCartPlus, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
+import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
 import { useSelector, useDispatch } from 'react-redux';
 import Comments from "./Comments";
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { fromPayment } from "../features/navigatePayment";
-import { actions as searchDropDownActions } from "../features/searchdropdown"
 import MovieSlider from "./MovieSlider";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 function MovieInfo({ onCategoryClick, handleMovieClick }) {
+
   const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
   const selectedMovie = JSON.parse(lastSelectedMovie);
+  const rating = selectedMovie.vote_average;
+
+  let dispatch = useDispatch();
+  let navigate = useNavigate();
+  const auth = getAuth();
+  const db = firebase.firestore();
+  const user = auth.currentUser;
+  const videoRef = useRef(null);
+  const imgUrlStart = "https://image.tmdb.org/t/p/original";
+  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
+
   const [isPurchased, setIsPurchased] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [purchasedMovies, setPurchasedMovies] = useState([]);
-
-  //const [playing, setPlaying] = useState(false);
-  const videoRef = useRef(null);
   const [genres, setGenres] = useState([]);
-  const rating = selectedMovie.vote_average;
   const [trailerKey, setTrailerKey] = useState(null);
   const [showOverview, setShowOverview] = useState(true);
   const [showTrailer, setShowTrailer] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [watchList, setWatchList] = useState('Add to watchlist');
-  const imgUrlStart = "https://image.tmdb.org/t/p/original";
-  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
-  const auth = getAuth();
-  const db = firebase.firestore();
-  let dispatch = useDispatch();
-  let navigate = useNavigate();
   const [documentID, setDocumentID] = useState('');
-  const user = auth.currentUser;
   const [language, setLanguage] = useState(['']);
 
   const WATCHLIST_STATUS = {
@@ -153,7 +153,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
         navigate("/login");
       }
     })
-
   }
 
   const handleWatchlistClick = () => {
@@ -254,7 +253,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
           </div>
         </div>
       </div>
-
       <div className="movieinfobuybtns">
         {isPurchased ? (
           <button onClick={handlePlayButtonClick} className="movieinfobtn">Play</button>
@@ -305,7 +303,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       </section>
     </div>
   );
-
 }
 
 export default MovieInfo;

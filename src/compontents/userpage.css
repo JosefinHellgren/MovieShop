@@ -16,7 +16,6 @@
   color: white;
 }
 
-
 .user-page .purchased-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -30,8 +29,6 @@
   justify-content: center;
   align-items: center;
 }
-
-
 
 .watchlist-item {
   display: flex;
@@ -53,11 +50,11 @@
   display: none;
 }
 
-.user-page .purchased-item > section:hover .play-icon {
+.user-page .purchased-item>section:hover .play-icon {
   display: block;
 }
 
-.user-page .purchased-item > section,
+.user-page .purchased-item>section,
 .user-page .watchlist-item {
   transition: transform 0.3s ease;
   transform: scale(1);
@@ -106,7 +103,7 @@
   color: #ffffff;
 }
 
-.user-page .purchased-item > section:hover,
+.user-page .purchased-item>section:hover,
 .user-page .watchlist-item:hover {
   transform: scale(1.05);
 }
@@ -116,15 +113,13 @@
   border-radius: 10px;
 }
 
-
 @media only screen and (min-width: 768px) {
   .user-page {
     width: 80vw;
-
     text-align: start;
   }
 
-  .user-page > h3 {
+  .user-page>h3 {
     margin-left: 20px;
   }
 

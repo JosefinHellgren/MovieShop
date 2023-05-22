@@ -9,16 +9,13 @@ import UserPage from './compontents/UserPage';
 import Playmovie from './compontents/Playmovie';
 import Navbar from './compontents/NavBar.jsx';
 import SearchResults from './compontents/SearchResults';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fromPayment } from "./features/navigatePayment";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { actions as searchDropDownActions } from "./features/searchdropdown"
 
 function App() {
 
   const navigate = useNavigate();
-  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
   const dispatch = useDispatch();
   const [searchPageResults, setSearchPagResults] = useState([]);
   const [searchWord, setSearchWord] = useState('');

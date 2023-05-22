@@ -1,19 +1,10 @@
-.payment_sucsessfull_wrapper .progress_bar{
-   
-        height: 100%;
-        background-color: green;
-        border-radius: 5px;
-    
-
-
-}
-
-.payment_sucsessfull_wrapper{
-   
-    height: 20px;
-   
+.payment_sucsessfull_wrapper .progress_bar {
+    height: 100%;
+    background-color: green;
     border-radius: 5px;
-  
-   
 }
 
+.payment_sucsessfull_wrapper {
+    height: 20px;
+    border-radius: 5px;
+}

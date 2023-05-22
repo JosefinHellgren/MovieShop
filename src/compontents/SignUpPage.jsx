@@ -7,7 +7,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-const SignUpPage = ({onCreatingAccountClick}) => {
+const SignUpPage = ({ onCreatingAccountClick }) => {
 
     const auth = getAuth();
     const db = firebase.firestore();
@@ -19,10 +19,10 @@ const SignUpPage = ({onCreatingAccountClick}) => {
         EXISTS: 'The username is already taken',
         INVALID: 'Username must not contain spaces'
     }
+
     const [validUsername, setValidUsername] = useState(STATUS_USERNAME.NORMAL);
     const [validEmail, setValidEmail] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
-
 
     const handleEmailChange = (event) => {
         const { value } = event.target;
@@ -81,7 +81,7 @@ const SignUpPage = ({onCreatingAccountClick}) => {
         const isEmpty = /^\s*$/.test(email);
         if (isEmpty) {
             return false;
-        } 
+        }
 
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const domain = email.substring(email.lastIndexOf("@") + 1);
@@ -101,10 +101,10 @@ const SignUpPage = ({onCreatingAccountClick}) => {
     }
 
     const signUp = () => {
+
         const email = document.getElementById('email-input').value;
         const password = document.getElementById('password-input').value;
         const repeatPassword = document.getElementById('repeatpassword-input').value;
-
 
         if (validUsername == STATUS_USERNAME.INVALID) {
             alert('Username must not contain spaces');
@@ -180,7 +180,6 @@ const SignUpPage = ({onCreatingAccountClick}) => {
                 <p className={validUsername === STATUS_USERNAME.EXISTS ? 'text-danger' :
                     validUsername === STATUS_USERNAME.VALID ? 'text-success' :
                         validUsername === STATUS_USERNAME.INVALID ? 'text-danger' : ''
-
                 }>{validUsername}</p>
                 <input type="text" id='username-input' placeholder="Username" onBlur={checkIfUsernameExists} onKeyUp={handleEnterPressed} required />
                 <input type="text" id='email-input' placeholder="Email" onKeyUp={handleEnterPressed} onChange={handleEmailChange} required />
@@ -190,7 +189,6 @@ const SignUpPage = ({onCreatingAccountClick}) => {
                     <button type='submit' >Sign up</button>
                 </section>
             </form>
-
         </div>
     )
 }

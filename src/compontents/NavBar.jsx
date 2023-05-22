@@ -31,9 +31,7 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   const [userUID, setUserUID] = useState(null);
   const [signedIn, setSignedIn] = useState(false);
   let unsubscribe = () => { };
-
   const searchDropDown = useSelector(state => state.searchDropdown.searchDropDown);
-
   const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState('');
 
@@ -73,7 +71,6 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
       }
     };
   }, [createAccount])
-
 
   useEffect(() => {
     let unsubscribe = () => { };
@@ -220,7 +217,6 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
               className="play-icon-computer" />
             <h4>My movies</h4>
           </div>
-
         );
       } else {
         return (

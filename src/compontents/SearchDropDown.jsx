@@ -1,6 +1,4 @@
-
 import "./searchdropdown.css"
-
 
 const SearchDropDown = ({ query, searchResults, handleSearchClick, handleMovieClick }) => {
 
@@ -16,7 +14,7 @@ const SearchDropDown = ({ query, searchResults, handleSearchClick, handleMovieCl
     return (
         <div className="search_dropdown">
             {displayResults && displayResults.map((movie, index) => (
-                <div key={index} className="dropdown_item" onClick={ () => handleMovieClick(movie)}>
+                <div key={index} className="dropdown_item" onClick={() => handleMovieClick(movie)}>
                     <img className="movie_poster" src={imgUrlStart + movie.poster_path} />
                     <p>{movie.title}</p>
                 </div>

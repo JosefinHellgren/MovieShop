@@ -9,12 +9,11 @@ import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
 
 const Comments = () => {
 
-  const [commentText, setCommentText] = useState('');
-  const [userName, setUserName] = useState('');
   const timeStamp = new Date();
-
   const auth = getAuth();
   const db = firebase.firestore();
+  const [commentText, setCommentText] = useState('');
+  const [userName, setUserName] = useState('');
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState('');
 
@@ -22,8 +21,10 @@ const Comments = () => {
   const movie = JSON.parse(lastSelectedMovie);
 
   useEffect(() => {
+
     const commentsRef = db.collection("comments");
     const filteredCommentsRef = commentsRef.where("movieid", "==", movie.id.toString());
+
     filteredCommentsRef.onSnapshot((querySnapshot) => {
       if (!querySnapshot.empty) {
         const commentsData = querySnapshot.docs.map((doc) => doc.data());
@@ -42,6 +43,7 @@ const Comments = () => {
   const saveToFirebase = () => {
 
     if (commentText != '') {
+
       const timeStampText = timeStamp.toString();
       const formattedDate = new Intl.DateTimeFormat('en-US').format(timeStamp).toString();
 
@@ -56,11 +58,9 @@ const Comments = () => {
         timeStamp: timeStampText,
         thumbsUp: 0,
         thumbsDown: 0
-
       })
         .then(() => {
           console.log("saved.");
-
         })
         .catch((error) => {
           console.error("error saving: ", error);
@@ -228,13 +228,9 @@ const Comments = () => {
 
   return (
     <div className="comments-wrapper">
-
-
       {user && <div>
         <textarea className="comment-input" value={commentText} onChange={handleTextAreaChange} name="text" type="text" placeholder="your comment..."></textarea>
         <button onClick={saveToFirebase}>comment</button></div>}
-
-
       <div className="comments-list">
         {comments && comments
           .slice()
