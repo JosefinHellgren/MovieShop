@@ -1,5 +1,7 @@
+
 import React, {useRef, useEffect, useState} from 'react';
 import { useNavigate } from "react-router-dom";
+
 
 import './playmovie.css'
 import video from '../videos/newmovie.mp4'

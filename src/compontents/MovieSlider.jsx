@@ -9,6 +9,9 @@ import MovieGridItem from "./MovieGridItem";
 const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre_id, movie_id, similar }) => {
 
     const [slidesToShow, setSlidesToShow] = useState(3);
+    const [slidesToScroll,setSlidesToScroll] = useState(3);
+    const [autoplay,setAutoplay] = useState(false);
+    const [isMobile, setIsMobile] = useState(false)
     const moviesObject = useSelector(state => state.movies);
     const dispatch = useDispatch();
 
@@ -48,11 +51,18 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
     useEffect(() => {
         const updateSlidesToShow = () => {
             if (window.innerWidth <= 768 && title === "Big Movie" || window.innerWidth >= 768 && title === "Big Movie") {
-                setSlidesToShow(1); // Show only one slide for Slider A on wider screens
+                setSlidesToShow(1); 
+                setSlidesToScroll(1);
+                setAutoplay(true)
+                // Show only one slide for Slider A on wider screens
             } else if (window.innerWidth >= 768) {
                 setSlidesToShow(4); // Show four slides for other sliders on wider screens
+                setSlidesToScroll(4);
             } else {
-                setSlidesToShow(3); // Show three slides on smaller screens
+                setSlidesToShow(3); 
+                setSlidesToScroll(3)
+                setIsMobile(true)// Show three slides on smaller screens
+                console.log("isMobile should slide to scroll")
             }
         };
 
@@ -73,9 +83,14 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
             {title !== 'Big Movie' && (
                 <h4 onClick={handleCategoryClick}>{title} {'>'}</h4>
             )}
+
             {content && content.length > 0 ? (
-                <Slider key={moviesObject.status} className="slick-slider" slidesToShow={slidesToShow} slidesToScroll={slidesToShow} >
+                <Slider key={moviesObject.status} className="slick-slider" slidesToShow={slidesToShow}
+                    slideToSwipe={isMobile}
+                    touchThreshold={10}
+                    slidesToScroll={slidesToShow} autoplay={autoplay} >
                     {content.map((movie, index) => (
+
                         <div key={index} className={`slider_container ${title === 'Big Movie' ? 'big-movie-slider' : ''}`}>
                             <MovieGridItem movie={movie} handleMovieClick={handleMovieClick} useBackDrop={title === "Big Movie"} />
                         </div>
@@ -97,6 +112,8 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
             URL = `https://api.themoviedb.org/3/movie/${movie_id}/similar?api_key=${apiKey}&language=en-US&region=SE&page=${page}`;
         } else if (movie_id !== "") {
             URL = `https://api.themoviedb.org/3/movie/${movie_id}/recommendations?api_key=${apiKey}&language=en-US&region=SE&page=${page}`;
+        } else if( title === "Big Movie"){
+            URL = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}`
         }
 
         dispatch(actions.isFetching());

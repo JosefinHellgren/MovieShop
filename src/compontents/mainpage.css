@@ -6,8 +6,30 @@
     display: none;
 }
 
-.mainpage_container .popular_movies_section {
-    margin-top: 35%;
+
+  .mainpage_container .popular_movies_section{
+    margin-top: 7%;
+  }
+
+
+
+
+@media (min-device-width: 768px) {
+
+  
+  .mainpage_container .popular_movies_section{
+    margin-top: 0%;
+  }
+ 
+  .mainpage_container section {
+    margin-bottom: 20%; 
+  }
+
+  .mainpage_container .big_Movie_poster_section{
+    margin-bottom: 20%;
+  }
+  
+
 }
 
 @media (min-device-width: 768px) {

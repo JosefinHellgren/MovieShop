@@ -12,6 +12,8 @@ import SearchResults from './compontents/SearchResults';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions as searchDropDownActions } from "./features/searchdropdown"
+import ikon from "./images/image1.png"
+
 
 function App() {
 

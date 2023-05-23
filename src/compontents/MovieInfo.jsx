@@ -354,10 +354,10 @@ function MovieInfo({ onCategoryClick, handleMovieClick, toggleUserIconVisibility
         </div>
       )}
 
+
       <section onClick={scrollToTop}>
       <MovieSlider similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
       <MovieSlider similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
-
       </section>
     </div>
   );

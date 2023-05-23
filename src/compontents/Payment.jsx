@@ -139,6 +139,7 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
 
 const Payment = ({toggleUserIconVisibility}) => {
 
+
     const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
     const selectedMovie = JSON.parse(lastSelectedMovie);
     const imgUrlStart = "https://image.tmdb.org/t/p/original";
@@ -160,6 +161,7 @@ const Payment = ({toggleUserIconVisibility}) => {
     const movie = selectedMovie;
     let navigate = useNavigate();
 
+
     useEffect(() => {
         toggleUserIconVisibility(true);
         const user = auth.currentUser;
@@ -171,6 +173,7 @@ const Payment = ({toggleUserIconVisibility}) => {
                 }
             })
     }, [])
+
 
     const handleExitButtonClick = () => {
 
@@ -212,7 +215,7 @@ const Payment = ({toggleUserIconVisibility}) => {
         const currentDate = new Date();
         const [month, year] = value.split('/');
         const cardExpiration = new Date(Number("20" + year), Number(month) - 1, 1); // Assuming the year is in the format YY, we add "20" to convert it to YYYY
-       
+      
         const cleanedValue = value.replace(/\D/g, ''); 
         
         let formattedValue = cleanedValue;
@@ -268,7 +271,8 @@ const Payment = ({toggleUserIconVisibility}) => {
     const handleNameChange = (event) => {
         const { value } = event.target;
 
-        const isValid = /^[a-zA-Z\u00C0-\u00ff]+\s?[a-zA-Z\u00C0-\u00ff]+$/.test(value)
+        const isValid = /^[a-zA-Z\u00C0-\u00ff]+(\s+[a-zA-Z\u00C0-\u00ff]+)*\s*$/.test(value);
+
 
         setCardName(value);
 
@@ -435,7 +439,7 @@ const Payment = ({toggleUserIconVisibility}) => {
                                 Name on Card:
                                 <input type="text" onChange={handleNameChange} value={cardName} placeholder='Jamile Jonson' required></input>
                             </div>
-                            <button type='submit' className='submitButton'> Buy </button>
+                            <button type='submit' className='submitButton'> 99kr Buy </button>
                             <button onClick={handleExitButtonClick}>Cancel</button>
                         </form>)}
                 </div>
