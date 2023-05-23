@@ -4,6 +4,7 @@ import './searchresults.css'
 import { STATUS, actions } from "../features/movies";
 import React, { useEffect, useState } from "react";
 
+
 const SearchResults = ({ query, title, category, handleMovieClick, searchResults }) => {
 
     const dispatch = useDispatch();
@@ -78,6 +79,7 @@ const SearchResults = ({ query, title, category, handleMovieClick, searchResults
             </div>
         </div>
     );
+
 };
 
 export default SearchResults;

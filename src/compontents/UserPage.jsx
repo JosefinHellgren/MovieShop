@@ -62,7 +62,6 @@ const UserPage = () => {
   }, [currentUser]);
 
   const handlePurchasedMovieClick = (movie) => {
-    //dispatch(actions.selectMovie(movie))
     localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
     navigate("/movieinfo/");
   }

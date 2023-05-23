@@ -29,6 +29,18 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   const [isPurchased, setIsPurchased] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [purchasedMovies, setPurchasedMovies] = useState([]);
+
+  const SELECTED_BUTTON = {
+    OVERVIEW : 'overview',
+    TRAILER : 'trailer',
+    COMMENTS : 'comments'
+  }
+
+  const [selectedBtnState, setselectedBtnState] = useState(SELECTED_BUTTON.OVERVIEW);
+
+  //const [playing, setPlaying] = useState(false);
+  const videoRef = useRef(null);
+ 
   const [genres, setGenres] = useState([]);
   const [trailerKey, setTrailerKey] = useState(null);
   const [showOverview, setShowOverview] = useState(true);
@@ -36,12 +48,18 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   const [showComments, setShowComments] = useState(false);
   const [watchList, setWatchList] = useState('Add to watchlist');
   const [documentID, setDocumentID] = useState('');
+
   const [language, setLanguage] = useState(['']);
+
+
+  const [isClicked, setIsClicked] = useState(false);
+
 
   const WATCHLIST_STATUS = {
     EXISTS: 'Remove from watchlist',
     EMPTY: 'Add to watchlist'
   }
+
 
   const checkMovieWatchList = () => {
 
@@ -100,10 +118,14 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
         );
         if (trailer) {
           setTrailerKey(trailer.key);
+        }else{
+          setTrailerKey(null)
+          
         }
       })
       .catch((error) => console.log(error));
   }, [selectedMovie.id]);
+
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -135,24 +157,46 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     setIsPurchased(!!purchasedMovies.find(movie => movie.id === selectedMovie.id));
   }, [purchasedMovies, selectedMovie.id]);
 
+
+  const scrollToTop =() => {
+    console.log('scrolla uppåt')
+    window.scrollTo(0, 0);
+  }
+
+  useEffect(() => {
+    scrollToTop();
+  },[])
+
   // find genre names for each genre ID in the movie's genre_ids array
   const genreNames = selectedMovie.genre_ids.map(id => {
     const genre = genres.find(g => g.id === id);
     return genre ? genre.name : "";
   });
 
+
+
+    //Går till fullscreen när man dubbelklickar på video
+    const handleFullscreenChange = () => {
+      setIsFullscreen((prevState) => !prevState);
+    };
+
+
   const handleBuy = () => {
 
-    //if we have a user, then we want to navigate to payment and set the navigatetoPayment statet till true.
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        navigate('/payment/');
-      } else {
-        dispatch(fromPayment())
-        console.log(navigatePayment)
-        navigate("/login");
-      }
-    })
+ 
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      console.log('User is authenticated');
+      navigate('/payment/');
+    } else {
+      console.log('User is not authenticated');
+      dispatch(fromPayment());
+      console.log(navigatePayment);
+      navigate('/login');
+    }
+
   }
 
   const handleWatchlistClick = () => {
@@ -176,6 +220,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       }
     } else {
       navigate('/login');
+      console.log('navigering till login handle watch')
     }
   }
 
@@ -183,18 +228,23 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
     setShowOverview(true);
     setShowTrailer(false);
     setShowComments(false);
+
+    setselectedBtnState(SELECTED_BUTTON.OVERVIEW)
+
   };
 
   const handleShowTrailer = () => {
     setShowOverview(false);
     setShowTrailer(true);
     setShowComments(false);
+    setselectedBtnState(SELECTED_BUTTON.TRAILER)
   };
 
   const handleShowComments = () => {
     setShowOverview(false);
     setShowTrailer(false);
     setShowComments(true);
+    setselectedBtnState(SELECTED_BUTTON.COMMENTS)
   };
 
   const handlePlayButtonClick = () => {
@@ -211,6 +261,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       }
     }
   };
+
 
   useEffect(() => {
 
@@ -235,6 +286,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       default: setLanguage(""); break;
     }
   }, [selectedMovie])
+
 
   return (
     <div className="movieinfo">
@@ -264,14 +316,15 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
         )}
       </div>
       <div className="details-nav">
+
         <button className="details-btn" onClick={handleShowOverview}>
-          About
+         {selectedBtnState === 'overview' ? <strong className="extra-bold">About</strong> : "About"}
         </button>
-        <button className="details-btn" onClick={handleShowTrailer}>
-          Trailer
+        <button className="details-btn" onClick={handleShowTrailer} onDoubleClick={handleFullscreenChange} >
+        {selectedBtnState == 'trailer' ? <strong className="extra-bold">Trailer</strong> : "Trailer"}
         </button>
         <button className="details-btn" onClick={handleShowComments}>
-          Comments
+        {selectedBtnState == 'comments' ? <strong className="extra-bold">Comments</strong> : "Comments"}
         </button>
       </div>
       {showOverview && (
@@ -297,9 +350,11 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
           <Comments />
         </div>
       )}
-      <section>
-        <MovieSlider onClick={window.scrollTo(0, 0)} similar={false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick} />
-        <MovieSlider onClick={window.scrollTo(0, 0)} similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick} />
+
+      <section onClick={scrollToTop}>
+      <MovieSlider similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+      <MovieSlider similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+
       </section>
     </div>
   );

@@ -28,6 +28,7 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
 
   const auth = getAuth();
   const db = firebase.firestore();
+  const uid = localStorage.getItem('uid');
   const [userUID, setUserUID] = useState(null);
   const [signedIn, setSignedIn] = useState(false);
   let unsubscribe = () => { };
@@ -35,28 +36,39 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState('');
 
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setSignedIn(true);
-        setUserUID(user.uid);
-        console.log('currentuser inloggad')
+     
+          setSignedIn(true);
+          setUserUID(user.uid);
+          localStorage.setItem('uid', user.uid);
+        
       } else {
         setSignedIn(false);
         setUserUID(null);
-        console.log('inte inloggad')
+        localStorage.removeItem('uid');
       }
     });
   }, [])
 
   useEffect(() => {
 
-    if (createAccount === 'success') {
-      console.log('userUID,', userUID)
+    if (uid) {
+      setSignedIn(true);
+      setUserUID(uid);
+    } 
+  }, []);
+  
+
+  useEffect(() => {
+    
+   if (createAccount === 'success') {
+
       const docRef = db.collection('users').doc(userUID);
       unsubscribe = docRef.onSnapshot((doc) => {
         if (doc.exists) {
-          console.log('snapshot körs, datan finns')
           const data = doc.data();
           changeBackground(data.background);
           if (createAccount != 'normal') {
@@ -75,29 +87,22 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   useEffect(() => {
     let unsubscribe = () => { };
     if (userUID && createAccount === 'normal') {
-      console.log('userUID,', userUID)
       const docRef = db.collection('users').doc(userUID);
       unsubscribe = docRef.onSnapshot((doc) => {
         if (doc.exists) {
-          console.log('snapshot körs, datan finns')
           const data = doc.data();
           changeBackground(data.background);
-        } else {
-          console.log('snapshot körs, datan finns inte')
-        }
+        } 
       });
     }
 
     return () => {
-      console.log('unsubscripe körs')
       unsubscribe();
     };
   }, [userUID]);
 
   const changeBackground = (background) => {
-    console.log('change background körs')
     if (background === 'black') {
-      console.log('change background to black körs')
       document.body.style.backgroundColor = "black";
       document.querySelector('#root').style.backgroundColor = 'black';
       dropdownUl.style.background = 'black';
@@ -144,6 +149,7 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   }, [location.pathname]);
 
   const handleMovieClick = (movie) => {
+
     localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
     navigate("/movieinfo/");
   };
@@ -169,6 +175,9 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
     dropdown.removeAttribute('open');
     unsubscribe();
     navigate('/');
+    setSignedIn(false);
+    setUserUID(null);
+    localStorage.removeItem('uid');
     auth.signOut();
   }
 

@@ -64,6 +64,19 @@ const LoginPage = () => {
     }
   }
 
+  const handleKeyUp = (event) => {
+    if (event.key === 'Enter') {
+      login();
+    }
+  }
+
+  const handleEnterPressed = (event) => {
+    const emailInput = document.getElementById("userPassword-input");
+    if (event.key === 'Enter') {
+      emailInput.focus();
+    }
+  }
+
   const handleIconClick = () => {
     navigate(-1);
   }
@@ -82,12 +95,17 @@ const LoginPage = () => {
       </section>
       <section className="sign-up-container">
         <p className='error-message'>{errorMessage}</p>
-        <input type="text" className={errorEmail ? "email-input red-border" : "email-input"} id='userEmail-input' placeholder="Enter you email" />
+        <input type="text" 
+        className={errorEmail ? "email-input red-border" : "email-input"} 
+        id='userEmail-input' 
+        placeholder="Enter you email"
+        onKeyUp={handleEnterPressed} />
         <PasswordInput
           id="userPassword-input"
           className={errorPassword ? "password-input red-border" : "password-input"}
           name="password"
           placeholder="Enter your password"
+          onKeyUp = {handleKeyUp}
         />
       </section>
       <p className='register-member' onClick={handleRegisterClick}>Not registered yet? Register here!</p>

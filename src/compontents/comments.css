@@ -11,10 +11,13 @@
     font-weight: bold;
 }
 
-.comments-wrapper .comments-list {
-    height: 100px;
-    width: 300px;
-    overflow: auto;
+
+
+.comments-wrapper .comments-list{
+    height: 165px;
+     width: 300px;
+      overflow: auto;
+
 }
 
 .comments-wrapper .comment-input {

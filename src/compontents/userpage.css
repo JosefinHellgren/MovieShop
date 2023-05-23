@@ -39,6 +39,7 @@
 .user-page .purchased-item>section {
   position: relative;
   width: 35vw;
+  cursor: pointer;
 }
 
 .user-page .play-icon {
@@ -63,6 +64,7 @@
 .user-page .watchlist-item>section {
   position: relative;
   width: 35vw;
+  cursor: pointer;
 }
 
 .user-page .purchased-title {
