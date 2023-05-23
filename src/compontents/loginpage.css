@@ -13,6 +13,7 @@
     display: flex;
     justify-content: flex-end;
     margin-left: auto;
+    cursor: pointer;
 }
 
 .login-page .fa-icon {
@@ -52,8 +53,15 @@
 }
 
 .login-page .register-member {
-    color: white;
+    color: #00AEEF; 
+    cursor: pointer;
+    text-decoration: underline;
 }
+
+.login-page .register-member:hover {
+    color: #ff7700;
+}
+
 
 .login-page .fa-times-icon {
     font-size: 35px;

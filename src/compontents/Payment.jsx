@@ -42,7 +42,18 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
         const [month, year] = value.split('/');
         const cardExpiration = new Date(Number("20" + year), Number(month) - 1, 1); // Assuming the year is in the format YY, we add "20" to convert it to YYYY
 
-        setExpDate(value);
+        const cleanedValue = value.replace(/\D/g, ''); 
+
+        let formattedValue = cleanedValue;
+
+        if (cleanedValue.length >= 2) {
+            formattedValue = cleanedValue.slice(0, 2) + '/' + cleanedValue.slice(2);
+        }
+
+        setExpDate(formattedValue);
+
+
+
 
         if (isValid) {
 
@@ -126,7 +137,7 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
     );
 };
 
-const Payment = () => {
+const Payment = ({toggleUserIconVisibility}) => {
 
     const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
     const selectedMovie = JSON.parse(lastSelectedMovie);
@@ -150,6 +161,7 @@ const Payment = () => {
     let navigate = useNavigate();
 
     useEffect(() => {
+        toggleUserIconVisibility(true);
         const user = auth.currentUser;
 
         db.collection('users').doc(user.uid).collection('purchased').where('id', "==", movie.id).get()
@@ -200,8 +212,18 @@ const Payment = () => {
         const currentDate = new Date();
         const [month, year] = value.split('/');
         const cardExpiration = new Date(Number("20" + year), Number(month) - 1, 1); // Assuming the year is in the format YY, we add "20" to convert it to YYYY
-
-        setExpDate(value);
+       
+        const cleanedValue = value.replace(/\D/g, ''); 
+        
+        let formattedValue = cleanedValue;
+        
+        if (cleanedValue.length >= 2) {
+          
+          formattedValue = cleanedValue.slice(0, 2) + '/' + cleanedValue.slice(2);
+        }
+        
+        setExpDate(formattedValue);
+        
 
         if (isValid) {
             if (cardExpiration < currentDate) {

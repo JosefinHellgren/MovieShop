@@ -7,7 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { FaPlay } from 'react-icons/fa';
 import './userpage.css'
 
-const UserPage = () => {
+
+const UserPage = ({toggleUserIconVisibility}) => {
+
 
   const db = firebase.firestore();
   const auth = getAuth();
@@ -21,6 +23,7 @@ const UserPage = () => {
   const [purchasedIsEmpty, setPurchasedIsEmpty] = useState(true);
 
   useEffect(() => {
+    toggleUserIconVisibility(false);
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log('user hämtats')

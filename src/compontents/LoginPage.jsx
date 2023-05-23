@@ -4,10 +4,12 @@ import './loginpage.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import PasswordInput from './PasswordInput';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const LoginPage = () => {
+
+
+const LoginPage = ({toggleUserIconVisibility}) => {
 
   const auth = getAuth();
   const navigate = useNavigate();
@@ -23,6 +25,10 @@ const LoginPage = () => {
     WRONGPASSWORD: 'Wrong password',
     USERNOTFOUND: 'User not found'
   }
+
+  useEffect(() => {
+    toggleUserIconVisibility(true);
+  },[])
 
   const login = async () => {
     const email = document.getElementById('userEmail-input').value;
@@ -110,7 +116,7 @@ const LoginPage = () => {
       </section>
       <p className='register-member' onClick={handleRegisterClick}>Not registered yet? Register here!</p>
       <section className='signup-button-container'>
-        <button onClick={login}>Sign in</button>
+        <button onClick={login}>Log in</button>
       </section>
     </div>
   );

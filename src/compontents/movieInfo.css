@@ -1,5 +1,4 @@
 .movieinfo {
-
   color: white;
   display: flex;
   flex-direction: column;
@@ -9,9 +8,11 @@
 }
 
 
- .movieinfo .extra-bold {
+  .movieinfo .extra-bold {
     font-weight: 900;
   }
+  
+
 
 .movieinfo .movie-details {
   display: flex;
@@ -143,6 +144,7 @@
   }
 
 
+
 .movieinfo .details-nav {
   margin-top: 30px;
   display: flex;
@@ -183,10 +185,9 @@
 }
 
 
-
-
   @media only screen and (max-width: 990px) {
     .movieinfo .movieinfocontainer .poster-container .movieinfobackdrop .backdrop-img {
       display: none;
     }
 }
+

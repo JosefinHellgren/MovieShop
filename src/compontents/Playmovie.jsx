@@ -6,8 +6,12 @@ import video from '../videos/newmovie.mp4'
 
 
 
-function Playmovie() {
+function Playmovie({toggleUserIconVisibility}) {
 
+useEffect(() => {
+  toggleUserIconVisibility(true);
+},[])
+ 
 
 
   let navigate = useNavigate();
@@ -20,6 +24,7 @@ function Playmovie() {
   const handleGoBack = () => {
     navigate(-1);
   };
+
 
 
 

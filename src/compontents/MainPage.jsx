@@ -1,8 +1,16 @@
 
 import MovieSlider from "./MovieSlider";
 import "./mainpage.css";
+import { useEffect } from "react";
 
-const MainPage = ({ onCategoryClick,  handleMovieClick }) => {
+
+
+const MainPage = ({ onCategoryClick,  handleMovieClick, toggleUserIconVisibility }) => {
+
+  useEffect(() => {
+    toggleUserIconVisibility(true);
+  }, [])
+
 
 
   return (
