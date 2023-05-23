@@ -101,8 +101,6 @@ border-radius: 15px;
 
 @media (min-width: 768px) {
 
-
-
     .payment-container .div-for-web {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -118,7 +116,6 @@ border-radius: 15px;
 
     .payment-container .payment-form-wrapper {
         margin-top: 1%;
-
     }
 
     .payment-container .paymentform {

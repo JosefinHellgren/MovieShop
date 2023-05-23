@@ -4,9 +4,11 @@ import './playmovie.css'
 import video from '../videos/movie.mp4'
 
 
-function Playmovie() {
+function Playmovie({toggleUserIconVisibility}) {
 
-
+useEffect(() => {
+  toggleUserIconVisibility(true);
+},[])
  
 
 

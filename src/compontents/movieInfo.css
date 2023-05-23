@@ -6,6 +6,7 @@
     align-items: center;
     justify-content: flex-start;
     margin-top: 60px;
+    width: 100vw;
   }
 
 .movieinfo  .movie-details  {
@@ -19,7 +20,6 @@
   .movieinfo .extra-bold {
     font-weight: 900;
   }
-  
   
 
   .movieinfo .movieinfobackdrop{
@@ -144,15 +144,6 @@
     transition: transform 0.5s; /* Lägg till en övergångseffekt för smidig ändring av storlek */
   }
   
- 
-
- 
-  @media only screen and (min-width: 768px) {
-    .movieinfo .traileriframe .trailer {
-      width: 600px;
-    height: 300px;
-    }
-  }
 
   @media only screen and (min-width: 768px) {
     .movieinfo .poster-img {
@@ -164,14 +155,16 @@
     .movieinfo .movieinfocontainer .poster-container .movieinfobackdrop .backdrop-img {
       display: none;
     }
-  }
-
-
-  @media only screen and (min-width: 768px){
+    .movieinfo .traileriframe .trailer {
+      width: 600px;
+    height: 300px;
+    }
     .movieinfo .info-overview{
       width: 500px;
     }
-
   }
+
+
+
 
  

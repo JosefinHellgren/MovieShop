@@ -8,7 +8,7 @@ import { FaPlay } from 'react-icons/fa';
 import './userpage.css'
 
 
-const UserPage = () => {
+const UserPage = ({toggleUserIconVisibility}) => {
 
   const imgUrlStart = "https://image.tmdb.org/t/p/original"
   const [purchasedMovies, setPurchasedMovies] = useState([]);
@@ -23,6 +23,7 @@ const UserPage = () => {
   const auth = getAuth();
 
   useEffect(() => {
+    toggleUserIconVisibility(false);
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log('user hämtats')

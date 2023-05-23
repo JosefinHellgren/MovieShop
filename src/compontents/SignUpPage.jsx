@@ -5,9 +5,9 @@ import 'firebase/compat/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const SignUpPage = ({onCreatingAccountClick}) => {
+const SignUpPage = ({onCreatingAccountClick, toggleUserIconVisibility}) => {
 
     const auth = getAuth();
     const db = firebase.firestore();
@@ -22,6 +22,10 @@ const SignUpPage = ({onCreatingAccountClick}) => {
     const [validUsername, setValidUsername] = useState(STATUS_USERNAME.NORMAL);
     const [validEmail, setValidEmail] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
+
+    useEffect(() => {
+        toggleUserIconVisibility(true);
+    },[])
 
 
     const handleEmailChange = (event) => {

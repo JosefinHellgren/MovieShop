@@ -15,7 +15,7 @@ import SearchDropDown from "./SearchDropDown";
 import { FiSettings } from "react-icons/fi";
 import {AiOutlinePlayCircle} from 'react-icons/ai'
 
-const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
+const Navbar = ({ onSearchClick, handleAccountStatus, createAccount, isUserIconVisible }) => {
 
   const pinkGradient = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
   const blackGradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%';
@@ -32,7 +32,7 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   const uid = localStorage.getItem('uid');
   const [userUID, setUserUID] = useState(null);
   const [signedIn, setSignedIn] = useState(false);
-  let unsubscribe = () => { };
+  let unsubscribe = () => {};
 
   const searchDropDown = useSelector(state => state.searchDropdown.searchDropDown);
 
@@ -64,30 +64,30 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   }, []);
   
 
-  useEffect(() => {
-    
-   if (createAccount === 'success') {
-      const docRef = db.collection('users').doc(userUID);
-      unsubscribe = docRef.onSnapshot((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          changeBackground(data.background);
-          if (createAccount != 'normal') {
-            handleAccountStatus('normal');
-          }
-        } 
-     });
-    } 
-    return () => {
-      if (!signedIn) {
-       unsubscribe(); 
-      }
-    };
-  }, [createAccount])
+
+
+useEffect(() => {
+  if (userUID && createAccount === 'normal') {
+    const docRef = db.collection('users').doc(userUID);
+    unsubscribe = docRef.onSnapshot((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        changeBackground(data.background);
+      } 
+    });
+  }
+
+  return () => {
+    if (unsubscribe) {
+      unsubscribe();
+    }
+  };
+}, [userUID, createAccount]);
+
+
 
 
   useEffect(() => {
-    let unsubscribe = () => {}; 
     if (userUID && createAccount === 'normal') {
       const docRef = db.collection('users').doc(userUID);
       unsubscribe = docRef.onSnapshot((doc) => {
@@ -210,45 +210,26 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   }
 
   const renderButton = (isMobile, signedIn) => {
-    if (isMobile) {
-      if (signedIn) {
-        return (
-          <AiOutlinePlayCircle 
-          className="playbtn-mobile"
-          onClick={handlePlayButtonPressed}/>
-        );
-      } else {
-        return (
-          <HiOutlineUserCircle
-            className="user_icon"
-            onClick={handleUserCircleClick}
-          />
-        );
-      }
-    } else {
-      if (signedIn) {
-        return (
-          <div className="play-button-div" onClick={handlePlayButtonPressed}>
-          <AiOutlinePlayCircle 
-          className="play-icon-computer"/>
-          <h4>My movies</h4>
-          </div>
-          
-        );
-      } else {
-        return(
-        
-        <div className="user-icon-div" onClick={handleUserCircleClick}>
+    if (!isUserIconVisible) {
+      return null;
+    } else if (isMobile) {
+      return (
+        <HiOutlineUserCircle
+        className="user_icon"
+        onClick={signedIn ? handlePlayButtonPressed : handleUserCircleClick}
+      />
+      );
+    } else if (!isMobile) {
+      return (
+      <div className="user-icon-div" onClick={signedIn ? handlePlayButtonPressed : handleUserCircleClick}>
          <HiOutlineUserCircle
             className="user_icon_computer"
           /> 
-          <h4> Log in</h4>
+          <h4>{signedIn ? "My Pages" : "Log in"}</h4>
         </div>
-        )
-      }
+      )
     }
   };
-
 
   const renderSettingsButton = (isMobile) => {
     if (isMobile) {
@@ -297,8 +278,7 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
         <input type="text" value={query} placeholder="Search movies.." onChange={handleSearchInputChange} />
         <ImSearch className="search_icon" onClick={handleSearchClick} />
       </div>
-      <section className={signedIn ? 'navbar_section' : 'navbar_section hide'}>
-        
+      <section className={signedIn && !isUserIconVisible ? 'navbar_section' : 'navbar_section hide'}>
         <details className="dropdown">
           {renderSettingsButton(isMobile)}
           <ul>

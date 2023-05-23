@@ -13,6 +13,7 @@
     display: flex;
     justify-content: flex-end;
     margin-left: auto;
+    cursor: pointer;
 }
 
 .sign-up-page .fa-icon {

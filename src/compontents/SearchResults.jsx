@@ -1,7 +1,13 @@
+import { useEffect } from "react";
 import MovieGridItem from "./MovieGridItem";
 import './searchresults.css'
 
-const SearchResults = ({ title, searchResults, handleMovieClick }) => {  
+const SearchResults = ({ title, searchResults, handleMovieClick, toggleUserIconVisibility }) => {  
+
+  useEffect(() => {
+    toggleUserIconVisibility(true);
+  },[])
+
   return (
     <div className="search_results">
       <h2>{title}</h2>

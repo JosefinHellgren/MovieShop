@@ -14,7 +14,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 
-function MovieInfo({ onCategoryClick, handleMovieClick }) {
+function MovieInfo({ onCategoryClick, handleMovieClick, toggleUserIconVisibility }) {
   const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
   
   const selectedMovie = JSON.parse(lastSelectedMovie);
@@ -134,6 +134,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
 console.log('movieid:', selectedMovie)
   
   useEffect(() => {
+    toggleUserIconVisibility(true);
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log('user hämtats')
