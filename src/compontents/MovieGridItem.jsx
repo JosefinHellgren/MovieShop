@@ -9,6 +9,9 @@ const MovieGridItem = ({ movie, handleMovieClick, useBackDrop }) => {
     const imageSource = useBackDrop ? movie.backdrop_path : movie.poster_path;
     const movieStyle = useBackDrop ? { width: '90%', paddingTop: "80px" } : {};
     const formattedYear = new Date(movie.release_date).getFullYear();
+
+    const stringFormatted = String(formattedYear);
+    
     useEffect(() => {
         const handleResize = () => {
           setIsMobile(window.innerWidth <= 767);
@@ -37,7 +40,7 @@ const MovieGridItem = ({ movie, handleMovieClick, useBackDrop }) => {
             <div className="movie_info"
                 onClick={() => handleMovieClick(movie)}>
                 <h6 className="movie_title">{movie.title}</h6>
-                <p className="movie_release">{formattedYear}</p>
+                <p className="movie_release">{stringFormatted}</p>
                 <p className="movie_rating">{movie.vote_average}</p>
             </div>
 
