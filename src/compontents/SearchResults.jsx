@@ -6,11 +6,15 @@ import { STATUS, actions } from "../features/movies";
 import React, { useEffect, useState } from "react";
 
 
-const SearchResults = ({ query, title, category, handleMovieClick, searchResults }) => {
+const SearchResults = ({ query, title, category, handleMovieClick, searchResults, toggleUserIconVisibility }) => {
 
     const dispatch = useDispatch();
     const moviesObject = useSelector(state => state.movies);
     const [content, setContent] = useState([]);
+
+    useEffect(() => {
+        toggleUserIconVisibility(true);
+    }, [])
 
     useEffect(() => {
         if (category === "search") {
@@ -80,28 +84,8 @@ const SearchResults = ({ query, title, category, handleMovieClick, searchResults
             </div>
         </div>
     );
-
-
-const SearchResults = ({ title, searchResults, handleMovieClick, toggleUserIconVisibility }) => {  
-
-  useEffect(() => {
-    toggleUserIconVisibility(true);
-  },[])
-
-  return (
-    <div className="search_results">
-      <h2>{title}</h2>
-      <div className="movie_grid">
-        {searchResults && searchResults.map((movie, index) => (
-            <div className="movie_item" key={index}>
-          <MovieGridItem key={movie.id} movie={movie} handleMovieClick={handleMovieClick} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
 };
+
 
 export default SearchResults;
 

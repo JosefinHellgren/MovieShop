@@ -14,11 +14,11 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
 
 
     const settings = {
-        dots : true,
-        infinite : true,
+        dots: true,
+        infinite: true,
         sped: 500
     }
-    
+
     useEffect(() => {
         fetchMovies(movie_id, genre_id, category, dispatch, similar)
     }, [title, movie_id, similar]);
@@ -68,31 +68,24 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
     }, []);
 
     return (
+
         <div className="movie_slider">
-
-
             {title !== 'Big Movie' && (
                 <h4 onClick={handleCategoryClick}>{title} {'>'}</h4>
             )}
-            <Slider {...settings} key={moviesObject.status} 
-            className="slick-slider" swipeToSlide={true}
-             slidesToShow={slidesToShow} slidesToScroll={1}
-             
-             
-     >
-                {content &&
-                    content.map((movie, index) => (
+            {content && content.length > 0 ? (
+                <Slider key={moviesObject.status} className="slick-slider" slidesToShow={slidesToShow} slidesToScroll={slidesToShow} >
+                    {content.map((movie, index) => (
                         <div key={index} className={`slider_container ${title === 'Big Movie' ? 'big-movie-slider' : ''}`}>
                             <MovieGridItem movie={movie} handleMovieClick={handleMovieClick} useBackDrop={title === "Big Movie"} />
                         </div>
                     ))}
-
-            </Slider>
-          ) : (
-            <h5>Could not load movies</h5>
-          )}
+                </Slider>
+            ) : (
+                <h5>Could not load movies</h5>
+            )}
         </div>
-      );
+    );
 
     async function fetchMovies(movie_id, genre_id, category, dispatch, similar, page = 1) {
         const apiKey = "305f99214975faee28a0f129881c6ec9";
