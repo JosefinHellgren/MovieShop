@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fromPayment } from "./features/navigatePayment";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { actions as searchDropDownActions } from "./features/searchdropdown"
+import ikon from "./images/image1.png"
+
 
 
 function App() {

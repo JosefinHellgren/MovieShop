@@ -1,0 +1,26 @@
+
+
+
+{
+    "name": "Movie Shop",
+    "short_name": "Movie Shop",
+    "description": "Movies for movie lovers, by movie lovers.",
+    "icons": [
+       
+      {
+        "src": "image1.png",
+        "type": "image/png",
+        "sizes": "1024x1024"
+      },
+      {
+        "src": "favicon.ico",
+        "sizes": "64x64 32x32 24x24 16x16",
+        "type": "image/x-icon"
+      }
+  
+      ],
+    "start_url": "/MovieShop/",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#000000"
+  }
