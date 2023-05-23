@@ -1,6 +1,6 @@
 import '../compontents/payment.css'
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import visa from '../images/visa.png'
 import americanexpress from '../images/AmericanExpress.png'
 import mastercard from '../images/Mastercard.png'
