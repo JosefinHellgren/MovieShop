@@ -1,8 +1,6 @@
 
-
 import MovieSlider from "./MovieSlider";
 import "./mainpage.css";
-
 
 const MainPage = ({ onCategoryClick,  handleMovieClick }) => {
 
@@ -32,9 +30,7 @@ const MainPage = ({ onCategoryClick,  handleMovieClick }) => {
       </section>
       <section className="drama_section">
         <MovieSlider similar={false}  genre_id="18" title="Drama" category="drama"  handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick} />
-
       </section>
-      
     </div>
   );
 };

@@ -1,28 +1,35 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import './movieInfo.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsUp, faCartPlus, faThumbsDown } from '@fortawesome/free-solid-svg-icons'
+import { faCartPlus } from '@fortawesome/free-solid-svg-icons'
 import { useSelector, useDispatch } from 'react-redux';
 import Comments from "./Comments";
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { fromPayment } from "../features/navigatePayment";
-import { actions as searchDropDownActions } from "../features/searchdropdown"
 import MovieSlider from "./MovieSlider";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
-
 function MovieInfo({ onCategoryClick, handleMovieClick }) {
+
   const lastSelectedMovie = localStorage.getItem('lastSelectedMovie');
-  
   const selectedMovie = JSON.parse(lastSelectedMovie);
+  const rating = selectedMovie.vote_average;
+
+  let dispatch = useDispatch();
+  let navigate = useNavigate();
+  const auth = getAuth();
+  const db = firebase.firestore();
+  const user = auth.currentUser;
+  const videoRef = useRef(null);
+  const imgUrlStart = "https://image.tmdb.org/t/p/original";
+  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
 
   const [isPurchased, setIsPurchased] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [purchasedMovies, setPurchasedMovies] = useState([]);
-  
+
   const SELECTED_BUTTON = {
     OVERVIEW : 'overview',
     TRAILER : 'trailer',
@@ -33,29 +40,20 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
 
   //const [playing, setPlaying] = useState(false);
   const videoRef = useRef(null);
-  
-
+ 
   const [genres, setGenres] = useState([]);
-  const rating = selectedMovie.vote_average;
   const [trailerKey, setTrailerKey] = useState(null);
   const [showOverview, setShowOverview] = useState(true);
   const [showTrailer, setShowTrailer] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [watchList, setWatchList] = useState('Add to watchlist');
-
-  const imgUrlStart = "https://image.tmdb.org/t/p/original";
-  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
-  const auth = getAuth();
-  const db = firebase.firestore();
-  let dispatch = useDispatch();
-  let navigate = useNavigate();
   const [documentID, setDocumentID] = useState('');
 
-  const [isClicked, setIsClicked] = useState(false);
-  
-  
+  const [language, setLanguage] = useState(['']);
 
-  const user = auth.currentUser;
+
+  const [isClicked, setIsClicked] = useState(false);
+
 
   const WATCHLIST_STATUS = {
     EXISTS: 'Remove from watchlist',
@@ -63,12 +61,10 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   }
 
 
- 
-
   const checkMovieWatchList = () => {
-    
+
     if (user) {
-       db.collection('users')
+      db.collection('users')
         .doc(user.uid)
         .collection('watchlist')
         .where('id', '==', selectedMovie.id)
@@ -77,7 +73,6 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
             const doc = querySnapshot.docs[0];
             const documentId = doc.id;
             setDocumentID(documentId);
-            
             setWatchList(WATCHLIST_STATUS.EXISTS);
           } else {
             setWatchList(WATCHLIST_STATUS.EMPTY);
@@ -86,14 +81,14 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
         });
     }
   };
-  
+
   useEffect(() => {
     let unsubscribe;
 
     if (user) {
       unsubscribe = checkMovieWatchList();
-    } 
-  
+    }
+
     return () => {
       if (unsubscribe) {
         unsubscribe();
@@ -131,8 +126,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
       .catch((error) => console.log(error));
   }, [selectedMovie.id]);
 
-console.log('movieid:', selectedMovie)
-  
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -144,13 +138,12 @@ console.log('movieid:', selectedMovie)
     });
   }, [])
 
-
   useEffect(() => {
     console.log('before async')
     async function fetchData() {
       if (currentUser != null) {
         console.log('aysync funktion user sant')
-        console.log("user: " ,currentUser)
+        console.log("user: ", currentUser)
         const purchasedRef = db.collection('users').doc(currentUser.uid).collection('purchased');
         const querySnapshot = await purchasedRef.get();
         const purchasedMovies = querySnapshot.docs.map(doc => doc.data());
@@ -160,10 +153,10 @@ console.log('movieid:', selectedMovie)
     fetchData();
   }, [currentUser]);
 
-
   useEffect(() => {
     setIsPurchased(!!purchasedMovies.find(movie => movie.id === selectedMovie.id));
   }, [purchasedMovies, selectedMovie.id]);
+
 
   const scrollToTop =() => {
     console.log('scrolla uppåt')
@@ -174,12 +167,12 @@ console.log('movieid:', selectedMovie)
     scrollToTop();
   },[])
 
-
   // find genre names for each genre ID in the movie's genre_ids array
   const genreNames = selectedMovie.genre_ids.map(id => {
     const genre = genres.find(g => g.id === id);
     return genre ? genre.name : "";
   });
+
 
 
     //Går till fullscreen när man dubbelklickar på video
@@ -190,9 +183,7 @@ console.log('movieid:', selectedMovie)
 
   const handleBuy = () => {
 
-    dispatch(searchDropDownActions.hideSearchDropDown());
-
-
+ 
     const auth = getAuth();
     const user = auth.currentUser;
 
@@ -205,6 +196,7 @@ console.log('movieid:', selectedMovie)
       console.log(navigatePayment);
       navigate('/login');
     }
+
   }
 
   const handleWatchlistClick = () => {
@@ -233,7 +225,6 @@ console.log('movieid:', selectedMovie)
   }
 
   const handleShowOverview = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(true);
     setShowTrailer(false);
     setShowComments(false);
@@ -243,7 +234,6 @@ console.log('movieid:', selectedMovie)
   };
 
   const handleShowTrailer = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(false);
     setShowTrailer(true);
     setShowComments(false);
@@ -251,13 +241,11 @@ console.log('movieid:', selectedMovie)
   };
 
   const handleShowComments = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     setShowOverview(false);
     setShowTrailer(false);
     setShowComments(true);
     setselectedBtnState(SELECTED_BUTTON.COMMENTS)
   };
-
 
   const handlePlayButtonClick = () => {
     console.log('Play button clicked');
@@ -275,52 +263,58 @@ console.log('movieid:', selectedMovie)
   };
 
 
+  useEffect(() => {
+
+    switch (selectedMovie.original_language) {
+      case "en": setLanguage("English"); break;
+      case "es": setLanguage("Spanish"); break;
+      case "fr": setLanguage("French"); break;
+      case "de": setLanguage("German"); break;
+      case "it": setLanguage("Italian"); break;
+      case "ja": setLanguage("Japanese"); break;
+      case "ko": setLanguage("Korean"); break;
+      case "pt": setLanguage("Portuguese"); break;
+      case "ru": setLanguage("Russian"); break;
+      case "zh": setLanguage("Chinese"); break;
+      case "nl": setLanguage("Dutch"); break;
+      case "sv": setLanguage("Swedish"); break;
+      case "da": setLanguage("Danish"); break;
+      case "no": setLanguage("Norwegian"); break;
+      case "fi": setLanguage("Finnish"); break;
+      case "pl": setLanguage("Polish"); break;
+      case "tr": setLanguage("Turkish"); break;
+      default: setLanguage(""); break;
+    }
+  }, [selectedMovie])
+
+
   return (
     <div className="movieinfo">
       <div className="movieinfocontainer">
-      <h1>{selectedMovie.title}</h1>
-     
-     
-      
-      <div className="poster-container">
-        
-       
-        <img className = 'poster-img' src={imgUrlStart + selectedMovie.poster_path} alt={selectedMovie.title} />
-        <div className="movie-details">
-          <div className="movieinfobackdrop">
-            <img className = 'backdrop-img' src={imgUrlStart + selectedMovie.backdrop_path}  />
-          </div>
-    
+        <h1>{selectedMovie.title}</h1>
+        <div className="poster-container">
+          <img className='poster-img' src={imgUrlStart + selectedMovie.poster_path} alt={selectedMovie.title} />
+          <div className="movie-details">
+            <div className="movieinfobackdrop">
+              <img className='backdrop-img' src={imgUrlStart + selectedMovie.backdrop_path} />
+            </div>
             <p className="movie-detail"><strong>Genres: </strong>{genreNames.join(", ")}</p>
-            <p className="movie-detail"><strong>Language: </strong>{selectedMovie.original_language}</p>
+            <p className="movie-detail"><strong>Language: </strong>{language}</p>
             <p className="movie-detail"><strong>Release: </strong>{selectedMovie.release_date}</p>
             <p><strong>Rating:</strong> {rating}</p>
-       
-          
-
-
-          
+          </div>
         </div>
       </div>
-      </div>
-
       <div className="movieinfobuybtns">
-
-       
-        
         {isPurchased ? (
           <button onClick={handlePlayButtonClick} className="movieinfobtn">Play</button>
-            ) : (
-              <>
-              <button  onClick={handleBuy} className="movieinfobtn"><FontAwesomeIcon icon={faCartPlus} /> Buy</button>
-              <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
-              </>
-          
-            )}
-
-       
+        ) : (
+          <>
+            <button onClick={handleBuy} className="movieinfobtn"><FontAwesomeIcon icon={faCartPlus} /> Buy</button>
+            <button className="movieinfobtn" onClick={handleWatchlistClick}>{watchList}</button>
+          </>
+        )}
       </div>
-
       <div className="details-nav">
 
         <button className="details-btn" onClick={handleShowOverview}>
@@ -333,41 +327,37 @@ console.log('movieid:', selectedMovie)
         {selectedBtnState == 'comments' ? <strong className="extra-bold">Comments</strong> : "Comments"}
         </button>
       </div>
-
       {showOverview && (
-
         <div className="info-overview">
           <p className="overview"><strong>Overview</strong> <br></br> {selectedMovie.overview}</p>
-
         </div>
       )}
-
       {showTrailer && (
         <div className="traileriframe">
-        <iframe className="trailer" 
-          ref={videoRef}
-          src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
-          title="YouTube video player"
-          display="initial"
-          webkitallowfullscreen="true"
-          allowFullScreen={true}
-          allow="autoplay; encrypted-media"
-        ></iframe>
+          <iframe className="trailer"
+            ref={videoRef}
+            src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
+            title="YouTube video player"
+            display="initial"
+            webkitallowfullscreen="true"
+            allowFullScreen={true}
+            allow="autoplay; encrypted-media"
+          ></iframe>
         </div>
       )}
-
       {showComments && (
         <div>
           <Comments />
         </div>
       )}
+
       <section onClick={scrollToTop}>
       <MovieSlider similar= {false} movie_id={selectedMovie.id} genre_id="" title="Recommended Movies" category="recommended" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
       <MovieSlider similar={true} movie_id={selectedMovie.id} genre_id="" title="Similar Movies" category="similar" handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick}/>
+
       </section>
     </div>
   );
-
 }
 
 export default MovieInfo;

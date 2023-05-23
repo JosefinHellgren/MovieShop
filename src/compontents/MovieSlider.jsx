@@ -36,23 +36,16 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
             content = moviesObject.movies[category];
             break;
         case STATUS.FAILURE:
-            content = <p>No movies available for this category</p>;
             break;
         default:
             content = null
     }
 
     const handleCategoryClick = () => {
-        onCategoryClick(title, content);
+        onCategoryClick(title, content, category);
     }
 
-    /*  if (content !== null) {
-        if (content && content.length === 0) {
-            return <h4>No movies found for {title}</h4>;
-        }
-    }  */
-
-     useEffect(() => {
+    useEffect(() => {
         const updateSlidesToShow = () => {
             if (window.innerWidth <= 768 && title === "Big Movie" || window.innerWidth >= 768 && title === "Big Movie") {
                 setSlidesToShow(1); // Show only one slide for Slider A on wider screens
@@ -72,10 +65,11 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
         return () => {
             window.removeEventListener('resize', updateSlidesToShow);
         };
-    }, []); 
+    }, []);
 
     return (
         <div className="movie_slider">
+
 
             {title !== 'Big Movie' && (
                 <h4 onClick={handleCategoryClick}>{title} {'>'}</h4>
@@ -92,9 +86,13 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
                             <MovieGridItem movie={movie} handleMovieClick={handleMovieClick} useBackDrop={title === "Big Movie"} />
                         </div>
                     ))}
+
             </Slider>
+          ) : (
+            <h5>Could not load movies</h5>
+          )}
         </div>
-    );
+      );
 
     async function fetchMovies(movie_id, genre_id, category, dispatch, similar, page = 1) {
         const apiKey = "305f99214975faee28a0f129881c6ec9";
@@ -115,7 +113,7 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
             let json = await response.json();
             let movies = json.results;
 
-            if (3 > page) {
+            if (4 > page) {
                 let nextPageMovies = await fetchMovies(movie_id, genre_id, category, dispatch, similar, page + 1);
                 movies = movies.concat(nextPageMovies);
             }

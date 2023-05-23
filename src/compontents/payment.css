@@ -1,47 +1,38 @@
-
-.payment-container .poster{
-width: 60%;
-height: 60%;
-top: 10%;
-border-radius: 15px;
-
+.payment-container .poster {
+    width: 60%;
+    height: 60%;
+    top: 10%;
+    border-radius: 15px;
 }
 
 .payment-container {
     top: 0%;
     width: 100%;
     height: 100%;
-    min-height:100vh;
+    min-height: 100vh;
     margin: 0 auto;
     padding: 0;
     color: white;
     margin-top: 60px;
     position: relative;
-
 }
 
-
-
-.payment-container .poster_purchased{
+.payment-container .poster_purchased {
     width: 80%;
     height: 80%;
-
 }
 
 .payment-container .exit-button {
-  
     background-color: rgba(rgba(255, 0, 0, 0), green, blue, alpha);
     position: fixed;
     right: 10%;
-   
     color: white;
     font-size: 30px;
     font-weight: bold;
 }
 
-
-.payment-container .small-info{
-   width: 500px;
+.payment-container .small-info {
+    width: 500px;
 }
 
 .payment-container .paymentform {
@@ -57,7 +48,6 @@ border-radius: 15px;
 
 .payment-container .paymentform button {
     margin-top: 20px;
-    
 }
 
 .payment-container #playButton {
@@ -78,8 +68,7 @@ border-radius: 15px;
     width: 500px;
 }
 
-
-.payment-container .payment-form-wrapper img{
+.payment-container .payment-form-wrapper img {
     width: 60px;
     height: 40px;
 }
@@ -93,32 +82,23 @@ border-radius: 15px;
     border: 4px solid greenyellow;
 }
 
-
-
-
-
-
-
 @media (min-width: 768px) {
-
-
 
     .payment-container .div-for-web {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        justify-content: center; 
+        justify-content: center;
         align-items: center;
         grid-gap: 0;
     }
+
     .payment-container .poster {
         width: 70%;
         height: 70%;
-      }
-
+    }
 
     .payment-container .payment-form-wrapper {
         margin-top: 1%;
-
     }
 
     .payment-container .paymentform {
@@ -137,14 +117,12 @@ border-radius: 15px;
         top: 10%;
         right: 5%;
         margin: 5px;
-       
         color: white;
         font-size: 30px;
         font-weight: bold;
     }
 
-
     .div-for-web.show {
         display: block;
-      }
+    }
 }

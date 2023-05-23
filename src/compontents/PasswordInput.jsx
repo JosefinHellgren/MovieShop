@@ -4,6 +4,7 @@ import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import './passwordinput.css'
 
 const PasswordInput = ({ icon, ...inputProps }) => {
+
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {

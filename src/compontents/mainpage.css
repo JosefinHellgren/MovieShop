@@ -1,45 +1,27 @@
-
 .mainpage_container {
     position: relative;
-  }
-
-
-
-
+}
 
 .mainpage_container .hide {
     display: none;
-  }
+}
 
-
-  .mainpage_container .popular_movies_section{
+.mainpage_container .popular_movies_section {
     margin-top: 35%;
-  }
-
-
-
+}
 
 @media (min-device-width: 768px) {
 
-  
-  .mainpage_container .popular_movies_section{
-    margin-top: 45%;
-  }
- 
-  .mainpage_container section {
-    margin-bottom: 20%; 
-  }
+    .mainpage_container .popular_movies_section {
+        margin-top: 45%;
+    }
 
-  .mainpage_container .big_Movie_poster_section{
-    margin-bottom: 20%;
-  }
-  
+    .mainpage_container section {
+        margin-bottom: 20%;
+    }
+
+    .mainpage_container .big_Movie_poster_section {
+        margin-bottom: 20%;
+    }
+
 }
-
-
- 
-
-
-
-
-
