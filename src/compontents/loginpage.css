@@ -28,13 +28,14 @@
     margin-bottom: 30px;
 }
 
-.login-page .signup-title > h1 {
+.login-page .signup-title>h1 {
     font-size: 25px;
     color: white;
     font-family: 'Courier New', Courier, monospace;
 }
 
-.login-page .sign-up-container > input, .login-page .password-input {
+.login-page .sign-up-container>input,
+.login-page .password-input {
     border-radius: 10px;
     height: 5vh;
     width: 80vw;
@@ -46,8 +47,7 @@
     font-weight: bolder;
 }
 
-
-.login-page .signup-button-container > button {
+.login-page .signup-button-container>button {
     margin-top: 50px;
     background-color: red;
 }
@@ -72,9 +72,10 @@
     border: 2px solid red;
 }
 
-@media only screen and (min-width: 768px) { 
+@media only screen and (min-width: 768px) {
+
     .login-page {
-       
+
         width: 400px;
         padding: 10px;
         border-radius: 5px;
@@ -82,17 +83,17 @@
 
     }
 
-    .login-page .sign-up-container > input {
+    .login-page .sign-up-container>input {
         width: 320px;
     }
 
-    .sign-up-container { 
+    .sign-up-container {
         width: 330px;
-       
+
     }
 
-    .login-page .signup-button-container > button {
-       margin-bottom: 20px;
+    .login-page .signup-button-container>button {
+        margin-bottom: 20px;
     }
 
- }
+}

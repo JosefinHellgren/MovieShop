@@ -10,17 +10,17 @@ import './userpage.css'
 
 const UserPage = ({toggleUserIconVisibility}) => {
 
-  const imgUrlStart = "https://image.tmdb.org/t/p/original"
-  const [purchasedMovies, setPurchasedMovies] = useState([]);
-  const [watchlistMovies, setWatchlistMovies] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
-  const navigate = useNavigate();
-  const [watchListIsEmpty, setwatchListIsEmpty] = useState(true);
-  const [purchasedIsEmpty, setPurchasedIsEmpty] = useState(true);
-  const dispatch = useDispatch();
 
   const db = firebase.firestore();
   const auth = getAuth();
+  const navigate = useNavigate();
+  const imgUrlStart = "https://image.tmdb.org/t/p/original";
+
+  const [purchasedMovies, setPurchasedMovies] = useState([]);
+  const [watchlistMovies, setWatchlistMovies] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [watchListIsEmpty, setwatchListIsEmpty] = useState(true);
+  const [purchasedIsEmpty, setPurchasedIsEmpty] = useState(true);
 
   useEffect(() => {
     toggleUserIconVisibility(false);
@@ -31,7 +31,6 @@ const UserPage = ({toggleUserIconVisibility}) => {
       }
     });
   }, [])
-
 
   useEffect(() => {
     async function fetchPurchasedData() {
@@ -67,7 +66,6 @@ const UserPage = ({toggleUserIconVisibility}) => {
 
   const handlePurchasedMovieClick = (movie) => {
     localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
-
     navigate("/movieinfo/");
   }
 
@@ -105,14 +103,13 @@ const UserPage = ({toggleUserIconVisibility}) => {
   return (
     <div className="user-page">
       <h3><br />My movies</h3>
-      <section className={purchasedIsEmpty ? "" : "purchased-container" }>
+      <section className={purchasedIsEmpty ? "" : "purchased-container"}>
         {renderPurchasedMovies}
-       
-          <p>{purchasedIsEmpty ? "You haven't bought any movies yet" : ""}</p>
+        <p>{purchasedIsEmpty ? "You haven't bought any movies yet" : ""}</p>
       </section>
       <h3>My watchlist</h3>
       <section className={watchListIsEmpty ? "" : "watchList-container"}>
-      {renderWatchlistMovies}
+        {renderWatchlistMovies}
         <p>{watchListIsEmpty ? "You haven't added any movies to your watchlist yet" : ""}</p>
       </section>
     </div>

@@ -9,34 +9,31 @@ import UserPage from './compontents/UserPage';
 import Playmovie from './compontents/Playmovie';
 import Navbar from './compontents/NavBar.jsx';
 import SearchResults from './compontents/SearchResults';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fromPayment } from "./features/navigatePayment";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { actions as searchDropDownActions } from "./features/searchdropdown"
-
 
 function App() {
 
   const navigate = useNavigate();
-
   const [isUserIconVisible, setIsUserIconVisible] = useState(true); 
   const navigatePayment = useSelector((state) => state.navigatePayment.payment);
   const dispatch = useDispatch();
   const [searchPageResults, setSearchPagResults] = useState([]);
   const [searchWord, setSearchWord] = useState('');
+  const [category, setCategory] = useState('');
 
   const CREATEACCOUNT_STATUS = {
-    NORMAL : 'normal',
+    NORMAL: 'normal',
     CREATING: 'creating',
     SUCCESS: 'success'
   }
 
   const [createAccount, setCreateAccount] = useState(CREATEACCOUNT_STATUS.NORMAL);
-  
- 
-  const handleSearchClick = (newQuery, searchPageResults) => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
+
+
+  const handleSearchClick = (newQuery, searchPageResults, category) => {
+    setCategory(category);
     setSearchWord(newQuery);
     setSearchPagResults(searchPageResults);
     navigate('/searchResults');
@@ -59,7 +56,12 @@ function App() {
     navigate("/movieinfo/");
   };
 
+  const handleCloseSearchbar = () => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
+  }
+
   return (
+
     <div className="App">
       <Navbar onSearchClick={handleSearchClick} handleAccountStatus = {handleCreateAccountStatus} createAccount = {createAccount} isUserIconVisible ={isUserIconVisible}/>
       <Routes>
@@ -77,6 +79,7 @@ function App() {
         title={`Showing results for ${searchWord}`} searchResults={searchPageResults} 
         handleMovieClick={handleMovieClick} 
         toggleUserIconVisibility={handleIsShowingUserIcon}/>} />
+
       </Routes>
     </div>
   )

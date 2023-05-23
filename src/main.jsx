@@ -8,10 +8,6 @@ import { HashRouter as Router } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit'
 import { rootReducer } from './features/rootreducer.js';
 import { Provider } from 'react-redux';
-import PaymentSucsessfull from './compontents/PaymentSucsessfull';
-
-
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyDEfI0TLpFbsldRzHb72ZhZsXVKjiuRn1o",
@@ -21,8 +17,6 @@ const firebaseConfig = {
   messagingSenderId: "711049264258",
   appId: "1:711049264258:web:2e6a5ce723a1873b7a089b"
 };
-
-
 
 firebase.initializeApp(firebaseConfig);
 

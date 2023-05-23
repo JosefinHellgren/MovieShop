@@ -1,8 +1,8 @@
 
-
 import MovieSlider from "./MovieSlider";
 import "./mainpage.css";
 import { useEffect } from "react";
+
 
 
 const MainPage = ({ onCategoryClick,  handleMovieClick, toggleUserIconVisibility }) => {
@@ -10,6 +10,7 @@ const MainPage = ({ onCategoryClick,  handleMovieClick, toggleUserIconVisibility
   useEffect(() => {
     toggleUserIconVisibility(true);
   }, [])
+
 
 
   return (
@@ -37,9 +38,7 @@ const MainPage = ({ onCategoryClick,  handleMovieClick, toggleUserIconVisibility
       </section>
       <section className="drama_section">
         <MovieSlider similar={false}  genre_id="18" title="Drama" category="drama"  handleMovieClick={handleMovieClick} onCategoryClick={onCategoryClick} />
-
       </section>
-      
     </div>
   );
 };

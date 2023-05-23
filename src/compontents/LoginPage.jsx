@@ -1,4 +1,4 @@
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import './loginpage.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -8,13 +8,15 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 
+
 const LoginPage = ({toggleUserIconVisibility}) => {
+
   const auth = getAuth();
   const navigate = useNavigate();
+  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
   const [errorMessage, setErrorMessage] = useState('');
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
-  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
 
   const ERROR = {
     EMAILMISSING: 'Please enter your email',
@@ -53,8 +55,6 @@ const LoginPage = ({toggleUserIconVisibility}) => {
             navigate(-1)
             console.log("redux statet payment " + navigatePayment)
           }
-
-
         })
         .catch((error) => {
           if (error.code === 'auth/wrong-password') {
@@ -100,7 +100,6 @@ const LoginPage = ({toggleUserIconVisibility}) => {
         <h1>Sign in</h1>
       </section>
       <section className="sign-up-container">
-
         <p className='error-message'>{errorMessage}</p>
         <input type="text" 
         className={errorEmail ? "email-input red-border" : "email-input"} 
@@ -115,10 +114,7 @@ const LoginPage = ({toggleUserIconVisibility}) => {
           onKeyUp = {handleKeyUp}
         />
       </section>
-
-
       <p className='register-member' onClick={handleRegisterClick}>Not registered yet? Register here!</p>
-
       <section className='signup-button-container'>
         <button onClick={login}>Log in</button>
       </section>

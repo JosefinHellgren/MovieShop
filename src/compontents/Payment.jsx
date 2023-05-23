@@ -1,47 +1,40 @@
 import '../compontents/payment.css'
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-
+import { useState } from 'react';
 import visa from '../images/visa.png'
 import americanexpress from '../images/AmericanExpress.png'
 import mastercard from '../images/Mastercard.png'
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
-
 import { getAuth } from "firebase/auth"
 import { useSelector } from 'react-redux';
 import PaymentSucsessfull from './PaymentSucsessfull';
 
-
 const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, setCVV, setCardNumber, setCardName, setExpDate, saveMovieToFirebase }) => {
-
 
     const [cardNumberValid, setCardNumberValid] = useState(false);
     const [nameOnCardValid, setNameOnCardValid] = useState(false);
     const [cvvNumberValid, setCVVNumberValid] = useState(false);
     const [dateExpValid, setDateExpValid] = useState(false);
 
-
     const handleCardNumberChange = (event) => {
+
         const { value } = event.target;
 
         const isValid = /^\d{15}$/.test(value);
         setCardNumber(value)
 
-
         if (isValid) {
             event.target.setCustomValidity('');
             setCardNumberValid(true);
-
-
             console.log("its valid")
         } else {
             event.target.setCustomValidity('Please enter a valid 15-digit card number');
             console.log("its not  valid")
         }
         console.log(value)
-
     }
+
     const handleExpDateChange = (event) => {
         const { value } = event.target;
         const isValid = /^(0[1-9]|1[0-2])\/\d{2}$/.test(value);
@@ -61,7 +54,9 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
 
 
 
+
         if (isValid) {
+
             if (cardExpiration < currentDate) {
                 event.target.setCustomValidity('Card has expired');
                 console.log('Card has expired');
@@ -85,7 +80,6 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
         setCVV(value)
         const isValid = /^\d{4}$/.test(value);
 
-
         if (isValid) {
             event.target.setCustomValidity('');
             console.log("correct cvv for visa and mastercard")
@@ -97,10 +91,8 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
     }
 
     const handleNameChange = (event) => {
+
         const { value } = event.target;
-
-
-
         const isValid = /^[a-zA-Z\u00C0-\u00ff]+\s?[a-zA-Z\u00C0-\u00ff]+$/.test(value)
 
         setCardName(value);
@@ -110,7 +102,6 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
             setNameOnCardValid(true);
         } else {
             event.target.setCustomValidity('Please use only letters')
-
         }
     }
 
@@ -122,15 +113,10 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
             setIsPaymentSuccessful(true);
             saveMovieToFirebase();
             console.log(cardNumberValid, nameOnCardValid, cvvNumberValid, dateExpValid)
-
         } else {
-
             console.log(cardNumberValid, nameOnCardValid, cvvNumberValid, dateExpValid)
         }
-
-
     }
-
 
     return (
         <div>
@@ -187,11 +173,9 @@ const Payment = ({toggleUserIconVisibility}) => {
     }, [])
 
     const handleExitButtonClick = () => {
-        //should we realy use the state to conditional navigate here?
-        //cus we should allready had turn the state to false again. 
+
         if (navigatePayment === true) {
             navigate('/')
-
         } else {
             navigate(-1)
         }
@@ -205,26 +189,22 @@ const Payment = ({toggleUserIconVisibility}) => {
     }
 
     const handleCardNumberChange = (event) => {
+
         const { value } = event.target;
 
         const isValid = /^\d{16}$/.test(value);
         setCardNumber(value)
 
-
         if (isValid) {
             event.target.setCustomValidity('');
             setCardNumberValid(true);
-
-
             console.log("its valid")
         } else {
             event.target.setCustomValidity('Please enter a valid 16-digit card number');
             console.log("its not  valid")
         }
         console.log(value)
-
     }
-
 
     const handleExpDateChange = (event) => {
         const { value } = event.target;
@@ -246,8 +226,6 @@ const Payment = ({toggleUserIconVisibility}) => {
         
 
         if (isValid) {
-
-
             if (cardExpiration < currentDate) {
                 event.target.setCustomValidity('Card has expired');
                 console.log('Card has expired');
@@ -266,6 +244,7 @@ const Payment = ({toggleUserIconVisibility}) => {
     };
 
     const handleCVVChange = (event) => {
+
         const { value } = event.target;
 
         setCVV(value)
@@ -273,10 +252,7 @@ const Payment = ({toggleUserIconVisibility}) => {
 
         if (cardType == "American Express") {
 
-
-
         } else {
-
             console.log("here we land up if there is not found out to be a Amex card.")
         }
         if (isValid) {
@@ -294,7 +270,6 @@ const Payment = ({toggleUserIconVisibility}) => {
 
         const isValid = /^[a-zA-Z\u00C0-\u00ff]+\s?[a-zA-Z\u00C0-\u00ff]+$/.test(value)
 
-
         setCardName(value);
 
         if (isValid) {
@@ -306,8 +281,6 @@ const Payment = ({toggleUserIconVisibility}) => {
             console.log("please use only letters")
         }
     }
-
-
 
     const saveMovieToFirebase = () => {
 
@@ -357,24 +330,17 @@ const Payment = ({toggleUserIconVisibility}) => {
             });
     }
 
-
-
     const handleSubmit = (event) => {
         event.preventDefault()
         if (cardNumberValid == true && cvvNumberValid == true && nameOnCardValid == true && dateExpValid == true) {
             console.log("all fields area valid")
             setIsPaymentSuccessful(true);
             console.log(cardNumberValid, nameOnCardValid, cvvNumberValid, dateExpValid)
-
             saveMovieToFirebase()
-
-
         } else {
             console.log("fields are not valid")
             console.log(cardNumber, cardName, cvv, expDate)
         }
-
-
     }
 
     //If we want to use the background image.
@@ -386,22 +352,18 @@ const Payment = ({toggleUserIconVisibility}) => {
 
     };
     return (
-
-
         <div className="payment-container"  >
 
             <div className={isPaymentSuccessful ? 'div-for-web show' : 'div-for-web'}>
                 <div className='small-info'>
-
-
                     {isPaymentSuccessful ? (<div className='loading_payment'>
-
                         <img className='poster_purchased' src={imgUrlStart + movie.poster_path}></img> <br /><PaymentSucsessfull /> </div>) : (<div>  <h1 onClick={handleExitButtonClick} className='exit-button'>x</h1> <h2>Checkout:</h2><img className='poster' src={imgUrlStart + movie.poster_path}></img> <h2>{movie.title}</h2> </div>)}
 
                 </div>
                 {isPaymentSuccessful ? (
                     <></>
                 ) : (<div className='payment-form-wrapper'>
+
                     <label>
                         <input
                             type="checkbox"
@@ -460,8 +422,8 @@ const Payment = ({toggleUserIconVisibility}) => {
                         />
                     </label>
                     
-                    {cardType === "American Express" ? (<AmexForm setIsPaymentSuccessful={setIsPaymentSuccessful} saveMovieToFirebase={saveMovieToFirebase} setCardName={setCardName} setCVV={setCVV} setCardNumber={setCardNumber} setExpDate={setExpDate} cardName={cardName} cardNumber={cardNumber} cvv={cvv} expDate={expDate} />) : (
 
+                    {cardType === "American Express" ? (<AmexForm setIsPaymentSuccessful={setIsPaymentSuccessful} saveMovieToFirebase={saveMovieToFirebase} setCardName={setCardName} setCVV={setCVV} setCardNumber={setCardNumber} setExpDate={setExpDate} cardName={cardName} cardNumber={cardNumber} cvv={cvv} expDate={expDate} />) : (
                         <form onSubmit={handleSubmit}>
                             <div className='paymentform'>
                                 Card Number:
@@ -480,7 +442,6 @@ const Payment = ({toggleUserIconVisibility}) => {
                 )}
             </div>
         </div>
-
     )
 }
 

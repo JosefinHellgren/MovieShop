@@ -7,7 +7,9 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
+
 const SignUpPage = ({onCreatingAccountClick, toggleUserIconVisibility}) => {
+
 
     const auth = getAuth();
     const db = firebase.firestore();
@@ -19,13 +21,16 @@ const SignUpPage = ({onCreatingAccountClick, toggleUserIconVisibility}) => {
         EXISTS: 'The username is already taken',
         INVALID: 'Username must not contain spaces'
     }
+
     const [validUsername, setValidUsername] = useState(STATUS_USERNAME.NORMAL);
     const [validEmail, setValidEmail] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
 
+
     useEffect(() => {
         toggleUserIconVisibility(true);
     },[])
+
 
 
     const handleEmailChange = (event) => {
@@ -85,7 +90,7 @@ const SignUpPage = ({onCreatingAccountClick, toggleUserIconVisibility}) => {
         const isEmpty = /^\s*$/.test(email);
         if (isEmpty) {
             return false;
-        } 
+        }
 
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const domain = email.substring(email.lastIndexOf("@") + 1);
@@ -105,10 +110,10 @@ const SignUpPage = ({onCreatingAccountClick, toggleUserIconVisibility}) => {
     }
 
     const signUp = () => {
+
         const email = document.getElementById('email-input').value;
         const password = document.getElementById('password-input').value;
         const repeatPassword = document.getElementById('repeatpassword-input').value;
-
 
         if (validUsername == STATUS_USERNAME.INVALID) {
             alert('Username must not contain spaces');
@@ -178,7 +183,6 @@ const SignUpPage = ({onCreatingAccountClick, toggleUserIconVisibility}) => {
                 <p className={validUsername === STATUS_USERNAME.EXISTS ? 'text-danger' :
                     validUsername === STATUS_USERNAME.VALID ? 'text-success' :
                         validUsername === STATUS_USERNAME.INVALID ? 'text-danger' : ''
-
                 }>{validUsername}</p>
                 <input type="text" id='username-input' placeholder="Username" onChange={checkIfUsernameExists} required />
                 <input type="text" id='email-input' placeholder="Email" onChange={handleEmailChange} required />
@@ -188,7 +192,6 @@ const SignUpPage = ({onCreatingAccountClick, toggleUserIconVisibility}) => {
                     <button type='submit' >Sign up</button>
                 </section>
             </form>
-
         </div>
     )
 }

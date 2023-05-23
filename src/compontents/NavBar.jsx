@@ -5,15 +5,13 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { HiOutlineUserCircle } from "react-icons/hi";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { actions as searchDropDownActions } from "../features/searchdropdown"
-
 import { ImSearch } from "react-icons/im"
 import SearchDropDown from "./SearchDropDown";
 import { FiSettings } from "react-icons/fi";
-import {AiOutlinePlayCircle} from 'react-icons/ai'
+import { AiOutlinePlayCircle } from 'react-icons/ai'
 
 const Navbar = ({ onSearchClick, handleAccountStatus, createAccount, isUserIconVisible }) => {
 
@@ -26,16 +24,16 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount, isUserIconV
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  let category = "search";
 
   const auth = getAuth();
   const db = firebase.firestore();
   const uid = localStorage.getItem('uid');
   const [userUID, setUserUID] = useState(null);
   const [signedIn, setSignedIn] = useState(false);
+
   let unsubscribe = () => {};
-
   const searchDropDown = useSelector(state => state.searchDropdown.searchDropDown);
-
   const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState('');
 
@@ -57,12 +55,14 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount, isUserIconV
   }, [])
 
   useEffect(() => {
+
     if (uid) {
       setSignedIn(true);
       setUserUID(uid);
     } 
   }, []);
   
+
 
 
 
@@ -86,8 +86,31 @@ useEffect(() => {
 
 
 
+  useEffect(() => {
+    
+   if (createAccount === 'success') {
+
+      const docRef = db.collection('users').doc(userUID);
+      unsubscribe = docRef.onSnapshot((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          changeBackground(data.background);
+          if (createAccount != 'normal') {
+            handleAccountStatus('normal');
+          }
+        }
+      });
+    }
+    return () => {
+      if (!signedIn) {
+        unsubscribe();
+      }
+    };
+  }, [createAccount])
+
 
   useEffect(() => {
+
     if (userUID && createAccount === 'normal') {
       const docRef = db.collection('users').doc(userUID);
       unsubscribe = docRef.onSnapshot((doc) => {
@@ -97,7 +120,7 @@ useEffect(() => {
         } 
       });
     }
-  
+
     return () => {
       unsubscribe();
     };
@@ -142,9 +165,8 @@ useEffect(() => {
   }
 
   const handleSearchClick = () => {
+    onSearchClick(query, searchResults, category);
     setQuery('');
-    dispatch(searchDropDownActions.hideSearchDropDown());
-    onSearchClick(query, searchResults);
   }
 
   useEffect(() => {
@@ -152,18 +174,16 @@ useEffect(() => {
   }, [location.pathname]);
 
   const handleMovieClick = (movie) => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
+
     localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
     navigate("/movieinfo/");
   };
 
   const handleUserCircleClick = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate('/login');
   }
 
   const handlePlayButtonPressed = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate('/userpage')
   }
 
@@ -188,7 +208,6 @@ useEffect(() => {
 
   const saveBackcolorFirestore = (background) => {
     const userUID = auth.currentUser.uid;
-
     db.collection("users").doc(userUID).set({
       background: background
     }, { merge: true })
@@ -205,11 +224,11 @@ useEffect(() => {
   }
 
   const handleMovWheelClick = () => {
-   dispatch(searchDropDownActions.hideSearchDropDown());
     navigate("/");
   }
 
   const renderButton = (isMobile, signedIn) => {
+
     if (!isUserIconVisible) {
       return null;
     } else if (isMobile) {
@@ -228,6 +247,7 @@ useEffect(() => {
           <h4>{signedIn ? "My Pages" : "Log in"}</h4>
         </div>
       )
+
     }
   };
 
@@ -240,40 +260,36 @@ useEffect(() => {
       )
     } else {
       return (
-       <summary role="button">
-        <section className="settingsbtn-container" >
-          <FiSettings className="settings-icon" />
-          <h4>Settings</h4>
-        </section>
-      </summary> 
-      )  
+        <summary role="button">
+          <section className="settingsbtn-container" >
+            <FiSettings className="settings-icon" />
+            <h4>Settings</h4>
+          </section>
+        </summary>
+      )
     }
   }
-  
- 
-    const [isMobile, setIsMobile] = useState(false);
-  
-    useEffect(() => {
-      const handleResize = () => {
-        setIsMobile(window.innerWidth < 768);
-      };
-  
-      window.addEventListener("resize", handleResize);
-      handleResize(); 
-  
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-    }, []);
-  
-  
-  
-  
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <nav className="navbar">
       <section className="navbar-container">
         <img src={Movie_wheel} alt="Movie Wheel Logo" className="movie_wheel" onClick={handleMovWheelClick} />
+
       <div className="search_bar">
         <input type="text" value={query} placeholder="Search movies.." onChange={handleSearchInputChange} />
         <ImSearch className="search_icon" onClick={handleSearchClick} />
@@ -292,15 +308,14 @@ useEffect(() => {
         </details>
       </section>
       {renderButton(isMobile, signedIn)}
+
       </section>
       <section>
-      <div className={`search_dropdown ${searchDropDown ? '' : 'hide'}`}>
-          <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
+        <div className={`search_dropdown ${searchDropDown ? '' : 'hide'}`}>
+          <SearchDropDown query={query} searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
         </div>
       </section>
-      
     </nav>
-
   );
 }
 
