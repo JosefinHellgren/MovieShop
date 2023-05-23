@@ -15,6 +15,13 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
     const moviesObject = useSelector(state => state.movies);
     const dispatch = useDispatch();
 
+
+    const settings = {
+        dots: true,
+        infinite: true,
+        sped: 500
+    }
+
     useEffect(() => {
         fetchMovies(movie_id, genre_id, category, dispatch, similar)
     }, [title, movie_id, similar]);
@@ -32,23 +39,16 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
             content = moviesObject.movies[category];
             break;
         case STATUS.FAILURE:
-            content = <p>No movies available for this category</p>;
             break;
         default:
             content = null
     }
 
     const handleCategoryClick = () => {
-        onCategoryClick(title, content);
+        onCategoryClick(title, content, category);
     }
 
-    /*  if (content !== null) {
-        if (content && content.length === 0) {
-            return <h4>No movies found for {title}</h4>;
-        }
-    }  */
-
-     useEffect(() => {
+    useEffect(() => {
         const updateSlidesToShow = () => {
             if (window.innerWidth <= 768 && title === "Big Movie" || window.innerWidth >= 768 && title === "Big Movie") {
                 setSlidesToShow(1); 
@@ -75,26 +75,30 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
         return () => {
             window.removeEventListener('resize', updateSlidesToShow);
         };
-    }, []); 
+    }, []);
 
     return (
-        <div className="movie_slider">
 
+        <div className="movie_slider">
             {title !== 'Big Movie' && (
                 <h4 onClick={handleCategoryClick}>{title} {'>'}</h4>
             )}
-            <Slider key={moviesObject.status} className="slick-slider" 
-           autoplay={autoplay}
-            slidesToShow={slidesToShow} slidesToScroll={slidesToScroll}
-            slideToSwipe={isMobile}
-            touchThreshold={10} >
-                {content &&
-                    content.map((movie, index) => (
+
+            {content && content.length > 0 ? (
+                <Slider key={moviesObject.status} className="slick-slider" slidesToShow={slidesToShow}
+                    slideToSwipe={isMobile}
+                    touchThreshold={10}
+                    slidesToScroll={slidesToShow} autoplay={autoplay} >
+                    {content.map((movie, index) => (
+
                         <div key={index} className={`slider_container ${title === 'Big Movie' ? 'big-movie-slider' : ''}`}>
                             <MovieGridItem movie={movie} handleMovieClick={handleMovieClick} useBackDrop={title === "Big Movie"} />
                         </div>
                     ))}
-            </Slider>
+                </Slider>
+            ) : (
+                <h5>Could not load movies</h5>
+            )}
         </div>
     );
 
@@ -119,7 +123,7 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
             let json = await response.json();
             let movies = json.results;
 
-            if (3 > page) {
+            if (4 > page) {
                 let nextPageMovies = await fetchMovies(movie_id, genre_id, category, dispatch, similar, page + 1);
                 movies = movies.concat(nextPageMovies);
             }

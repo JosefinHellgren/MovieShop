@@ -13,6 +13,7 @@
     display: flex;
     justify-content: flex-end;
     margin-left: auto;
+    cursor: pointer;
 }
 
 .sign-up-page .fa-icon {
@@ -27,21 +28,20 @@
     margin-bottom: 0px;
 }
 
-.sign-up-page .signup-title > h1 {
+.sign-up-page .signup-title>h1 {
     font-size: 25px;
     color: white;
     font-family: 'Courier New', Courier, monospace;
 }
 
-.sign-up-page .sign-up-container > input {
+.sign-up-page .sign-up-container>input {
     border-radius: 10px;
     height: 5vh;
     width: 80vw;
     margin-bottom: 15px;
 }
 
-
-.sign-up-page .signup-button-container > button {
+.sign-up-page .signup-button-container>button {
     margin-top: 50px;
     margin-bottom: 20px;
     background-color: red;
@@ -60,7 +60,7 @@
     color: red;
 }
 
-@media only screen and (min-width: 768px) { 
+@media only screen and (min-width: 768px) {
     .sign-up-page {
         width: 400px;
         padding: 10px;
@@ -68,10 +68,7 @@
         box-shadow: 1px 1px 10px 1px white;
     }
 
-    .sign-up-page .sign-up-container > input {
-      
+    .sign-up-page .sign-up-container>input {
         width: 330px;
-       
     }
-
- }
+}

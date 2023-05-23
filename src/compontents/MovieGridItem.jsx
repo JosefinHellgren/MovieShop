@@ -1,4 +1,6 @@
+
 import { useState,useEffect } from "react";
+
 import "./moviegriditem.css"
 
 const MovieGridItem = ({ movie, handleMovieClick, useBackDrop }) => {
@@ -22,23 +24,25 @@ const MovieGridItem = ({ movie, handleMovieClick, useBackDrop }) => {
     //conditional show the title on mpbile.
 
     return (
-
-        <div className="movie_grid_item" onClick={() => handleMovieClick(movie)}
-        >
+        <div className="movie_grid_item" onClick={() => handleMovieClick(movie)}>
             <img
                 className="movie_poster"
                 src={imgUrlStart + imageSource}
                 style={movieStyle}
             />
+
             {isMobile && <p className="mobile_movie_title" > {movie.title}</p>}
 {!isMobile &&
+
             <div className="movie_info"
                 onClick={() => handleMovieClick(movie)}>
                 <h6 className="movie_title">{movie.title}</h6>
                 <p className="movie_release">{formattedYear}</p>
                 <p className="movie_rating">{movie.vote_average}</p>
             </div>
+
 }
+
         </div>
     )
 }

@@ -5,17 +5,15 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { HiOutlineUserCircle } from "react-icons/hi";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { actions as searchDropDownActions } from "../features/searchdropdown"
-
 import { ImSearch } from "react-icons/im"
 import SearchDropDown from "./SearchDropDown";
 import { FiSettings } from "react-icons/fi";
-import {AiOutlinePlayCircle} from 'react-icons/ai'
+import { AiOutlinePlayCircle } from 'react-icons/ai'
 
-const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
+const Navbar = ({ onSearchClick, handleAccountStatus, createAccount, isUserIconVisible }) => {
 
   const pinkGradient = 'linear-gradient(to bottom, #d70dff 0%, #d70dff 80%, rgba(0, 0, 0, 0) 100%)';
   const blackGradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%';
@@ -26,82 +24,110 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  let category = "search";
 
   const auth = getAuth();
   const db = firebase.firestore();
+  const uid = localStorage.getItem('uid');
   const [userUID, setUserUID] = useState(null);
   const [signedIn, setSignedIn] = useState(false);
-  let unsubscribe = () => { };
 
+  let unsubscribe = () => {};
   const searchDropDown = useSelector(state => state.searchDropdown.searchDropDown);
-
   const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState('');
+
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setSignedIn(true);
-        setUserUID(user.uid);
-        console.log('currentuser inloggad')
+     
+          setSignedIn(true);
+          setUserUID(user.uid);
+          localStorage.setItem('uid', user.uid);
+        
       } else {
         setSignedIn(false);
         setUserUID(null);
-        console.log('inte inloggad')
+        localStorage.removeItem('uid');
       }
     });
   }, [])
 
   useEffect(() => {
+
+    if (uid) {
+      setSignedIn(true);
+      setUserUID(uid);
+    } 
+  }, []);
+  
+
+
+
+
+useEffect(() => {
+  if (userUID && createAccount === 'normal') {
+    const docRef = db.collection('users').doc(userUID);
+    unsubscribe = docRef.onSnapshot((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        changeBackground(data.background);
+      } 
+    });
+  }
+
+  return () => {
+    if (unsubscribe) {
+      unsubscribe();
+    }
+  };
+}, [userUID, createAccount]);
+
+
+
+  useEffect(() => {
     
    if (createAccount === 'success') {
-      console.log('userUID,', userUID)
+
       const docRef = db.collection('users').doc(userUID);
       unsubscribe = docRef.onSnapshot((doc) => {
         if (doc.exists) {
-          console.log('snapshot körs, datan finns')
           const data = doc.data();
           changeBackground(data.background);
           if (createAccount != 'normal') {
             handleAccountStatus('normal');
           }
-        } 
-     });
-    } 
+        }
+      });
+    }
     return () => {
       if (!signedIn) {
-       unsubscribe(); 
+        unsubscribe();
       }
     };
   }, [createAccount])
 
 
   useEffect(() => {
-    let unsubscribe = () => {}; 
+
     if (userUID && createAccount === 'normal') {
-      console.log('userUID,', userUID)
       const docRef = db.collection('users').doc(userUID);
       unsubscribe = docRef.onSnapshot((doc) => {
         if (doc.exists) {
-          console.log('snapshot körs, datan finns')
           const data = doc.data();
           changeBackground(data.background);
-        } else {
-          console.log('snapshot körs, datan finns inte')
-        }
+        } 
       });
     }
-  
+
     return () => {
-      console.log('unsubscripe körs')
       unsubscribe();
     };
   }, [userUID]);
 
   const changeBackground = (background) => {
-    console.log('change background körs')
     if (background === 'black') {
-      console.log('change background to black körs')
       document.body.style.backgroundColor = "black";
       document.querySelector('#root').style.backgroundColor = 'black';
       dropdownUl.style.background = 'black';
@@ -139,9 +165,8 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   }
 
   const handleSearchClick = () => {
+    onSearchClick(query, searchResults, category);
     setQuery('');
-    dispatch(searchDropDownActions.hideSearchDropDown());
-    onSearchClick(query, searchResults);
   }
 
   useEffect(() => {
@@ -149,22 +174,16 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   }, [location.pathname]);
 
   const handleMovieClick = (movie) => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
-   
 
     localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
-    
-
     navigate("/movieinfo/");
   };
 
   const handleUserCircleClick = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate('/login');
   }
 
   const handlePlayButtonPressed = () => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
     navigate('/userpage')
   }
 
@@ -181,12 +200,14 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
     dropdown.removeAttribute('open');
     unsubscribe();
     navigate('/');
+    setSignedIn(false);
+    setUserUID(null);
+    localStorage.removeItem('uid');
     auth.signOut();
   }
 
   const saveBackcolorFirestore = (background) => {
     const userUID = auth.currentUser.uid;
-
     db.collection("users").doc(userUID).set({
       background: background
     }, { merge: true })
@@ -203,50 +224,32 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
   }
 
   const handleMovWheelClick = () => {
-   dispatch(searchDropDownActions.hideSearchDropDown());
     navigate("/");
   }
 
   const renderButton = (isMobile, signedIn) => {
-    if (isMobile) {
-      if (signedIn) {
-        return (
-          <AiOutlinePlayCircle 
-          className="playbtn-mobile"
-          onClick={handlePlayButtonPressed}/>
-        );
-      } else {
-        return (
-          <HiOutlineUserCircle
-            className="user_icon"
-            onClick={handleUserCircleClick}
-          />
-        );
-      }
-    } else {
-      if (signedIn) {
-        return (
-          <div className="play-button-div" onClick={handlePlayButtonPressed}>
-          <AiOutlinePlayCircle 
-          className="play-icon-computer"/>
-          <h4>My movies</h4>
-          </div>
-          
-        );
-      } else {
-        return(
-        
-        <div className="user-icon-div" onClick={handleUserCircleClick}>
+
+    if (!isUserIconVisible) {
+      return null;
+    } else if (isMobile) {
+      return (
+        <HiOutlineUserCircle
+        className="user_icon"
+        onClick={signedIn ? handlePlayButtonPressed : handleUserCircleClick}
+      />
+      );
+    } else if (!isMobile) {
+      return (
+      <div className="user-icon-div" onClick={signedIn ? handlePlayButtonPressed : handleUserCircleClick}>
          <HiOutlineUserCircle
             className="user_icon_computer"
           /> 
-          <h4> Log in</h4>
+          <h4>{signedIn ? "My Pages" : "Log in"}</h4>
         </div>
-        )
-      }
+      )
+
     }
   };
-
 
   const renderSettingsButton = (isMobile) => {
     if (isMobile) {
@@ -257,46 +260,41 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
       )
     } else {
       return (
-       <summary role="button">
-        <section className="settingsbtn-container" >
-          <FiSettings className="settings-icon" />
-          <h4>Settings</h4>
-        </section>
-      </summary> 
-      )  
+        <summary role="button">
+          <section className="settingsbtn-container" >
+            <FiSettings className="settings-icon" />
+            <h4>Settings</h4>
+          </section>
+        </summary>
+      )
     }
   }
-  
- 
-    const [isMobile, setIsMobile] = useState(false);
-  
-    useEffect(() => {
-      const handleResize = () => {
-        setIsMobile(window.innerWidth < 768);
-      };
-  
-      window.addEventListener("resize", handleResize);
-      handleResize(); 
-  
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-    }, []);
-  
-  
-  
-  
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <nav className="navbar">
       <section className="navbar-container">
         <img src={Movie_wheel} alt="Movie Wheel Logo" className="movie_wheel" onClick={handleMovWheelClick} />
+
       <div className="search_bar">
         <input type="text" value={query} placeholder="Search movies.." onChange={handleSearchInputChange} />
         <ImSearch className="search_icon" onClick={handleSearchClick} />
       </div>
-      <section className={signedIn ? 'navbar_section' : 'navbar_section hide'}>
-        
+      <section className={signedIn && !isUserIconVisible ? 'navbar_section' : 'navbar_section hide'}>
         <details className="dropdown">
           {renderSettingsButton(isMobile)}
           <ul>
@@ -310,15 +308,14 @@ const Navbar = ({ onSearchClick, handleAccountStatus, createAccount }) => {
         </details>
       </section>
       {renderButton(isMobile, signedIn)}
+
       </section>
       <section>
-      <div className={`search_dropdown ${searchDropDown ? '' : 'hide'}`}>
-          <SearchDropDown searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
+        <div className={`search_dropdown ${searchDropDown ? '' : 'hide'}`}>
+          <SearchDropDown query={query} searchResults={searchResults} handleSearchClick={handleSearchClick} handleMovieClick={handleMovieClick} />
         </div>
       </section>
-      
     </nav>
-
   );
 }
 

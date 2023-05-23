@@ -5,9 +5,11 @@ import 'firebase/compat/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const SignUpPage = ({onCreatingAccountClick}) => {
+
+const SignUpPage = ({onCreatingAccountClick, toggleUserIconVisibility}) => {
+
 
     const auth = getAuth();
     const db = firebase.firestore();
@@ -19,9 +21,16 @@ const SignUpPage = ({onCreatingAccountClick}) => {
         EXISTS: 'The username is already taken',
         INVALID: 'Username must not contain spaces'
     }
+
     const [validUsername, setValidUsername] = useState(STATUS_USERNAME.NORMAL);
     const [validEmail, setValidEmail] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
+
+
+    useEffect(() => {
+        toggleUserIconVisibility(true);
+    },[])
+
 
 
     const handleEmailChange = (event) => {
@@ -81,7 +90,7 @@ const SignUpPage = ({onCreatingAccountClick}) => {
         const isEmpty = /^\s*$/.test(email);
         if (isEmpty) {
             return false;
-        } 
+        }
 
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const domain = email.substring(email.lastIndexOf("@") + 1);
@@ -101,10 +110,10 @@ const SignUpPage = ({onCreatingAccountClick}) => {
     }
 
     const signUp = () => {
+
         const email = document.getElementById('email-input').value;
         const password = document.getElementById('password-input').value;
         const repeatPassword = document.getElementById('repeatpassword-input').value;
-
 
         if (validUsername == STATUS_USERNAME.INVALID) {
             alert('Username must not contain spaces');
@@ -126,7 +135,10 @@ const SignUpPage = ({onCreatingAccountClick}) => {
                 saveDataToFirestore(userName, email);
             })
             .catch((error) => {
-                console.log(error)
+                const errorCode = error.code
+                if (errorCode === 'auth/email-already-in-use') {
+                    alert('Email is already in use. Please enter a different email.');
+                }
                 return;
             })
     }
@@ -154,15 +166,6 @@ const SignUpPage = ({onCreatingAccountClick}) => {
         navigate(-1);
     }
 
-    const handleEnterPressed = (event) => {
-        if (event.key === 'Enter') {
-            const nextInput = event.target.nextElementSibling;
-            if (nextInput) {
-                nextInput.focus();
-            }
-        }
-    }
-
     const handleSubmit = (event) => {
         event.preventDefault()
         signUp();
@@ -180,17 +183,15 @@ const SignUpPage = ({onCreatingAccountClick}) => {
                 <p className={validUsername === STATUS_USERNAME.EXISTS ? 'text-danger' :
                     validUsername === STATUS_USERNAME.VALID ? 'text-success' :
                         validUsername === STATUS_USERNAME.INVALID ? 'text-danger' : ''
-
                 }>{validUsername}</p>
-                <input type="text" id='username-input' placeholder="Username" onBlur={checkIfUsernameExists} onKeyUp={handleEnterPressed} required />
-                <input type="text" id='email-input' placeholder="Email" onKeyUp={handleEnterPressed} onChange={handleEmailChange} required />
-                <input type="password" id='password-input' placeholder="Password" onKeyUp={handleEnterPressed} onChange={handlePasswordChange} required />
+                <input type="text" id='username-input' placeholder="Username" onChange={checkIfUsernameExists} required />
+                <input type="text" id='email-input' placeholder="Email" onChange={handleEmailChange} required />
+                <input type="password" id='password-input' placeholder="Password" onChange={handlePasswordChange} required />
                 <input type="password" id='repeatpassword-input' placeholder="Repeat Password" required />
                 <section className='signup-button-container'>
                     <button type='submit' >Sign up</button>
                 </section>
             </form>
-
         </div>
     )
 }

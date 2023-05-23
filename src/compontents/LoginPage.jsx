@@ -1,20 +1,22 @@
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import './loginpage.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import PasswordInput from './PasswordInput';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 
-const LoginPage = () => {
+
+const LoginPage = ({toggleUserIconVisibility}) => {
+
   const auth = getAuth();
   const navigate = useNavigate();
+  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
   const [errorMessage, setErrorMessage] = useState('');
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
-  const navigatePayment = useSelector((state) => state.navigatePayment.payment);
 
   const ERROR = {
     EMAILMISSING: 'Please enter your email',
@@ -23,6 +25,10 @@ const LoginPage = () => {
     WRONGPASSWORD: 'Wrong password',
     USERNOTFOUND: 'User not found'
   }
+
+  useEffect(() => {
+    toggleUserIconVisibility(true);
+  },[])
 
   const login = async () => {
     const email = document.getElementById('userEmail-input').value;
@@ -49,8 +55,6 @@ const LoginPage = () => {
             navigate(-1)
             console.log("redux statet payment " + navigatePayment)
           }
-
-
         })
         .catch((error) => {
           if (error.code === 'auth/wrong-password') {
@@ -63,6 +67,19 @@ const LoginPage = () => {
             setErrorMessage(ERROR.USERNOTFOUND);
           }
         });
+    }
+  }
+
+  const handleKeyUp = (event) => {
+    if (event.key === 'Enter') {
+      login();
+    }
+  }
+
+  const handleEnterPressed = (event) => {
+    const emailInput = document.getElementById("userPassword-input");
+    if (event.key === 'Enter') {
+      emailInput.focus();
     }
   }
 
@@ -83,22 +100,23 @@ const LoginPage = () => {
         <h1>Sign in</h1>
       </section>
       <section className="sign-up-container">
-
         <p className='error-message'>{errorMessage}</p>
-        <input type="text" className={errorEmail ? "email-input red-border" : "email-input"} id='userEmail-input' placeholder="Enter you email" />
+        <input type="text" 
+        className={errorEmail ? "email-input red-border" : "email-input"} 
+        id='userEmail-input' 
+        placeholder="Enter you email"
+        onKeyUp={handleEnterPressed} />
         <PasswordInput
           id="userPassword-input"
           className={errorPassword ? "password-input red-border" : "password-input"}
           name="password"
           placeholder="Enter your password"
+          onKeyUp = {handleKeyUp}
         />
       </section>
-
-
       <p className='register-member' onClick={handleRegisterClick}>Not registered yet? Register here!</p>
-
       <section className='signup-button-container'>
-        <button onClick={login}>Sign in</button>
+        <button onClick={login}>Log in</button>
       </section>
     </div>
   );

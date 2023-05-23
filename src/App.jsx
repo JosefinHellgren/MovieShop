@@ -9,38 +9,43 @@ import UserPage from './compontents/UserPage';
 import Playmovie from './compontents/Playmovie';
 import Navbar from './compontents/NavBar.jsx';
 import SearchResults from './compontents/SearchResults';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fromPayment } from "./features/navigatePayment";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { actions as searchDropDownActions } from "./features/searchdropdown"
 import ikon from "./images/image1.png"
-
 
 
 function App() {
 
   const navigate = useNavigate();
-
-
+  const [isUserIconVisible, setIsUserIconVisible] = useState(true); 
   const navigatePayment = useSelector((state) => state.navigatePayment.payment);
   const dispatch = useDispatch();
   const [searchPageResults, setSearchPagResults] = useState([]);
   const [searchWord, setSearchWord] = useState('');
+  const [category, setCategory] = useState('');
 
   const CREATEACCOUNT_STATUS = {
-    NORMAL : 'normal',
+    NORMAL: 'normal',
     CREATING: 'creating',
     SUCCESS: 'success'
   }
 
   const [createAccount, setCreateAccount] = useState(CREATEACCOUNT_STATUS.NORMAL);
- 
-  const handleSearchClick = (newQuery, searchPageResults) => {
-    dispatch(searchDropDownActions.hideSearchDropDown());
+
+
+  const handleSearchClick = (newQuery, searchPageResults, category) => {
+    setCategory(category);
     setSearchWord(newQuery);
     setSearchPagResults(searchPageResults);
     navigate('/searchResults');
+  }
+
+  const handleIsShowingUserIcon = (isVisible) => {
+    if (isVisible != isUserIconVisible) {
+      console.log('inom if sats')
+      setIsUserIconVisible(isVisible);
+    }
   }
 
   const handleCreateAccountStatus = (NEW_STATUS) => {
@@ -53,21 +58,30 @@ function App() {
     navigate("/movieinfo/");
   };
 
+  const handleCloseSearchbar = () => {
+    dispatch(searchDropDownActions.hideSearchDropDown());
+  }
+
   return (
+
     <div className="App">
-      <Navbar onSearchClick={handleSearchClick} handleAccountStatus = {handleCreateAccountStatus} createAccount = {createAccount}/>
+      <Navbar onSearchClick={handleSearchClick} handleAccountStatus = {handleCreateAccountStatus} createAccount = {createAccount} isUserIconVisible ={isUserIconVisible}/>
       <Routes>
 
-        <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick}/>}/>
-        <Route path="/movieinfo" element={<MovieInfo onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick}/>}/>
-        <Route path='/login' element={<LoginPage/>} />
-        <Route path='/userpage'element= {<UserPage/>} />
-        <Route path= "/signup" element={<SignUpPage onCreatingAccountClick = {handleCreateAccountStatus}/>}/>
-        <Route path="/video" element={<Playmovie/>}/>
-        <Route path="/payment" element={<Payment />}/>
+        <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} toggleUserIconVisibility = {handleIsShowingUserIcon}/>}/>
+        <Route path="/movieinfo" element={<MovieInfo onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} toggleUserIconVisibility={handleIsShowingUserIcon}/>}/>
+        <Route path='/login' element={<LoginPage toggleUserIconVisibility={handleIsShowingUserIcon}/>} />
+        <Route path='/userpage'element= {<UserPage toggleUserIconVisibility={handleIsShowingUserIcon} />} />
+        <Route path= "/signup" element={<SignUpPage 
+        onCreatingAccountClick = {() => handleCreateAccountStatus} 
+        toggleUserIconVisibility={handleIsShowingUserIcon}/>}/>
+        <Route path="/video" element={<Playmovie toggleUserIconVisibility={handleIsShowingUserIcon}/>}/>
+        <Route path="/payment" element={<Payment toggleUserIconVisibility={handleIsShowingUserIcon}/>}/>
         <Route path='/searchresults' element= {<SearchResults 
         title={`Showing results for ${searchWord}`} searchResults={searchPageResults} 
-        handleMovieClick={handleMovieClick} />} />
+        handleMovieClick={handleMovieClick} 
+        toggleUserIconVisibility={handleIsShowingUserIcon}/>} />
+
       </Routes>
     </div>
   )

@@ -4,7 +4,7 @@ const isFetching = createAction('is fetching');
 const success = createAction('success');
 const failure = createAction('failure');
 
-const actions = {isFetching, success, failure};
+const actions = { isFetching, success, failure };
 
 const STATUS = {
   NORMAL: 'normal',
@@ -21,7 +21,8 @@ const initialState = {
     upcomingMovies: null,
     comedyMovies: null,
     actionMovies: null,
-    romanceMovies: null
+    romanceMovies: null,
+    searchResults: null
   }
 };
 

@@ -1,15 +1,14 @@
-
-.movie_grid_item{
+.movie_grid_item {
     align-items: center;
     display: flex;
     flex-direction: column;
+    width: 100%;
     height: fit-content;
     position: relative;
     overflow: hidden;
+    overflow-x: scroll;
     transition: transform 0.3s;
-   
-   
-    
+
 }
 .movie_grid_item .mobile_movie_title{
  
@@ -27,8 +26,8 @@
 
 .movie_grid_item:hover {
     transform: scale(1.05);
-  
-  }
+}
+
 
   .movie_grid_item .movie_rating{
 font-size: 20px;
@@ -39,14 +38,14 @@ color: rgb(4, 3, 3);
     color: rgb(3, 2, 2);
   }
 
-  .movie_grid_item .movie_info {
+.movie_grid_item .movie_info {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s;
     position: absolute;
-    
     bottom: 10%;
     left: 10%;
+
 
     background-color: rgba(248, 246, 249, 0.533);
     padding: 5%;
@@ -56,16 +55,11 @@ color: rgb(4, 3, 3);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Soft shadow */
     background-clip: padding-box;
   }
-  
-  .movie_grid_item:hover .movie_info {
+
+.movie_grid_item:hover .movie_info {
     opacity: 1;
     visibility: visible;
-    
-  }
-
-
-
-
+}
 
 .movie_grid_item .movie_title {
     font-size: 20px;
@@ -78,39 +72,29 @@ color: rgb(4, 3, 3);
     -webkit-line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
-   
 }
-
-
-
-
 
 .movie_grid_item .movie_poster {
     width: 100%;
     max-height: 100%;
     object-fit: contain;
     transition: transform 0.3s;
-  }
+}
 
 .movie-grid-item:hover .movie_poster {
-    transform: scale(2); 
+    transform: scale(2);
     opacity: 0.5;
-  }
-  
-  .movie-grid-item:hover .movie_info {
+}
+
+.movie-grid-item:hover .movie_info {
     opacity: 1;
-  }
-
-
-
+}
 
 @media screen and (max-width: 767px) {
 
-
     .movie_grid_item .movie_title {
         font-size: 7px;
-        
-      max-width: 75%;
+        max-width: 75%;
         color: rgb(247, 245, 245);
         margin-top: 5px;
         display: -webkit-box;
@@ -118,38 +102,34 @@ color: rgb(4, 3, 3);
         -webkit-line-clamp: 2;
         overflow: hidden;
         text-overflow: ellipsis;
-       
     }
-  .movie_grid_item .movie_rating{
-font-size: 4px;
-    color: green;
-      }
-      .movie_grid_item .movie_release{
+
+    .movie_grid_item .movie_rating {
+        font-size: 4px;
+        color: green;
+    }
+
+    .movie_grid_item .movie_release {
         font-size: 4px;
         color: white;
-      }
-    
-      .movie_grid_item .movie_info {
+    }
+
+    .movie_grid_item .movie_info {
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s;
         position: absolute;
-       width:75%;
-    
+        width: 75%;
         background-color: rgba(4, 0, 0, 0.68);
         padding: 5%;
-      }
-      
-      .movie_grid_item:hover .movie_info {
+    }
+
+    .movie_grid_item:hover .movie_info {
         opacity: 1;
         visibility: visible;
-        
-      }
+    }
 }
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
-
-  
-  
-  }
-
+    
+}
