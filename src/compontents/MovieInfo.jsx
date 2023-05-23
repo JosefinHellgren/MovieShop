@@ -39,7 +39,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick }) {
   const [selectedBtnState, setselectedBtnState] = useState(SELECTED_BUTTON.OVERVIEW);
 
   //const [playing, setPlaying] = useState(false);
-  const videoRef = useRef(null);
+  // const videoRef = useRef(null);
  
   const [genres, setGenres] = useState([]);
   const [trailerKey, setTrailerKey] = useState(null);
