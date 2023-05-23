@@ -8,7 +8,7 @@
   padding: 6px;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0) 100%);
   z-index: 5;
-  height: 70px;
+  height: 60px;
 }
 
 .navbar .movie_wheel {
@@ -114,6 +114,8 @@
 }
 
 .navbar .user_icon {
+  position: relative;
+  top: 9px;
   font-size: 35px;
   color: white;
 }
