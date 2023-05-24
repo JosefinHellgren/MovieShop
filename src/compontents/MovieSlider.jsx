@@ -14,6 +14,7 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
     const [isMobile, setIsMobile] = useState(false)
     const moviesObject = useSelector(state => state.movies);
     const dispatch = useDispatch();
+    const [errorMsg, setErrorMsg] = useState('');
 
 
     const settings = {
@@ -97,7 +98,7 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
                     ))}
                 </Slider>
             ) : (
-                <h5>Could not load movies</h5>
+                <h5>{errorMsg}</h5>
             )}
         </div>
     );
@@ -117,6 +118,7 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
         }
 
         dispatch(actions.isFetching());
+        setErrorMsg('Loading movies...');
 
         try {
             let response = await fetch(URL);
@@ -127,6 +129,11 @@ const MovieSlider = ({ title, category, handleMovieClick, onCategoryClick, genre
                 let nextPageMovies = await fetchMovies(movie_id, genre_id, category, dispatch, similar, page + 1);
                 movies = movies.concat(nextPageMovies);
             }
+
+
+            if (movies.length === 0) {
+                setErrorMsg('Could not find any recommended movies');
+              }
 
             const payload = {
                 category,
