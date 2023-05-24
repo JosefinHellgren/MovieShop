@@ -10,7 +10,7 @@ import { getAuth } from "firebase/auth"
 import { useSelector } from 'react-redux';
 import PaymentSucsessfull from './PaymentSucsessfull';
 
-const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, setCVV, setCardNumber, setCardName, setExpDate, saveMovieToFirebase }) => {
+const AmexForm = ({ handleExitButtonClick, setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, setCVV, setCardNumber, setCardName, setExpDate, saveMovieToFirebase }) => {
 
     const [cardNumberValid, setCardNumberValid] = useState(false);
     const [nameOnCardValid, setNameOnCardValid] = useState(false);
@@ -131,7 +131,8 @@ const AmexForm = ({ setIsPaymentSuccessful, cardName, cardNumber, expDate, cvv, 
                     Name on Card:
                     <input type="text" onChange={handleNameChange} value={cardName} placeholder='Jamile Jonson'></input>
                 </div>
-                <button className='submitButton' type='submit'> Buy 199kr</button>
+                <button className='submitButton' type='submit'> Buy</button>
+                <button onClick={handleExitButtonClick}>Cancel</button>
             </form>
         </div>
     );
@@ -427,7 +428,7 @@ const Payment = ({toggleUserIconVisibility}) => {
                     </label>
                     
 
-                    {cardType === "American Express" ? (<AmexForm setIsPaymentSuccessful={setIsPaymentSuccessful} saveMovieToFirebase={saveMovieToFirebase} setCardName={setCardName} setCVV={setCVV} setCardNumber={setCardNumber} setExpDate={setExpDate} cardName={cardName} cardNumber={cardNumber} cvv={cvv} expDate={expDate} />) : (
+                    {cardType === "American Express" ? (<AmexForm setIsPaymentSuccessful={setIsPaymentSuccessful} saveMovieToFirebase={saveMovieToFirebase} handleExitButtonClick={handleExitButtonClick} setCardName={setCardName} setCVV={setCVV} setCardNumber={setCardNumber} setExpDate={setExpDate} cardName={cardName} cardNumber={cardNumber} cvv={cvv} expDate={expDate} />) : (
                         <form onSubmit={handleSubmit}>
                             <div className='paymentform'>
                                 Card Number:
@@ -439,7 +440,7 @@ const Payment = ({toggleUserIconVisibility}) => {
                                 Name on Card:
                                 <input type="text" onChange={handleNameChange} value={cardName} placeholder='Jamile Jonson' required></input>
                             </div>
-                            <button type='submit' className='submitButton'> 99kr Buy </button>
+                            <button type='submit' className='submitButton'> Buy </button>
                             <button onClick={handleExitButtonClick}>Cancel</button>
                         </form>)}
                 </div>
