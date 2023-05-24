@@ -35,7 +35,6 @@ function App() {
 
 
   const handleSearchClick = (newQuery, searchPageResults, category) => {
-    console.log("handlesearchclick i app jsx")
     setCategory(category);
     setSearchWord(newQuery);
     setSearchPageResults(searchPageResults);
