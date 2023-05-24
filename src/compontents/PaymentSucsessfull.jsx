@@ -7,17 +7,17 @@ const PaymentSucsessfull = () => {
   const [progress, setProgress] = useState(0);
   let navigate = useNavigate();
 
-  //Show this component for 3 seconds then navigate back to MovieInfo with the "last clickedMovie data"
+  
 
   useEffect(() => {
     const progressInterval = setInterval(() => {
-      setProgress(prevProgress => prevProgress + 20); // Adjust the increment value as per your preference
-    }, 400); // Adjust the interval duration (in milliseconds) as per your preference
+      setProgress(prevProgress => prevProgress + 20); 
+    }, 400); 
 
     setTimeout(() => {
       clearInterval(progressInterval);
       navigate('/movieInfo/');
-    }, 3000); // Adjust the duration (in milliseconds) for showing the component before redirection
+    }, 3000);
 
     return () => {
       clearInterval(progressInterval);
