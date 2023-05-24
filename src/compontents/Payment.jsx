@@ -112,6 +112,7 @@ const AmexForm = ({ handleExitButtonClick, setIsPaymentSuccessful, cardName, car
             console.log("you now bought the movie")
             setIsPaymentSuccessful(true);
             saveMovieToFirebase();
+            document.body.style.zoom = '1';
             console.log(cardNumberValid, nameOnCardValid, cvvNumberValid, dateExpValid)
         } else {
             console.log(cardNumberValid, nameOnCardValid, cvvNumberValid, dateExpValid)
