@@ -81,8 +81,10 @@
 
   .movieinfo .poster-container img:hover {
     transform: perspective(800px) rotateY(30deg);
+
   }
-  
+
+ 
    
   .info-overview .overview {
     margin-top: 20px;
@@ -160,6 +162,11 @@
   margin-top: 20px;
   margin-right: 10px;
   transition: all 0.4s;
+
+  background-color: transparent;
+  
+  opacity: 1; /* Justera värdet för önskad transparens (0 är helt genomskinlig, 1 är helt opak) */
+  
 }
 
 
@@ -170,6 +177,11 @@
 
 .movieinfo .traileriframe {
   margin-top: 40px;
+}
+
+
+ .movieinfo .comments{
+  margin-top: 30px;
 }
 
 @media only screen and (min-width: 768px) {
@@ -199,5 +211,15 @@
     .movieinfo .movieinfocontainer .poster-container .movieinfobackdrop .backdrop-img {
       display: none;
     }
+}
+
+@media only screen and (max-width: 767px) {
+  .movieinfo .movieinfocontainer .poster-container .movieinfobackdrop .backdrop-img:hover {
+    transform: none;
+  }
+
+  .movieinfo .poster-container img:hover {
+    transform: none;
+  }
 }
 

@@ -294,7 +294,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick, toggleUserIconVisibility
   return (
     <div className="movieinfo">
       <div className="movieinfocontainer">
-        <h1>{selectedMovie.title}</h1>
+        <h3>{selectedMovie.title}</h3>
         <div className="poster-container">
           <img className='poster-img' src={imgUrlStart + selectedMovie.poster_path} alt={selectedMovie.title} />
           <div className="movie-details">
@@ -349,7 +349,7 @@ function MovieInfo({ onCategoryClick, handleMovieClick, toggleUserIconVisibility
         </div>
       )}
       {showComments && (
-        <div>
+        <div className="comments">
           <Comments />
         </div>
       )}
