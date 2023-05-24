@@ -17,8 +17,14 @@
 }
 
 .search_dropdown .dropdown_item img {
-    width: 2.4rem;
+    width: 2.6rem;
 }
+
+@media (min-width: 700px) { 
+    .search_dropdown .dropdown_item img {
+      width: 4rem;  
+    }
+  }
 
 .search_dropdown .dropdown_item p {
     font-size: 80%;
