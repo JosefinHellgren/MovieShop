@@ -7,7 +7,7 @@ const MovieGridItem = ({ movie, handleMovieClick, useBackDrop }) => {
     const [isMobile,setIsMobile] = useState(false);
     const imgUrlStart = "https://image.tmdb.org/t/p/original";
     const imageSource = useBackDrop ? movie.backdrop_path : movie.poster_path;
-    const movieStyle = useBackDrop ? { width: '90%', paddingTop: "80px" } : {};
+    const movieStyle = useBackDrop ? { width: '87%', paddingTop: "80px" } : {};
     const formattedYear = new Date(movie.release_date).getFullYear();
 
     const stringFormatted = String(formattedYear);

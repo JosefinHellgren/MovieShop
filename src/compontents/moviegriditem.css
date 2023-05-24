@@ -14,11 +14,15 @@
  
   color: rgb(249, 250, 251);
   font-weight: bold;
+font-size: 10px;
 
- 
-  background-color: rgba(6, 1, 1, 0.19);
   border-radius: 5px;
-  
+    display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 3em;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   
 }
 
@@ -45,6 +49,7 @@ color: rgb(4, 3, 3);
     position: absolute;
     bottom: 10%;
     left: 10%;
+    
 
 
     background-color: rgba(248, 246, 249, 0.533);
@@ -65,13 +70,14 @@ color: rgb(4, 3, 3);
     font-size: 20px;
     width: 24vw;
     max-width: 120px;
-    color: rgb(247, 245, 245);
+    color: rgb(4, 4, 4);
     margin-top: 5px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
+   
 }
 
 .movie_grid_item .movie_poster {
