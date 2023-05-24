@@ -39,7 +39,7 @@ const Comments = () => {
       console.log("Error getting comments:", error);
       setComments('');
     });
-  }, [movie]);
+  }, []);
 
   const saveToFirebase = () => {
 

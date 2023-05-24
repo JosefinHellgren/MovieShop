@@ -174,13 +174,7 @@
 }
 
 .navbar input:focus {
-  background-color: rgb(29, 29, 29);
-}
-
-.navbar input:hover {
-
-  background-color: rgb(29, 29, 29);
-
+  border-color: #E8476A;
 }
 
 .navbar .hide {
@@ -190,7 +184,7 @@
 :root {
   --dropdown-highlight: gray;
   --dropdown-width: 200px;
-  /* --dropdown-background: white; */
+ 
   --dropdown-color: white;
 }
 
@@ -342,6 +336,8 @@ a:not([href]) {
   width: 35px;
   height: 35px;
   color: white;
+  position: relative;
+  top: 9px;
 }
 
 .navbar .li-color {
