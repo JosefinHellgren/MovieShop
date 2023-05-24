@@ -1,10 +1,8 @@
-
 import { useDispatch, useSelector } from "react-redux";
 import MovieGridItem from "./MovieGridItem";
 import './searchresults.css'
 import { STATUS, actions } from "../features/movies";
 import React, { useEffect, useState } from "react";
-
 
 const SearchResults = ({ query, title, category, handleMovieClick, searchResults, toggleUserIconVisibility }) => {
 
@@ -12,14 +10,18 @@ const SearchResults = ({ query, title, category, handleMovieClick, searchResults
     const moviesObject = useSelector(state => state.movies);
     const [content, setContent] = useState([]);
 
-    useEffect(() => {
-        toggleUserIconVisibility(true);
-    }, [])
+     useEffect(() => {
+        console.log("toggle usericon")
+         toggleUserIconVisibility(true);
+     }, [])
 
     useEffect(() => {
+        console.log("hallåå")
         if (category === "search") {
+            console.log("search")
             fetchSearchResults(query, dispatch, category);
         } else {
+            console.log("ej search")
             setContent(searchResults);
         }
     }, [category, query]);
@@ -27,15 +29,19 @@ const SearchResults = ({ query, title, category, handleMovieClick, searchResults
     useEffect(() => {
         switch (moviesObject.status) {
             case STATUS.NORMAL:
+                console.log("status.normal")
                 setContent(null);
                 break;
             case STATUS.FETCHING:
+                console.log("status.fetching")
                 setContent(null);
                 break;
             case STATUS.SUCCESS:
+                console.log("status.success")
                 setContent(moviesObject.movies[category]);
                 break;
             case STATUS.FAILURE:
+                console.log("status.fail")
                 break;
             default:
                 setContent(null);
@@ -48,12 +54,14 @@ const SearchResults = ({ query, title, category, handleMovieClick, searchResults
         let URL = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}}`;
 
         dispatch(actions.isFetching());
+        console.log("fetching")
 
         try {
             let response = await fetch(URL);
             let json = await response.json();
             let movies = json.results;
 
+            console.log("succeed")
             if (4 > page) {
                 let nextPageMovies = await fetchSearchResults(query, dispatch, category, page + 1);
                 movies = movies.concat(nextPageMovies);

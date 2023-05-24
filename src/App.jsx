@@ -21,7 +21,7 @@ function App() {
   const [isUserIconVisible, setIsUserIconVisible] = useState(true); 
   const navigatePayment = useSelector((state) => state.navigatePayment.payment);
   const dispatch = useDispatch();
-  const [searchPageResults, setSearchPagResults] = useState([]);
+  const [searchPageResults, setSearchPageResults] = useState([]);
   const [searchWord, setSearchWord] = useState('');
   const [category, setCategory] = useState('');
 
@@ -35,9 +35,10 @@ function App() {
 
 
   const handleSearchClick = (newQuery, searchPageResults, category) => {
+    console.log("handlesearchclick i app jsx")
     setCategory(category);
     setSearchWord(newQuery);
-    setSearchPagResults(searchPageResults);
+    setSearchPageResults(searchPageResults);
     navigate('/searchResults');
   }
 
@@ -64,10 +65,9 @@ function App() {
 
   return (
 
-    <div className="App">
+    <div className="App" onClick={handleCloseSearchbar}>
       <Navbar onSearchClick={handleSearchClick} handleAccountStatus = {handleCreateAccountStatus} createAccount = {createAccount} isUserIconVisible ={isUserIconVisible}/>
       <Routes>
-
         <Route path="/" element={<MainPage onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} toggleUserIconVisibility = {handleIsShowingUserIcon}/>}/>
         <Route path="/movieinfo" element={<MovieInfo onCategoryClick={handleSearchClick} handleMovieClick={handleMovieClick} toggleUserIconVisibility={handleIsShowingUserIcon}/>}/>
         <Route path='/login' element={<LoginPage toggleUserIconVisibility={handleIsShowingUserIcon}/>} />
@@ -79,7 +79,7 @@ function App() {
         <Route path="/payment" element={<Payment toggleUserIconVisibility={handleIsShowingUserIcon}/>}/>
         <Route path='/searchresults' element= {<SearchResults 
         title={`Showing results for ${searchWord}`} searchResults={searchPageResults} 
-        handleMovieClick={handleMovieClick} 
+        handleMovieClick={handleMovieClick} category={category} query={searchWord}
         toggleUserIconVisibility={handleIsShowingUserIcon}/>} />
 
       </Routes>
