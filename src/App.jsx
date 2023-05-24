@@ -54,6 +54,7 @@ function App() {
   }
 
   const handleMovieClick = (movie) => {
+    window.scrollTo(0, 0);
     localStorage.setItem('lastSelectedMovie', JSON.stringify(movie))
     navigate("/movieinfo/");
   };
