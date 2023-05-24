@@ -48,12 +48,9 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 3;
-  display: none;
-}
-
-.user-page .purchased-item>section:hover .play-icon {
   display: block;
 }
+
 
 .user-page .purchased-item>section,
 .user-page .watchlist-item {
